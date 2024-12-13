@@ -13,6 +13,9 @@ in
 
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
+
+    ./pass.nix
+    ./hyprland.nix
   ];
 
   home = {
@@ -30,10 +33,11 @@ in
       # security
       gnupg age
 
-      # cli
-      helix zellij ripgrep 
-      tealdeer htop fzf
-      pass bat atool git
+      # cli main tools
+      helix zellij fish
+      
+      ripgrep tealdeer fzf
+      htop bat atool 
       ffmpeg gitui 
 
       unzip 
@@ -53,6 +57,7 @@ in
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   };
 
+  # enable git
   programs.git = {
     enable = true;
     userName = "EmmChriss";

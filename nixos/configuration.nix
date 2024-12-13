@@ -16,10 +16,10 @@
 
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
-  ];
 
-  # set time automatically
-  services.automatic-timezoned.enable = true;
+    # Handles setting timezone manually and automatically
+    ./timezone.nix
+  ];
 
   # remove unnecessary preinstalled packages
   environment.defaultPackages = [ ];
@@ -165,14 +165,6 @@
     users.morga = {
       isNormalUser = true;
       extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
-      packages = with pkgs; [
-        lf
-        helix
-        fish
-        zellij
-        git
-        firefox
-      ];
       shell = pkgs.fish;
     };
   };
@@ -191,6 +183,7 @@
     VISUAL = "hx";
   };
 
+  # Graphics settings
   services.xserver = {
     enable = true;
 
@@ -198,7 +191,7 @@
     videoDrivers = [ "nvidia" ];
     desktopManager.xterm.enable = false;
 
-    # TODO: 
+    # TODO: remove this when hyprland is working
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
 
@@ -219,6 +212,8 @@
     };
   };
 
+  # enable Thunar file manager
+  # needed to open archive files without extracting
   programs.thunar = with pkgs.xfce; {
     enable = true;
     plugins = [
@@ -227,8 +222,10 @@
     ];
   };
 
+  # stuff for thunar?
   programs.xfconf.enable = true;
 
+  # also file manager stuff
   services.gvfs.enable = true;
   services.tumbler.enable = true;
 
