@@ -14,6 +14,7 @@ in
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
 
+    ./nix-index.nix
     ./pass.nix
     ./hyprland.nix
   ];
@@ -33,12 +34,14 @@ in
       # security
       gnupg age
 
-      # cli main tools
-      helix zellij fish
-      
+      # tui
+      helix zellij fish lf
+      htop
+
+      # cli
       ripgrep tealdeer fzf
-      htop bat atool 
-      ffmpeg gitui 
+      bat atool grc
+      ffmpeg gitui eza
 
       unzip 
       grim slurp slop
@@ -50,28 +53,66 @@ in
     ];
   };
 
-  # enable hyprand and configure it
+  programs = {
+    # enable git
+    git = {
+      enable = true;
+      userName = "EmmChriss";
+      userEmail = "emmchris@protonmail.com";
+    };
+  
+    # enable fish shell
+    fish = {
+      enable = true;
+      interactiveShellInit = builtins.readFile ./config.fish;
+      plugins = (with pkgs.fishPlugins; [
+        # Colorized nixpkgs command output
+        { name = "grc"; src = grc.src; }
+        # Hydro prompt
+        { name = "hydro"; src = hydro.src; }
+        # Import foregin envs (aka. bash or conf)
+        { name = "foreign-env"; src = foreign-env.src; }
+        # Receive notifications when process done
+        { name = "done"; src = done.src; }
+        # Colored man-pages
+        { name = "colored-man"; src = colored-man-pages.src; }
+      ]);
+    };
+
+    # bat: cat replacement
+    bat = {
+      enable = true;
+      config.theme = "base16";
+    };
+
+    # direnv: load-unload .envrc and .env files
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+      config.whitelist.prefix = [ "/home/morga/Project" ];
+    };
+  };
+
+  # enable hyprand
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.variables = ["--all"];
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   };
 
-  # enable git
-  programs.git = {
-    enable = true;
-    userName = "EmmChriss";
-    userEmail = "emmchris@protonmail.com";
-  };
+  services.ssh-agent.enable = true;
 
-  xdg.userDirs = {
+  xdg = {
     enable = true;
-    documents = "$HOME/Documents";
-    download = "$HOME/Downloads";
-    videos = "$HOME/Media/Videos";
-    music = "$HOME/Media/Music";
-    pictures = "$HOME/Media/Pictures";
-    desktop = "$HOME/Desktop";
+    userDirs = {
+      enable = true;
+      documents = "$HOME/Documents";
+      download = "$HOME/Downloads";
+      videos = "$HOME/Media/Videos";
+      music = "$HOME/Media/Music";
+      pictures = "$HOME/Media/Pictures";
+      desktop = "$HOME/Desktop";
+    };
   };
 
   # Nicely reload system units when changing configs

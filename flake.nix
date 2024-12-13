@@ -59,9 +59,10 @@
       morga = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          # NixOS system configuration; all rooted in the same file 
+          # NixOS system configuration; all rooted in configuration.nix
           ./nixos/configuration.nix
 
+          # Home-manager configuration; all rooted in home.nix
           home-manager.nixosModules.home-manager
           {
             home-manager = {

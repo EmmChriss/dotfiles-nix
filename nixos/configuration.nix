@@ -159,22 +159,22 @@
   security.protectKernelImage = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  programs.fish.enable = true;
-  users = {
-    defaultUserShell = pkgs.fish;
-    users.morga = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
-      shell = pkgs.fish;
-    };
+  users.users.morga = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
   };
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
+  # Instead of setting as login shell, run fish immediately when bash starts
+  # See: https://nixos.wiki/wiki/Fish
+  programs.fish.enable = true;
+  programs.bash = {
+    interactiveShellInit = ''
+      if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+      then
+        shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+        exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+      fi
+    '';
   };
 
   # define editor globally
@@ -198,6 +198,16 @@
     # X11 keymap
     xkb.layout = "us";
   };
+
+  # GPU Acceleration
+  hardware.graphics.extraPackages = [
+    pkgs.rocmPackages.clr.icd # AMD OpenCL
+    pkgs.amdvlk # AMD Vulkan
+  ];
+
+  # Restrict GPU Accel to AMD
+  environment.variables.VK_ICD_FILENAMES =
+    "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
 
   # BATTERY: secondary boot config that switches off NVIDIA card
   specialisation = {
