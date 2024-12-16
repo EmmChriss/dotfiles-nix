@@ -33,6 +33,16 @@ in
     username = "morga";
     homeDirectory = "/home/morga";
 
+    shellAliases = {
+      helix = "hx";
+      ls = "eza -lh --group-directories-first --color=auto";
+      cat = "bat";
+      ssh = "env TERM=xterm-color ssh";
+      cliRef = "curl -s 'http://pastebin.com/raw/yGmGiDQX' | less -i";
+      page = "eval $PAGER";
+      http = "xh";
+    };
+
     packages = with pkgs; [
       # gui
       alacritty librewolf 

@@ -33,15 +33,6 @@ in
         gmv="git mv";
         grm="git rm";
       };
-      shellAliases = {
-        helix = mkIf (hasPackage "helix") "hx";
-        ls = mkIf (hasPackage "eza") "eza -lh --group-directories-first --color=auto";
-        cat = mkIf (hasPackage "bat") "bat";
-        ssh = "env TERM=xterm-color ssh";
-        cliRef = "curl -s 'http://pastebin.com/raw/yGmGiDQX' | less -i";
-        page = "eval $PAGER";
-        http = "xh";
-      };
       functions = {
         # disable greeting
         fish_greeting = "";
