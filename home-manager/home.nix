@@ -1,6 +1,11 @@
 { pkgs, config, lib, inputs, outputs, nix-colors, ... }:
 
-let colorscheme = nix-colors.colorSchemes.nord;
+let
+  colorscheme = nix-colors.colorSchemes.nord;
+  mkIfElse = p: yes: no: mkMerge [
+    (mkIf p yes)
+    (mkIf (!p) no)
+  ];
 in
 {
   # You can import other home-manager modules here
@@ -14,6 +19,7 @@ in
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
 
+    ./fish.nix
     ./nix-index.nix
     ./pass.nix
     ./hyprland.nix
@@ -35,8 +41,8 @@ in
       gnupg age
 
       # tui
-      helix zellij fish lf
-      htop
+      helix lf
+      htop xh
 
       # cli
       ripgrep tealdeer fzf
@@ -54,6 +60,11 @@ in
   };
 
   programs = {
+    zellij = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+  
     # enable git
     git = {
       enable = true;
@@ -61,24 +72,6 @@ in
       userEmail = "emmchris@protonmail.com";
     };
   
-    # enable fish shell
-    fish = {
-      enable = true;
-      interactiveShellInit = builtins.readFile ./config.fish;
-      plugins = (with pkgs.fishPlugins; [
-        # Colorized nixpkgs command output
-        { name = "grc"; src = grc.src; }
-        # Hydro prompt
-        { name = "hydro"; src = hydro.src; }
-        # Import foregin envs (aka. bash or conf)
-        { name = "foreign-env"; src = foreign-env.src; }
-        # Receive notifications when process done
-        { name = "done"; src = done.src; }
-        # Colored man-pages
-        { name = "colored-man"; src = colored-man-pages.src; }
-      ]);
-    };
-
     # bat: cat replacement
     bat = {
       enable = true;
