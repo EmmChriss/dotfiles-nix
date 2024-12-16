@@ -1,11 +1,11 @@
 Things to finish up before I can say that this configuration is complete
 
 - [ ] configs to integrate into nix format:
-  - [ ] fish
-  - [ ] alacritty
-  - [ ] zellij
-  - [ ] lf
-  - [ ] helix: maybe just builtins.readFile
+  - [x] fish
+  - [x] alacritty
+  - [x] zellij
+  - [x] lf
+  - [x] helix
   - [ ] hyprland
   - [ ] kickoff
   - [ ] waybar
@@ -22,6 +22,5 @@ Things to finish up before I can say that this configuration is complete
   - [ ] lf?
   - [ ] gitui?
   - [ ] DIRCOLORS?
-
 
 Inspired from: https://git.sr.ht/~misterio/nix-config/tree/main/item/home/misterio/features/cli/default.nix

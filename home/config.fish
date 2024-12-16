@@ -2,8 +2,8 @@
 # TODO: find out if these really matter at all
 set -x TERMINAL alacritty
 set -x BROWSER librewolf
-set -x EDITOR helix
-set -x VISUAL helix
+set -x EDITOR hx
+set -x VISUAL hx
 set -x PAGER less
 # set -x OPERNER xdg-open
 
@@ -55,7 +55,7 @@ set -x BAT_THEME TwoDark
 # ctrl-f to open lf
 bind \cf 'lf; commandline -f repaint'
 
-# lf alias to cd to dir when existing lf
+# lf alias to cd to dir when exiting lf
 function lf -w lf
     set tmp (mktemp)
     command lf -last-dir-path=$tmp $argv
@@ -63,7 +63,7 @@ function lf -w lf
         set dir (cat $tmp)
         rm -f "$tmp"
         if test -d "$dir" && test "$dir" != (pwd)
-            cd $dir
+            pushd $dir
         end
     end
 end

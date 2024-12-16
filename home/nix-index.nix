@@ -24,6 +24,7 @@ in
       RestartSec = "5m";
     };
   };
+
   systemd.user.timers.nix-index-database-sync = {
     Unit = { Description = "Automatic github:mic92/nix-index-database fetching"; };
     Timer = {

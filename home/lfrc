@@ -1,0 +1,83 @@
+set shell sh
+set shellopts '-eu'
+set ifs "\n"
+set scrolloff 10
+set previewer "~/.bin/preview"
+set promptfmt "\033[32;1m%u\033[0m \033[34;1m%w/\033[0m\033[1m%f\033[0m"
+
+${{
+	# init stuff
+	lf -remote "send $id resize"
+}}
+
+cmd resize ${{
+	# using 45 93 and 191 as tput outputs on 3 sizes I wish to support
+	w="$(tput cols)"
+	if [ $w -le 45 ]; then
+		lf -remote "send $id set ratios 1:2"
+	elif [ $w -le 191 ]; then
+		lf -remote "send $id set ratios 1:2:3"
+	fi
+}}
+
+map gg
+map g/ cd /
+map gr cd /
+map gh cd ~
+map gu cd /usr
+map gm cd /mnt
+map gd cd /mnt/data
+map gw cd /mnt/win
+
+map <a-r> push :rename<space>
+map <a-R> bulkrename
+map <a-d> delete
+
+map i $[ -f "$f" ] && ~/.bin/preview "$f" | $PAGER
+map e edit
+
+cmd usage %du -cLh "${f-$fs}" | tail -n 1 | sed 's/total//' 
+cmd open $[ -n "${1+0}" ] && $OPENER "$1" || $OPENER "$f"
+cmd edit $[ -n "${1+0}" ] && $EDITOR "$1" || $EDITOR "$f"
+cmd mkdir %[ -n "${1+0}" ] && mkdir "$1" || echo "Argument needed"
+cmd rename %{{
+	if [ -z "${1+0}" ]; then
+		echo "Argument needed"
+	else
+		if [ -e "$1" ]; then
+			echo "File exists"
+		else
+			mv "$f" "$1"
+		fi
+	fi
+}}
+cmd bulkrename !{{
+	tmp() { umask 077; mktemp /tmp/lf-bulkrename-index.XXXXXXXXXX; }
+	index_a="$(tmp)"
+	index_b="$(tmp)"
+	trap 'rm "$index_a" "$index_b"' EXIT INT QUIT
+	if [ -n "${fs:-}" ]; then
+		printf '%s\n' "$fs" > "$index_a"
+	else
+		ls -1Ap > "$index_a"
+	fi
+	cat "$index_a" > "$index_b"
+	"$EDITOR" "$index_b"
+	if [ "$(wc -l "$index_a" "$index_b" |
+		awk 'NR==1 {a=$1} NR==2 {b=$1} END {print a-b}' )" -ne 0 ]; then
+		echo "Number of lines must stay the same." >&2
+		exit 1
+	fi
+	tty="$(tty)"
+	line=0
+	paste -d "\n" "$index_a" "$index_b" | while read -r name; do
+		: $((line += 1))
+		if [ $((line % 2)) -eq 1 ]; then
+			a="$name"; continue
+		else
+			b="$name"
+		fi
+		[ "$a" = "$b" ] && continue
+		mv -vi -- "$a" "$b" < "$tty"
+	done
+}}

@@ -1,11 +1,11 @@
-{ pkgs, config, lib, inputs, outputs, nix-colors, ... }:
+{ pkgs, nix-colors, ... }:
 
 let
   colorscheme = nix-colors.colorSchemes.nord;
-  mkIfElse = p: yes: no: mkMerge [
-    (mkIf p yes)
-    (mkIf (!p) no)
-  ];
+  # mkIfElse = p: yes: no: mkMerge [
+  #   (mkIf p yes)
+  #   (mkIf (!p) no)
+  # ];
 in
 {
   # You can import other home-manager modules here
@@ -19,7 +19,11 @@ in
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
 
+    ./lf.nix
+    ./helix.nix
+    ./alacritty.nix
     ./fish.nix
+    ./zellij.nix
     ./nix-index.nix
     ./pass.nix
     ./hyprland.nix
@@ -33,6 +37,7 @@ in
       # gui
       alacritty librewolf 
       libnotify dunst
+      nerdfonts
     
       # cloud
       heroku 
@@ -41,8 +46,7 @@ in
       gnupg age
 
       # tui
-      helix lf
-      htop xh
+      htop xh ncdu
 
       # cli
       ripgrep tealdeer fzf
@@ -84,13 +88,6 @@ in
       nix-direnv.enable = true;
       config.whitelist.prefix = [ "/home/morga/Project" ];
     };
-  };
-
-  # enable hyprand
-  wayland.windowManager.hyprland = {
-    enable = true;
-    systemd.variables = ["--all"];
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   };
 
   services.ssh-agent.enable = true;
