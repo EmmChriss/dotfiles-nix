@@ -51,7 +51,7 @@
 
     # Reusable home-manager modules you might want to export
     # These are usually stuff you would upstream into home-manager
-    homeManagerModules = import ./modules/home-manager;
+    homeManagerModules = import ./modules/home;
 
     # merged system config and home-manager config
     # they build together but are in separate namespaces
@@ -69,7 +69,7 @@
               useUserPackages = true;
               useGlobalPkgs = true;
               extraSpecialArgs = { inherit inputs; };
-              users.morga = ./home-manager/home.nix;
+              users.morga = ./home/home.nix;
             };
             nixpkgs.overlays = [
               # TODO: look into this
