@@ -52,6 +52,10 @@ set -x BAT_THEME TwoDark
 # set -U fish_pager_color_prefix        'white' '--bold' '--underline'
 # set -U fish_pager_color_progress      'brwhite' '--background=cyan'
 
+# Refer to Hydro documentation
+# See: https://github.com/jorgebucaran/hydro
+# TODO: check out Hydro's configuration options
+
 # ctrl-f to open lf
 bind \cf 'lf; commandline -f repaint'
 

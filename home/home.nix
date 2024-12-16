@@ -47,13 +47,16 @@ in
       # gui
       alacritty librewolf 
       libnotify dunst
-      nerdfonts
+      nerdfonts tofi
+
+      # wayland
+      wl-clipboard
     
       # cloud
       heroku 
 
       # security
-      gnupg age
+      gnupg age pinentry
 
       # tui
       htop xh ncdu
@@ -101,6 +104,7 @@ in
   };
 
   services.ssh-agent.enable = true;
+  services.gpg-agent.enable = true;
 
   xdg = {
     enable = true;

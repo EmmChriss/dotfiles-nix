@@ -3,11 +3,11 @@ Things to finish up before I can say that this configuration is complete
 - [ ] configs to integrate into nix format:
   - [x] fish
   - [x] alacritty
-  - [x] zellij
-  - [x] lf
+  - [~] zellij
+  - [~] lf
   - [x] helix
   - [~] hyprland
-  - [ ] kickoff
+  - [ ] tofi
   - [ ] waybar
   - [ ] rustfmt
   - [ ] systemd units

@@ -197,13 +197,21 @@
       wayland = true;
     };
 
-    # Keep GNOME installed as alternative
-    # TODO: look into GNOME-based desktop
-    # eg: pop-shell, TidalWM, material-shell, Forge, tiling-shell
-    desktopManager.gnome.enable = true;
-
     # X11 keymap
     xkb.layout = "us";
+  };
+
+  # Keep GNOME installed as alternative
+  # TODO: look into GNOME-based desktop
+  # eg: pop-shell, TidalWM, material-shell, Forge, tiling-shell
+  # NOTE: hyprland is installed here, but configured in home-manager
+  services.xserver.desktopManager.gnome.enable = true;
+  programs.hyprland = {
+    enable = true;
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    # portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    withUWSM = true;
+    xwayland.enable = true;
   };
 
   # GPU Acceleration
@@ -245,6 +253,13 @@
   # also file manager stuff
   services.gvfs.enable = true;
   services.tumbler.enable = true;
+
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+    enableBrowserSocket = true;
+    pinentryPackage = pkgs.pinentry-all;
+  };
 
   # DO NOT CHANGE
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
