@@ -6,7 +6,7 @@ Things to finish up before I can say that this configuration is complete
   - [x] zellij
   - [x] lf
   - [x] helix
-  - [ ] hyprland
+  - [~] hyprland
   - [ ] kickoff
   - [ ] waybar
   - [ ] rustfmt

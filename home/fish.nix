@@ -1,5 +1,8 @@
 { pkgs, lib, config, ... }:
 
+# TODO: look into hasPackage. Problem: some packages do not get placed in 
+#   home.packages, but instead are activated with programs.*.enable, or
+#   equivalent. 
 let
   inherit (lib) mkIf;
   packageNames = map (p: p.pname or p.name or null) config.home.packages;

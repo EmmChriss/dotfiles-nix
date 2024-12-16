@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, outputs, lib, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 # Template: https://github.com/Misterio77/nix-starter-configs; standard variant
 {
@@ -191,8 +191,15 @@
     videoDrivers = [ "nvidia" ];
     desktopManager.xterm.enable = false;
 
-    # TODO: remove this when hyprland is working
-    displayManager.gdm.enable = true;
+    # Use GDM as DM
+    displayManager.gdm = {
+      enable = true;
+      wayland = true;
+    };
+
+    # Keep GNOME installed as alternative
+    # TODO: look into GNOME-based desktop
+    # eg: pop-shell, TidalWM, material-shell, Forge, tiling-shell
     desktopManager.gnome.enable = true;
 
     # X11 keymap
