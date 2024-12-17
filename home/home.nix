@@ -20,6 +20,9 @@ in
     # ./nvim.nix
 
     ./lf.nix
+    ./tofi.nix
+    ./scripts.nix
+    ./waybar.nix
     ./helix.nix
     ./alacritty.nix
     ./fish.nix

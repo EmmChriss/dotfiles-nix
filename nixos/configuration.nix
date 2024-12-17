@@ -124,9 +124,11 @@
     };
   };
 
-  # GPU switching
   environment.systemPackages = [
+    # GPU switching
     inputs.envycontrol.packages.x86_64-linux.default
+    # Userspace backlight tool
+    pkgs.brightnessctl
   ];
 
   # Audio
@@ -167,7 +169,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.morga = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "networkmanager" "video" ]; # Enable ‘sudo’ for the user.
   };
 
   # Instead of setting as login shell, run fish immediately when bash starts

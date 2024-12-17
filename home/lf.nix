@@ -4,6 +4,6 @@
 {
   programs.lf = {
     enable = true;
-    extraConfig = builtins.readFile ./lfrc;
+    extraConfig = builtins.readFile ./config/lfrc;
   };
 }

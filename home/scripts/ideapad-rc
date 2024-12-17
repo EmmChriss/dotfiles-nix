@@ -1,0 +1,53 @@
+#!/bin/sh
+
+function usage() {
+	[ -n "$1" ] && echo "$1"
+	echo "$0 [status | enable | disable | enable_until PERC]"
+	exit
+}
+
+function until_perc() {
+	trap 'ideapad-cm enable' EXIT 
+	
+	target_perc="$1"
+	while :; do
+		perc="$(cat /sys/class/power_supply/BAT*/capacity)"
+		[ "$perc" -ge "$target_perc" ] && exit
+		sleep 10
+	done
+}
+
+[ -f "/proc/acpi/call" ] || usage "acpi_call module not loaded"
+
+if [ "$1" == status ] || [ -z "$1" ]; then
+	cmd=status
+elif [ "$1" == enable ]; then
+	cmd=enable
+elif [ "$1" == disable ]; then
+	cmd=disable
+elif [ "$1" == enable_until ] && [ -n "$2" ]; then
+	cmd=enable_until
+	perc="$2"
+else
+	usage
+fi
+
+case $cmd in
+	status)
+		sudo sh -c "echo '\_SB.PCI0.LPC0.EC0.QCHO' > /proc/acpi/call"
+		sudo cat /proc/acpi/call; printf '\n'
+	;;
+	
+	enable)
+		echo '\_SB.PCI0.LPC0.EC0.VPC0.SBMC 0x07' | sudo tee /proc/acpi/call
+	;;
+	
+	disable)
+		echo '\_SB.PCI0.LPC0.EC0.VPC0.SBMC 0x08' | sudo tee /proc/acpi/call
+	;;
+	
+	enable_until)
+		echo '\_SB.PCI0.LPC0.EC0.VPC0.SBMC 0x07' | sudo tee /proc/acpi/call
+		{ until_perc "$perc" </dev/null >/dev/null & } &
+	;;
+esac

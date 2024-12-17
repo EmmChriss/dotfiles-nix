@@ -7,8 +7,8 @@ Things to finish up before I can say that this configuration is complete
   - [~] lf
   - [x] helix
   - [~] hyprland
-  - [ ] tofi
-  - [ ] waybar
+  - [x] tofi
+  - [~] waybar
   - [ ] rustfmt
   - [ ] systemd units
   - [ ] mimeapps

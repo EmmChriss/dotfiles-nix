@@ -37,6 +37,6 @@ in
         # disable greeting
         fish_greeting = "";
       };
-      interactiveShellInit = builtins.readFile ./config.fish;
+      interactiveShellInit = builtins.readFile ./config/config.fish;
     };
 }
