@@ -67,7 +67,7 @@ in
       htop xh ncdu
 
       # dev tools
-      pnpm nodejs
+      pnpm nodejs docker-compose
 
       # cli
       ripgrep tealdeer fzf

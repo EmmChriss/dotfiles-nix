@@ -293,7 +293,6 @@
   virtualisation.docker = {
     enable = true;
     autoPrune.enable = true;
-    extraPackages = [ pkgs.docker-compose ];
   };
 
   # DO NOT CHANGE
