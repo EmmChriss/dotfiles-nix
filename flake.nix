@@ -19,6 +19,8 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    envycontrol.url = "github:bayasdev/envycontrol";
   };
 
   outputs = { self, systems, nixpkgs, home-manager, nur, nix-colors, ... }@inputs:

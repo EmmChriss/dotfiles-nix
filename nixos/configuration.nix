@@ -106,6 +106,7 @@
       # modesetting is usually needed
       # TODO: verify if GNOME could be used instead on nouveau
       modesetting.enable = true;
+      nvidiaPersistenced = true;
       powerManagement.enable = true;
       powerManagement.finegrained = true;
 
@@ -122,6 +123,11 @@
       };
     };
   };
+
+  # GPU switching
+  environment.systemPackages = [
+    inputs.envycontrol.packages.x86_64-linux.default
+  ];
 
   # Audio
   security.rtkit.enable = true; # refer to NixOS Wiki:Audio
@@ -206,6 +212,25 @@
   # eg: pop-shell, TidalWM, material-shell, Forge, tiling-shell
   # NOTE: hyprland is installed here, but configured in home-manager
   services.xserver.desktopManager.gnome.enable = true;
+  environment.gnome.excludePackages = (with pkgs; [
+    gnome-photos
+    gnome-tour
+    gedit # text editor
+  ]) ++ (with pkgs; [
+    cheese # webcam tool
+    gnome-music
+    gnome-terminal
+    epiphany # web browser
+    geary # email reader
+    evince # document viewer
+    gnome-characters
+    totem # video player
+    tali # poker game
+    iagno # go game
+    hitori # sudoku game
+    atomix # puzzle game
+  ]);
+  
   programs.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
@@ -231,6 +256,7 @@
       services.xserver.videoDrivers = lib.mkForce [ ];
       hardware.nvidia = {
         modesetting.enable = lib.mkForce false;
+        nvidiaPersistenced = lib.mkForce false;
         prime.offload.enable = lib.mkForce false;
         prime.offload.enableOffloadCmd = lib.mkForce false;
       };

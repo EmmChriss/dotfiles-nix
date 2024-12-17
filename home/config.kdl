@@ -161,7 +161,7 @@ keybinds {
     shared_except "locked" {
         // custom
         bind "Alt -" { NewPane "Down"; }
-        bind "Alt |" { NewPane "Right"; }
+        bind "Alt \\" { NewPane "Right"; }
 
         // builtin
         bind "Ctrl g" { SwitchToMode "Locked"; }

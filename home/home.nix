@@ -1,4 +1,4 @@
-{ pkgs, nix-colors, ... }:
+{ pkgs, inputs, nix-colors, ... }:
 
 let
   colorscheme = nix-colors.colorSchemes.nord;
@@ -74,6 +74,24 @@ in
       screen
       wf-recorder anki-bin 
     ];
+  };
+
+  # GNOME config
+  dconf = {
+    enable = true;
+
+    # dark theme
+    settings."org/gnome/desktop/interfaces".color-scheme = "prefer-dark";
+
+    # extensions
+    settings."org/gnome/shell" = {
+      disable-user-extensions = false;
+      enabled-extensions = with pkgs.gnomeExtensions; [
+        blur-my-shell.extensionUuid
+        gsconnect.extensionUuid
+        gpu-profile-selector.extensionUuid
+      ];
+    };
   };
 
   programs = {
