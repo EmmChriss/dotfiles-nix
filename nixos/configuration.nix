@@ -169,7 +169,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.morga = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "video" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "networkmanager" "video" "docker" ];
   };
 
   # Instead of setting as login shell, run fish immediately when bash starts
@@ -287,6 +287,13 @@
     enableSSHSupport = true;
     enableBrowserSocket = true;
     pinentryPackage = pkgs.pinentry-all;
+  };
+
+  # enable docker for dev
+  virtualisation.docker = {
+    enable = true;
+    autoPrune.enable = true;
+    extraPackages = [ pkgs.docker-compose ];
   };
 
   # DO NOT CHANGE

@@ -66,6 +66,9 @@ in
       # tui
       htop xh ncdu
 
+      # dev tools
+      pnpm nodejs
+
       # cli
       ripgrep tealdeer fzf
       bat atool grc
