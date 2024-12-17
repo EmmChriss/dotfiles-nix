@@ -19,7 +19,9 @@ in
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
 
+    ./systemd-units.nix
     ./lf.nix
+    ./pqiv.nix
     ./tofi.nix
     ./scripts.nix
     ./waybar.nix
@@ -73,7 +75,7 @@ in
       grim slurp slop
       imagemagick libnotify
       git python3 lua zig 
-      mpv firefox pqiv
+      mpv firefox
       screen
       wf-recorder anki-bin 
     ];

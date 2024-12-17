@@ -9,8 +9,9 @@ Things to finish up before I can say that this configuration is complete
   - [~] hyprland
   - [x] tofi
   - [~] waybar
+  - [x] systemd units
+  - [x] pqiv
   - [ ] rustfmt
-  - [ ] systemd units
   - [ ] mimeapps
 - [ ] packages to colorize
   - [ ] fish

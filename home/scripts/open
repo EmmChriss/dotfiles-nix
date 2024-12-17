@@ -16,7 +16,7 @@ esac
 
 # Handle mimetype
 case "$MIME" in
-	image/*) orphan sxiv "$FILE" *; exit ;;
+	image/*) orphan pqiv "$FILE" *; exit ;;
 esac
 
 # Handle extension
