@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   # enable hyprland
@@ -8,8 +8,9 @@
     systemd.enable = true;
     systemd.variables = ["--all"];
     extraConfig = builtins.readFile ./hyprland.conf;
-    plugins = with pkgs.hyprlandPlugins; [
-      hyprbars hyprexpo
-    ];
+    # TODO: look into why these fail to load
+    # plugins = with pkgs.hyprlandPlugins; [
+    #   hyprbars hyprexpo
+    # ];
   };
 }
