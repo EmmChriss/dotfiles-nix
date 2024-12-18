@@ -68,6 +68,9 @@ in
 
       # dev tools
       pnpm nodejs docker-compose
+      dbeaver-bin psmisc postgresql
+      typescript-language-server
+      pgcli
 
       # cli
       ripgrep tealdeer fzf
@@ -89,6 +92,7 @@ in
     enable = true;
 
     # dark theme
+    # WARN: dbeaver breaks on dark theme
     settings."org/gnome/desktop/interfaces".color-scheme = "prefer-dark";
 
     # extensions

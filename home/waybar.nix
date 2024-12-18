@@ -2,13 +2,12 @@
 
 let
   bl_device = "amdgpu_bl2";
-  getbl = "echo '100*'$(brightnessctl -d amdgpu_bl2 -e g)/$(brightnessctl -d amdgpu_bl2 -e m) | bc";
+  getbl = "echo 20*$(brightnessctl -d amdgpu_bl2 --exponent=2 g)/$(brightnessctl -d amdgpu_bl2 m)*5 | bc";
 in
 {
   home.packages = with pkgs; [
     # get backlight when it changes by any means
-    # requires: entr
-    entr
+    entr bc
     (writeShellScriptBin "bar-backlight"
       ''
         echo /sys/class/backlight/${bl_device}/brightness |\
