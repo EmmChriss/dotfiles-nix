@@ -2,6 +2,8 @@
   description = "NixOS Configuration";
 
   inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
+  
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
 
     nixos-hardware.url = "github:NixOs/nixos-hardware/master";
@@ -15,6 +17,11 @@
 
     nix-colors.url = "github:misterio77/nix-colors";
 
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,18 +30,18 @@
     envycontrol.url = "github:bayasdev/envycontrol";
   };
 
-  outputs = { self, systems, nixpkgs, home-manager, nur, nix-colors, ... }@inputs:
-  let
-    inherit (self) outputs;
-    
-    # Small tool to iterate over each system
-    eachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f nixpkgs.legacyPackages.${system});
+  outputs = { self, systems, flake-utils, nixpkgs, home-manager, nur, fenix, nix-colors, ... }@inputs:
+  # let
+  #   # Small tool to iterate over each system
+  #   eachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f nixpkgs.legacyPackages.${system});
+  # in
+  let pkgs = system: nixpkgs.legacyPackages.${system};
   in
   {
 
     # Your custom packages
     # Accessible through 'nix build', 'nix shell', etc
-    packages = eachSystem (pkgs: import ./pkgs pkgs);
+    packages = flake-utils.lib.eachDefaultSystem (system: import ./pkgs (pkgs system));
 
     # Formatter for your nix files, available through 'nix fmt'
     # Other options beside 'alejandra' include 'nixpkgs-fmt'
@@ -75,9 +82,8 @@
               users.morga = ./home/home.nix;
             };
             nixpkgs.overlays = [
-              # TODO: look into this
-              # nur.overlay
-              # (import ./overlays)
+              fenix.overlays.default
+              nur.overlays.default
             ];
           }
         ];

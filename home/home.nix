@@ -1,12 +1,5 @@
-{ pkgs, inputs, nix-colors, ... }:
+{ pkgs, ... }:
 
-let
-  colorscheme = nix-colors.colorSchemes.nord;
-  # mkIfElse = p: yes: no: mkMerge [
-  #   (mkIf p yes)
-  #   (mkIf (!p) no)
-  # ];
-in
 {
   # You can import other home-manager modules here
   imports = [
@@ -53,6 +46,7 @@ in
       alacritty librewolf 
       libnotify dunst
       nerdfonts tofi
+      teams-for-linux
 
       # wayland
       wl-clipboard
@@ -68,9 +62,15 @@ in
 
       # dev tools
       pnpm nodejs docker-compose
-      dbeaver-bin psmisc postgresql
+      dbeaver-bin # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
+      psmisc postgresql
       typescript-language-server
       pgcli
+
+      # rust
+      (fenix.stable.withComponents [
+        "cargo" "clippy" "rust-src" "rustc" "rustfmt"
+      ])
 
       # cli
       ripgrep tealdeer fzf
@@ -92,7 +92,6 @@ in
     enable = true;
 
     # dark theme
-    # WARN: dbeaver breaks on dark theme
     settings."org/gnome/desktop/interfaces".color-scheme = "prefer-dark";
 
     # extensions
@@ -107,14 +106,17 @@ in
   };
 
   programs = {
-    zellij = {
-      enable = true;
-      enableFishIntegration = true;
-    };
-  
     # enable git
     git = {
       enable = true;
+
+      # git large file support
+      lfs.enable = true;
+
+      # git diff highlighter
+      # delta.enable = true;
+      difftastic.enable = true;
+      
       userName = "EmmChriss";
       userEmail = "emmchris@protonmail.com";
     };

@@ -11,6 +11,7 @@
       pkgs.marksman
       # pkgs.nixd
       pkgs.nil
+      pkgs.rust-analyzer
     ];
     ignores = [
       "target/"

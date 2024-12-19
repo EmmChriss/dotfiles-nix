@@ -57,9 +57,15 @@
       trusted-users = [ "morga" ];
       experimental-features = [ "nix-command" "flakes" ];
 
-      # enable hyprland cachix instance to not build hyprland and friends from source
-      substituters = ["https://hyprland.cachix.org"];
-      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+      # enable extra substituters
+      substituters = [
+        "https://hyprland.cachix.org"
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
     };
     gc = {
       automatic = true;
@@ -101,7 +107,10 @@
   # Hardware
   hardware = {
     bluetooth.enable = true;
-    graphics.enable = true;
+    graphics = {
+      enable = true;
+      package = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.mesa.drivers;
+    };
     nvidia = {
       # modesetting is usually needed
       # TODO: verify if GNOME could be used instead on nouveau
@@ -128,6 +137,7 @@
     # GPU switching
     inputs.envycontrol.packages.x86_64-linux.default
     # Userspace backlight tool
+    # NOTE: adds user groups when installed from nixos config
     pkgs.brightnessctl
   ];
 
@@ -236,7 +246,7 @@
   programs.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-    # portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     withUWSM = true;
     xwayland.enable = true;
   };

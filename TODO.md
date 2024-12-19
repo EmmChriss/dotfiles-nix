@@ -20,8 +20,12 @@ Things to finish up before I can say that this configuration is complete
   - [ ] zellij
   - [ ] hyprland?
   - [ ] waybar?
-  - [ ] lf?
+  - [ ] ~~lf?~~ (potential replacement: yazi)
   - [ ] gitui?
-  - [ ] DIRCOLORS?
+  - [ ] ~~DIRCOLORS?~~ (not needed for eza)
+- [ ] bugfixes
+  - [ ] waybar not starting on hyprland login
+  - [ ] other cursor
+  - [ ] background
 
 Inspired from: https://git.sr.ht/~misterio/nix-config/tree/main/item/home/misterio/features/cli/default.nix
