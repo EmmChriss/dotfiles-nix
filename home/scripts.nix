@@ -5,8 +5,6 @@
     # Volume control; requires pactl
     pulseaudio
     (writeShellScriptBin "vol" (builtins.readFile ./scripts/vol))
-    # Open arbitrary files from terminal
-    (writeShellScriptBin "open" (builtins.readFile ./scripts/open))
     # Preview files in terminal
     (writeShellScriptBin "preview" (builtins.readFile ./scripts/preview))
     # Rapid-charge mode for Lenovo laptops

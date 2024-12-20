@@ -13,7 +13,7 @@
     # ./nvim.nix
 
     ./systemd-units.nix
-    ./lf.nix
+    ./yazi.nix
     ./pqiv.nix
     ./tofi.nix
     ./scripts.nix
@@ -39,6 +39,9 @@
       cliRef = "curl -s 'http://pastebin.com/raw/yGmGiDQX' | less -i";
       page = "eval $PAGER";
       http = "xh";
+
+      # switched from lf to yazi
+      lf = "y";
     };
 
     packages = with pkgs; [
@@ -74,8 +77,8 @@
 
       # cli
       ripgrep tealdeer fzf
-      bat atool grc
-      ffmpeg gitui eza
+      bat atool grc comma
+      ffmpeg gitui eza ouch
 
       unzip 
       grim slurp slop

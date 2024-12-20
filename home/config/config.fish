@@ -56,7 +56,7 @@ set -x BAT_THEME TwoDark
 # See: https://github.com/jorgebucaran/hydro
 # TODO: check out Hydro's configuration options
 
-# ctrl-f to open lf
+# ctrl-f to open file manager
 bind \cf 'lf; commandline -f repaint'
 
 # lf alias to cd to dir when exiting lf

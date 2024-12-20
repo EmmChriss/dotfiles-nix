@@ -2,35 +2,48 @@
   description = "NixOS Configuration";
 
   inputs = {
-    flake-utils.url = "github:numtide/flake-utils";
-  
+    # Stable nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
 
+    # NixOS Hardware - master
     nixos-hardware.url = "github:NixOs/nixos-hardware/master";
 
+    # Home Manager
     home-manager = {
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hyprland.url = "github:hyprwm/Hyprland";
+    # Flake Utils: couple of utility functions
+    flake-utils.url = "github:numtide/flake-utils";
 
-    nix-colors.url = "github:misterio77/nix-colors";
+    # Nix Colors: manage your colorschemes
+    # TODO: use this for something
+    # nix-colors.url = "github:misterio77/nix-colors";
 
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
+    # Nur: Nix User Repository overlays
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Hyprland: upstream hyprland releases; uses cachix
+    hyprland.url = "github:hyprwm/Hyprland";
+
+    # Fenix: upstream rust profiles overlays
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # EnvyControl: PRIME switching made simple
     envycontrol.url = "github:bayasdev/envycontrol";
+
+    # Yazi: terminal file manager upstream releases
+    yazi.url = "github:sxyazi/yazi";
   };
 
-  outputs = { self, systems, flake-utils, nixpkgs, home-manager, nur, fenix, nix-colors, ... }@inputs:
+  outputs = { self, systems, flake-utils, nixpkgs, ... }@inputs:
   # let
   #   # Small tool to iterate over each system
   #   eachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f nixpkgs.legacyPackages.${system});
@@ -68,11 +81,46 @@
       morga = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
+          # Enable overlays
+          {
+            nixpkgs.overlays = [
+              inputs.nur.overlays.default
+              inputs.yazi.overlays.default
+
+              # Fenix workaround for stable nixpkgs caching; ie. instead of:
+              # inputs.fenix.overlays.default
+              # See: https://github.com/nix-community/fenix
+              # See: https://github.com/nix-community/fenix/issues/79
+              (_: super: 
+                let
+                  inherit (inputs) fenix;
+                  pkgs = fenix.inputs.nixpkgs.legacyPackages.${super.system};
+                in fenix.overlays.default pkgs pkgs
+              )
+            ];
+          }
+        
+          # Enable Cachix substituters
+          {
+            nix.settings = {
+              substituters = [
+                "https://hyprland.cachix.org"
+                "https://nix-community.cachix.org"
+                "https://yazi.cachix.org"
+              ];
+              trusted-public-keys = [
+                "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+                "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+                "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="
+              ];
+            };
+          }
+        
           # NixOS system configuration; all rooted in configuration.nix
           ./nixos/configuration.nix
 
           # Home-manager configuration; all rooted in home.nix
-          home-manager.nixosModules.home-manager
+          inputs.home-manager.nixosModules.home-manager
           {
             home-manager = {
               backupFileExtension = "homenew";
@@ -81,10 +129,6 @@
               extraSpecialArgs = { inherit inputs; };
               users.morga = ./home/home.nix;
             };
-            nixpkgs.overlays = [
-              fenix.overlays.default
-              nur.overlays.default
-            ];
           }
         ];
         specialArgs = { inherit inputs; };

@@ -13,6 +13,7 @@ Things to finish up before I can say that this configuration is complete
   - [x] pqiv
   - [ ] rustfmt
   - [ ] mimeapps
+  - [~] yazi: ~~config~~, ~~plugins~~, colorscheme, custom preview script
 - [ ] packages to colorize
   - [ ] fish
   - [ ] eza
@@ -20,7 +21,7 @@ Things to finish up before I can say that this configuration is complete
   - [ ] zellij
   - [ ] hyprland?
   - [ ] waybar?
-  - [ ] ~~lf?~~ (potential replacement: yazi)
+  - [x] ~~lf?~~ (potential replacement: yazi)
   - [ ] gitui?
   - [ ] ~~DIRCOLORS?~~ (not needed for eza)
 - [ ] bugfixes
