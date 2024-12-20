@@ -42,6 +42,9 @@ in
 
     # compress files
     ouch
+
+    # drag and drop
+    xdragon
   ];
 
   programs.yazi = {
@@ -53,13 +56,49 @@ in
     plugins = {
       chmod = "${yazi-plugins}/chmod.yazi";
       max-preview = "${yazi-plugins}/max-preview.yazi";
+      git = "${yazi-plugins}/git.yazi";
       fuse-archive = yazi-fuse-archive;
       ouch = yazi-ouch;
     };
 
     initLua = ''
-      -- Some plugins need initialization
+      -- Initialize plugins at startup
+      require("git"):setup()
       require("fuse-archive"):setup({ smart_enter = true })
+
+      -- Header: show username/hostname
+      Header:children_add(function()
+      	if ya.target_family() ~= "unix" then
+      		return ""
+      	end
+      	return ui.Span(ya.user_name() .. "@" .. ya.host_name() .. ":"):fg("blue")
+      end, 500, Header.LEFT)
+
+      -- Status: show symbolic link
+      function Status:name()
+      	local h = self._current.hovered
+      	if not h then
+      		return ""
+      	end
+
+      	return " " .. h.name:gsub("\r", "?", 1)
+      end
+
+      -- Status: show user:group
+      Status:children_add(function()
+      	local h = cx.active.current.hovered
+      	if h == nil or ya.target_family() ~= "unix" then
+      		return ""
+      	end
+
+      	return ui.Line {
+      		ui.Span(ya.user_name(h.cha.uid) or tostring(h.cha.uid)):fg("magenta"),
+      		":",
+      		ui.Span(ya.group_name(h.cha.gid) or tostring(h.cha.gid)):fg("magenta"),
+      		" ",
+      	}
+      end, 500, Status.RIGHT)
+      
     '';
 
     settings = {
@@ -98,10 +137,21 @@ in
           { name = "*"; use = ["open" "reveal" "edit" "view" "play"]; }
         ];
       };
+      plugin.prepend_fetchers = [
+        # Fetch git status of files and folders using git plugin
+        { id = "git"; name = "*"; run = "git"; }
+        { id = "git"; name = "*/"; run = "git"; }
+      ];
     };
 
     keymap = {
       manager.prepend_keymap = [
+        # drop to shell
+        { on = "!"; run = ''shell "$SHELL" --block''; desc = "Open shell here"; }
+
+        # drag and drop files
+        { on = "<C-n>"; run = ''shell 'dragon -x -i -T "$1"' ''; }
+      
         # transparently enter/leave archive files
         { on = "<Right>"; run = "plugin fuse-archive --args=mount"; desc = "Enter or Mount selected archive"; }
         { on = "<Left>"; run = "plugin fuse-archive --args=unmount"; desc = "Leave or Unmount selected archive"; }
@@ -133,6 +183,10 @@ in
         { on = ["g" "p"]; run = "cd ~/Media/Pictures"; desc = "Bookmark: Pictures"; }
         { on = ["g" "c"]; run = "cd ~/.config"; desc = "Bookmark: Config"; }
         { on = ["g" "n"]; run = "cd ~/nix"; desc = "Bookmark: Nix Config"; }
+      ];
+
+      input.prepend_keymap = [
+        { on = "<Esc>"; run = "close"; desc = "Cancel input"; }
       ];
     };
   };

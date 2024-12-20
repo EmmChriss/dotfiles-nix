@@ -40,6 +40,11 @@
       page = "eval $PAGER";
       http = "xh";
 
+      # when in doubt
+      atool = "echo Did you mean ouch compress/decompress'?'";
+      apack = "echo Did you mean ouch compress'?'";
+      aunpack = "echo Did you mean ouch decompress'?'";
+
       # switched from lf to yazi
       lf = "y";
     };
@@ -77,8 +82,8 @@
 
       # cli
       ripgrep tealdeer fzf
-      bat atool grc comma
-      ffmpeg gitui eza ouch
+      bat grc comma ffmpeg
+      gitui eza ouch
 
       unzip 
       grim slurp slop
