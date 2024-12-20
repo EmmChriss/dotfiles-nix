@@ -33,6 +33,10 @@ in
         gmv="git mv";
         grm="git rm";
       };
+      shellAliases = {
+        # use yazi instead of lf
+        lf = "y";
+      };
       functions = {
         # disable greeting
         fish_greeting = "";

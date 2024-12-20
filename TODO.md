@@ -13,7 +13,7 @@ Things to finish up before I can say that this configuration is complete
   - [x] pqiv
   - [ ] rustfmt
   - [ ] mimeapps
-  - [~] yazi: ~~config~~, ~~plugins~~, colorscheme, custom preview script
+  - [~] yazi: ~~config~~, ~~plugins~~, colorscheme, custom preview script, check out https://github.com/sharklasers996/eza-preview.yazi
 - [ ] packages to colorize
   - [ ] fish
   - [ ] eza

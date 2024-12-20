@@ -58,16 +58,3 @@ set -x BAT_THEME TwoDark
 
 # ctrl-f to open file manager
 bind \cf 'lf; commandline -f repaint'
-
-# lf alias to cd to dir when exiting lf
-function lf -w lf
-    set tmp (mktemp)
-    command lf -last-dir-path=$tmp $argv
-    if test -f "$tmp"
-        set dir (cat $tmp)
-        rm -f "$tmp"
-        if test -d "$dir" && test "$dir" != (pwd)
-            pushd $dir
-        end
-    end
-end
