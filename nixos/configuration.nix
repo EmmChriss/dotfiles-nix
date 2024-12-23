@@ -14,6 +14,9 @@
     # import entire laptop config
     inputs.nixos-hardware.nixosModules.lenovo-ideapad-15arh05
 
+    # enable amd-pstate
+    inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
+
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
 
@@ -124,15 +127,13 @@
   };
 
   environment.systemPackages = [
-    # GPU switching
-    inputs.envycontrol.packages.x86_64-linux.default
     # Userspace backlight tool
     # NOTE: adds user groups when installed from nixos config
     pkgs.brightnessctl
   ];
 
   # Audio
-  security.rtkit.enable = true; # refer to NixOS Wiki:Audio
+  security.rtkit.enable = true; # see NixOS Wiki:Audio
   services.pipewire = {
     enable = true;
     pulse.enable = true;
@@ -140,6 +141,8 @@
 
     # bluetooth support
     wireplumber.extraConfig.bluetoothEnhancements = {
+
+      # enable bluetooth audio support
       "monitor.bluez.properties" = {
         "bluez5.enable-sbc-xq" = true;
         "bluez5.enable-msbc" = true;
@@ -252,16 +255,17 @@
     "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
 
   # BATTERY: secondary boot config that switches off NVIDIA card
-  specialisation = {
-    battery.configuration = {
-      system.nixos.tags = [ "battery" ];
-      services.xserver.videoDrivers = lib.mkForce [ ];
-      hardware.nvidia = {
-        modesetting.enable = lib.mkForce false;
-        nvidiaPersistenced = lib.mkForce false;
-        prime.offload.enable = lib.mkForce false;
-        prime.offload.enableOffloadCmd = lib.mkForce false;
-      };
+  specialisation.battery.configuration = { ... }: {
+    # nixos-hardware: disable nvidia module
+    imports = [ inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable ];
+  
+    system.nixos.tags = [ "battery" ];
+    services.xserver.videoDrivers = lib.mkForce [ ];
+    hardware.nvidia = {
+      modesetting.enable = lib.mkForce false;
+      nvidiaPersistenced = lib.mkForce false;
+      prime.offload.enable = lib.mkForce false;
+      prime.offload.enableOffloadCmd = lib.mkForce false;
     };
   };
 
@@ -281,6 +285,31 @@
   # also file manager stuff
   services.gvfs.enable = true;
   services.tumbler.enable = true;
+
+  # power saving
+  services.power-profiles-daemon.enable = false;
+  services.auto-cpufreq = {
+    enable = true;
+    settings = {
+      battery = {
+         governor = "powersave";
+         turbo = "never";
+      };
+      charger = {
+         governor = "performance";
+         turbo = "auto";
+      };
+    };
+  };
+
+  # system76 scheduler for extra performance
+  services.system76-scheduler = {
+    enable = true;
+    useStockConfig = true;
+  };
+
+  # powertop auto tuning
+  powerManagement.powertop.enable = true;
 
   programs.gnupg.agent = {
     enable = true;

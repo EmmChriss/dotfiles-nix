@@ -66,11 +66,23 @@
       gnupg age pinentry
 
       # tui
-      htop xh ncdu
+      htop xh ncdu 
+      
+      # nix
+      nh manix nix-du
+      nix-tree
 
       # dev tools
       pnpm nodejs docker-compose
-      dbeaver-bin # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
+
+      # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
+      # TODO: overwrite/create dbeaver.desktop
+      (let wrapped = writeShellScriptBin "dbeaver" "GDK_BACKEND=x11 exec ${dbeaver-bin}/bin/dbeaver";
+      in pkgs.symlinkJoin {
+        name = "dbeaver";
+        paths = [wrapped dbeaver-bin]; 
+      })
+
       psmisc postgresql
       typescript-language-server
       pgcli
