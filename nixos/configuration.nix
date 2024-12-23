@@ -130,6 +130,9 @@
     # Userspace backlight tool
     # NOTE: adds user groups when installed from nixos config
     pkgs.brightnessctl
+
+    # Power monitor with system access
+    pkgs.powertop
   ];
 
   # Audio
@@ -215,7 +218,6 @@
   # Keep GNOME installed as alternative
   # TODO: look into GNOME-based desktop
   # eg: pop-shell, TidalWM, material-shell, Forge, tiling-shell
-  # NOTE: hyprland is installed here, but configured in home-manager
   services.xserver.desktopManager.gnome.enable = true;
   environment.gnome.excludePackages = (with pkgs; [
     gnome-photos
@@ -236,6 +238,7 @@
     atomix # puzzle game
   ]);
   
+  # NOTE: hyprland is installed here, but configured in home-manager
   programs.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
@@ -309,7 +312,9 @@
   };
 
   # powertop auto tuning
-  powerManagement.powertop.enable = true;
+  # WARN: messes with wireless mouse; disabled for now
+  # TODO: find fix
+  # powerManagement.powertop.enable = true;
 
   programs.gnupg.agent = {
     enable = true;
