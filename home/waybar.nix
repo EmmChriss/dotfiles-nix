@@ -1,21 +1,16 @@
 { pkgs, ... }:
 
-let
-  bl_device = "amdgpu_bl2";
-  getbl = "echo 20*$(brightnessctl -d amdgpu_bl2 --exponent=2 g)/$(brightnessctl -d amdgpu_bl2 m)*5 | bc";
-in
 {
   home.packages = with pkgs; [
     # get backlight when it changes by any means
-    entr bc
-    (writeShellScriptBin "bar-backlight"
-      ''
-        echo /sys/class/backlight/${bl_device}/brightness |\
-        entr -ns '${getbl}'
-      ''
-    )
-
-    # 
+    (writeShellApplication {
+      name = "bar-backlight";
+      runtimeInputs = [ entr bc ];
+      text = ''
+        echo /sys/class/backlight/amd*/brightness |\
+        entr -ns bl
+      '';
+    })
   ];
 
   programs.waybar = {

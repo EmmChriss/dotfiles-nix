@@ -127,10 +127,6 @@
   };
 
   environment.systemPackages = [
-    # Userspace backlight tool
-    # NOTE: adds user groups when installed from nixos config
-    pkgs.brightnessctl
-
     # Power monitor with system access
     pkgs.powertop
   ];
