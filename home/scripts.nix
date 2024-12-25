@@ -5,19 +5,35 @@
     # Volume control
     (writeShellApplication {
       name = "vol";
-      runtimeInputs = [ pulseaudio ];
+      runtimeInputs = [ wireplumber ];
       text = ''
-        # no args, print current volume
         if test $# = 0; then
-        	current="$(pactl get-sink-volume @DEFAULT_SINK@ | head -n1 | awk '{print $5}' | cut -d% -f1)"
-        	echo "$current"
-        	exit
+          # print usage
+          echo "vol [DEVICE] get: prints volume"
+          echo "vol [DEVICE] mute: toggle mute"
+          echo "vol [DEVICE] VOL%[+/-]: increase/decrese/set volume"
+          echo "DEVICE: sink/speaker | source/mic | [other input to wpctl]"
+          exit
+        elif test $# = 1; then
+          # $1: N%[+/-] | mute | get
+          dev=@DEFAULT_AUDIO_SINK@
+          op="$1"
+        elif test $# = 2; then
+          # $1: [sink/speaker] | [source/mic]
+          # $2: N%[+/-] | mute
+          case "$1" in
+            sink|speaker) dev=@DEFAULT_AUDIO_SINK@ ;;
+            source|mic*) dev=@DEFAULT_AUDIO_SOURCE@ ;;
+            *) dev="$1" ;;
+          esac
+          op="$2"
         fi
 
-        # at least one arg
-        case $1 in
-        	mute) pactl set-sink-mute @DEFAULT_SINK@ toggle ;;
-        	*) pactl set-sink-volume @DEFAULT_SINK@ "$1" ;;
+        echo "$op" "$dev"
+        case "$op" in
+          get) wpctl get-volume "$dev" | grep Volume | cut -d' ' -f2 | tr -d '.' | bl ;;
+        	mute) wpctl set-mute "$dev" toggle ;;
+        	*) wpctl set-volume "$dev" "$op" ;;
         esac
       '';
     })

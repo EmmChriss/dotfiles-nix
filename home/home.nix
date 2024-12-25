@@ -53,7 +53,7 @@
       # gui
       alacritty librewolf 
       libnotify dunst tofi
-      terminus-nerdfont
+      nerdfonts
       teams-for-linux
 
       # wayland
@@ -69,6 +69,7 @@
 
       # tui
       htop xh ncdu gitui
+      pulsemixer
       
       # cli
       ripgrep tealdeer fzf

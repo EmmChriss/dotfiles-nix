@@ -3,9 +3,10 @@
 {
   home.packages = with pkgs; [
     # get backlight when it changes by any means
+    # uses generic backlight script defined in ./scripts.nix
     (writeShellApplication {
       name = "bar-backlight";
-      runtimeInputs = [ entr bc ];
+      runtimeInputs = [ entr ];
       text = ''
         echo /sys/class/backlight/amd*/brightness |\
         entr -ns bl
@@ -36,12 +37,6 @@
         all-outputs = false;
         format = "{icon}";
         format-icons = {
-            "1:web" = "";
-            "2:code" = "";
-            "3:term" = "";
-            "4:work" = "";
-            "5:music" = "";
-            "6:docs" = "";
             urgent = "";
             empty = "⬤";
             active = "";
