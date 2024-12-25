@@ -53,7 +53,7 @@
       # gui
       alacritty librewolf 
       libnotify dunst tofi
-      nerdfonts-terminus
+      terminus-nerdfont
       teams-for-linux
 
       # wayland
@@ -62,7 +62,7 @@
       # wf-recorder # screen recorder on wayland
     
       # cloud
-      heroku flyctl mega-cmd
+      heroku flyctl megacmd
 
       # security
       gnupg age pinentry
