@@ -12,8 +12,18 @@
       # nixd
       nil
       rust-analyzer
+      python312Packages.python-lsp-server
+      taplo # toml
+      zls
+      # docker-langserver
+      # docker-compose-langserver
+      # elm-language-server
+      cmake-language-server
       bash-language-server
       typescript-language-server
+      lua-language-server
+      yaml-language-server
+      llvmPackages_19.clang-tools # provides clangd
     ];
     ignores = [
       "target/"
