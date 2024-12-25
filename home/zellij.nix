@@ -11,6 +11,8 @@
   };
 
   # home-manager doesn't yet support the KDL file format used by new zellij versions
+  # NOTE: actually, nix supports KDL
+  # TODO: port config to nix, eliminate native format
   home.file."${config.home.homeDirectory}/.config/zellij/config.kdl" = {
     enable = true;
     source = ./config/zellij.kdl;

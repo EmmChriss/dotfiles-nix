@@ -52,28 +52,37 @@
     packages = with pkgs; [
       # gui
       alacritty librewolf 
-      libnotify dunst
-      nerdfonts tofi
+      libnotify dunst tofi
+      nerdfonts-terminus
       teams-for-linux
 
       # wayland
-      wl-clipboard
+      wl-clipboard grim
+      slurp slop libnotify
+      # wf-recorder # screen recorder on wayland
     
       # cloud
-      heroku 
+      heroku flyctl mega-cmd
 
       # security
       gnupg age pinentry
 
       # tui
-      htop xh ncdu 
+      htop xh ncdu gitui
+      
+      # cli
+      ripgrep tealdeer fzf
+      bat grc ffmpeg eza
+      ouch imagemagick
       
       # nix
       nh manix nix-du
-      nix-tree
+      nix-tree comma 
 
       # dev tools
       pnpm nodejs docker-compose
+      psmisc postgresql pgcli
+      git python3 lua zig
 
       # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
       # TODO: overwrite/create dbeaver.desktop
@@ -83,27 +92,10 @@
         paths = [wrapped dbeaver-bin]; 
       })
 
-      psmisc postgresql
-      typescript-language-server
-      pgcli
-
       # rust
       (fenix.stable.withComponents [
         "cargo" "clippy" "rust-src" "rustc" "rustfmt"
       ])
-
-      # cli
-      ripgrep tealdeer fzf
-      bat grc comma ffmpeg
-      gitui eza ouch
-
-      unzip 
-      grim slurp slop
-      imagemagick libnotify
-      git python3 lua zig 
-      mpv firefox
-      screen
-      wf-recorder anki-bin 
     ];
   };
 

@@ -7,11 +7,13 @@
   programs.helix = {
     enable = true;
     defaultEditor = true;
-    extraPackages = [
-      pkgs.marksman
-      # pkgs.nixd
-      pkgs.nil
-      pkgs.rust-analyzer
+    extraPackages = with pkgs; [
+      marksman
+      # nixd
+      nil
+      rust-analyzer
+      bash-language-server
+      typescript-language-server
     ];
     ignores = [
       "target/"
