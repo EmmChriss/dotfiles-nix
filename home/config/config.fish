@@ -20,7 +20,7 @@ set -x _JAVA_AWT_WM_NONREPARENTING 1
 # TODO: fix dircolors
 # dircolors -c | sed 's/setenv/set -x/' | source
 # set -x LS_COLORS (sh -c 'eval $(dircolors $HOME/.config/DIR_COLORS); echo $LS_COLORS')
-set -x LESS -RS
+set -x LESS '-SIRNs --incsearch'
 set -x BAT_THEME TwoDark
 
 # Use terminal colors
