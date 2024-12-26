@@ -12,7 +12,6 @@
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
 
-    ./systemd-units.nix
     ./yazi.nix
     ./pqiv.nix
     ./tofi.nix
@@ -32,13 +31,21 @@
     homeDirectory = "/home/morga";
 
     shellAliases = {
+      # EDITOR
       helix = "hx";
+
+      # SHELL tools
       ls = "eza -lh --group-directories-first --color=auto";
       cat = "bat";
-      ssh = "env TERM=xterm-color ssh";
-      cliRef = "curl -s 'http://pastebin.com/raw/yGmGiDQX' | less -i";
       page = "eval $PAGER";
+
+      # network
+      bt = "bluetoothctl";
+      ssh = "env TERM=xterm-color ssh";
       http = "xh";
+
+      # utility
+      cliRef = "curl -s 'http://pastebin.com/raw/yGmGiDQX' | less -i";
 
       # when in doubt
       atool = "echo Did you mean ouch compress/decompress'?'";
@@ -47,6 +54,9 @@
 
       # switched from lf to yazi
       lf = "y";
+
+      # switched from tmux to zellij
+      tmux = "zellij";
     };
 
     packages = with pkgs; [
@@ -68,8 +78,8 @@
       gnupg age pinentry
 
       # tui
-      htop xh ncdu gitui
-      pulsemixer
+      htop xh gitui bluez
+      pulsemixer ncdu 
       
       # cli
       ripgrep tealdeer fzf
@@ -78,12 +88,18 @@
       
       # nix
       nh manix nix-du
-      nix-tree comma 
+      nix-tree comma
+      steam-run-free # just run some ld-loading program 
 
       # dev tools
       pnpm nodejs docker-compose
       psmisc postgresql pgcli
       git python3 lua zig
+
+      # rust
+      (fenix.stable.withComponents [
+        "cargo" "clippy" "rust-src" "rustc" "rustfmt"
+      ])
 
       # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
       # TODO: overwrite/create dbeaver.desktop
@@ -92,11 +108,6 @@
         name = "dbeaver";
         paths = [wrapped dbeaver-bin]; 
       })
-
-      # rust
-      (fenix.stable.withComponents [
-        "cargo" "clippy" "rust-src" "rustc" "rustfmt"
-      ])
     ];
   };
 
@@ -106,16 +117,6 @@
 
     # dark theme
     settings."org/gnome/desktop/interfaces".color-scheme = "prefer-dark";
-
-    # extensions
-    settings."org/gnome/shell" = {
-      disable-user-extensions = false;
-      enabled-extensions = with pkgs.gnomeExtensions; [
-        blur-my-shell.extensionUuid
-        gsconnect.extensionUuid
-        gpu-profile-selector.extensionUuid
-      ];
-    };
   };
 
   programs = {
@@ -146,6 +147,15 @@
       nix-direnv.enable = true;
       config.whitelist.prefix = [ "/home/morga/Project" ];
     };
+  };
+
+  systemd.user.services.megacmd = {
+    Unit = { Description = "Sync user directories to MEGA"; };
+    Service = {
+      ExecStart = "${pkgs.megacmd}/bin/mega-cmd-server";
+      Restart = "always";
+    };
+    Install.WantedBy = ["default.target"];
   };
 
   services.ssh-agent.enable = true;

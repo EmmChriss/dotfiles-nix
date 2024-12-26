@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # adds files using glob patterns to yadm repo
 
 # export package list

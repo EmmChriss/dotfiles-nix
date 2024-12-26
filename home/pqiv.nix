@@ -1,6 +1,5 @@
 { ... }:
 
-# TODO: look into why there is no config file generating
 {
   programs.pqiv = {
     enable = true;

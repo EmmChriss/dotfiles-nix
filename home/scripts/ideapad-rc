@@ -1,12 +1,12 @@
 #!/bin/sh
 
-function usage() {
+usage() {
 	[ -n "$1" ] && echo "$1"
 	echo "$0 [status | enable | disable | enable_until PERC]"
 	exit
 }
 
-function until_perc() {
+until_perc() {
 	trap 'ideapad-cm enable' EXIT 
 	
 	target_perc="$1"
@@ -19,13 +19,13 @@ function until_perc() {
 
 [ -f "/proc/acpi/call" ] || usage "acpi_call module not loaded"
 
-if [ "$1" == status ] || [ -z "$1" ]; then
+if [ "$1" = status ] || [ -z "$1" ]; then
 	cmd=status
-elif [ "$1" == enable ]; then
+elif [ "$1" = enable ]; then
 	cmd=enable
-elif [ "$1" == disable ]; then
+elif [ "$1" = disable ]; then
 	cmd=disable
-elif [ "$1" == enable_until ] && [ -n "$2" ]; then
+elif [ "$1" = enable_until ] && [ -n "$2" ]; then
 	cmd=enable_until
 	perc="$2"
 else
