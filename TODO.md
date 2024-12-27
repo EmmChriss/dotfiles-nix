@@ -15,6 +15,8 @@ Take a look at [WeAreWaylandNow](https://wearewaylandnow.com/) for cool software
   - [ ] wlogout: nice looking power menu, resembles tofi
   - [ ] hyprlock/gtklock/swaylock/waylock
   - [ ] switch from GDM to other login screen
+  - [ ] check out foot terminal emulator
+  - [ ] check out some widgets with eww/ags
   - [x] ~fish~
   - [x] ~alacritty~
   - [x] ~lf~: changed to yazi
