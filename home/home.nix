@@ -68,8 +68,8 @@
 
       # wayland
       wl-clipboard grim
-      slurp slop libnotify
-      # wf-recorder # screen recorder on wayland
+      slurp libnotify
+      wf-recorder # screen recorder on wayland
     
       # cloud
       heroku flyctl megacmd
