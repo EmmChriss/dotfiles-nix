@@ -63,7 +63,7 @@
       # gui
       alacritty librewolf 
       libnotify dunst tofi
-      nerdfonts
+      (nerdfonts.override { fonts = ["IosevkaTerm"]; })
       teams-for-linux
 
       # wayland

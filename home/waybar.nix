@@ -25,8 +25,7 @@
       position = "top";
       height = 24;
       spacing = 12;
-      modules-left = ["hyprland/workspaces"];
-      modules-center = ["hyprland/window"];
+      modules-left = ["hyprland/workspaces" "hyprland/window"];
       modules-right = ["custom/backlight" "pulseaudio" "network" "cpu" "memory" "battery" "tray" "clock"];
 
       "hyprland/workspaces"= {
@@ -35,12 +34,15 @@
         };
         disable-scroll = false;
         all-outputs = false;
-        format = "{icon}";
-        format-icons = {
-            urgent = "";
-            empty = "⬤";
-            active = "";
-            default = "";
+        format = "{icon} {windows}";
+        format-window-separator = " ";
+        window-rewrite-default = "";
+        window-rewrite = {
+          "title<.*youtube.*>" = "";
+          "class<librewolf>" = "";
+          "title<.*github.*>" = "";
+          "alacritty" = "";
+          "title<Zellij.*>" = "";
         };
       };
 
