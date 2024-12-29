@@ -28,7 +28,8 @@
     };
 
     # Hyprland: upstream hyprland releases; uses cachix
-    hyprland.url = "github:hyprwm/Hyprland";
+    # NOTE: pinned version to avoid cache misses on newer versions
+    hyprland.url = "https://github.com/hyprwm/Hyprland/archive/refs/tags/v0.45.2.tar.gz";
 
     # Fenix: upstream rust profiles overlays
     fenix = {
@@ -37,7 +38,8 @@
     };
 
     # Yazi: terminal file manager upstream releases
-    yazi.url = "github:sxyazi/yazi";
+    # NOTE: pinned version for potential backward-incompatible changes
+    yazi.url = "https://github.com/sxyazi/yazi/archive/refs/tags/v0.4.2.tar.gz";
   };
 
   outputs = { self, systems, flake-utils, nixpkgs, ... }@inputs:
