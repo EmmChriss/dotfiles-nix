@@ -36,18 +36,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # EnvyControl: PRIME switching made simple
-    envycontrol.url = "github:bayasdev/envycontrol";
-
     # Yazi: terminal file manager upstream releases
     yazi.url = "github:sxyazi/yazi";
   };
 
   outputs = { self, systems, flake-utils, nixpkgs, ... }@inputs:
-  # let
-  #   # Small tool to iterate over each system
-  #   eachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f nixpkgs.legacyPackages.${system});
-  # in
   let pkgs = system: nixpkgs.legacyPackages.${system};
   in
   {
