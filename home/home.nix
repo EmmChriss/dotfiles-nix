@@ -60,6 +60,9 @@
     };
 
     packages = with pkgs; [
+      # uni
+      protege-distribution
+      
       # gui
       alacritty librewolf 
       libnotify dunst tofi
@@ -94,7 +97,7 @@
       # dev tools
       pnpm nodejs docker-compose
       psmisc postgresql pgcli
-      git python3 lua zig
+      git python3 lua zig uv
 
       # rust
       (fenix.stable.withComponents [

@@ -34,7 +34,7 @@
         };
         disable-scroll = false;
         all-outputs = false;
-        format = "{icon} {windows}";
+        format = " {icon} {windows}";
         format-window-separator = " ";
         window-rewrite-default = "";
         window-rewrite = {
