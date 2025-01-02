@@ -24,6 +24,7 @@
     ./nix-index.nix
     ./pass.nix
     ./hyprland.nix
+    ./rustic.nix
   ];
 
   home = {
@@ -68,6 +69,7 @@
       libnotify dunst tofi
       (nerdfonts.override { fonts = ["IosevkaTerm"]; })
       teams-for-linux
+      popcorntime
 
       # wayland
       wl-clipboard grim
