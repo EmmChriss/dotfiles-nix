@@ -81,9 +81,9 @@
         format-bluetooth = "{volume}% {icon}";
         format-muted = "";
         format-icons = {
-            headphones = "";
-            handsfree = "";
-            headset = "";
+            headphone = "";
+            hands-free = "";
+            headset = "";
             phone = "";
             portable = "";
             car = "";
