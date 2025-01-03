@@ -99,11 +99,16 @@
 
   # Hardware
   hardware = {
-    bluetooth.enable = true;
+    bluetooth = {
+      enable = true;
+      settings.General.Experimental = true;
+    };
+
     graphics = {
       enable = true;
       package = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.mesa.drivers;
     };
+
     nvidia = {
       # modesetting is usually needed
       # TODO: verify if GNOME could be used instead on nouveau
@@ -135,18 +140,27 @@
   security.rtkit.enable = true; # see NixOS Wiki:Audio
   services.pipewire = {
     enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
 
     # bluetooth support
-    wireplumber.extraConfig.bluetoothEnhancements = {
+    wireplumber.extraConfig = {
+      # enable better audio profiles for bluetooth
+      "10-bluez" = {
+        "monitor.bluez.properties" = {
+          "bluez5.enable-sbc-xq" = true;
+          "bluez5.enable-msbc" = true;
+          "bluez5.enable-hw-volume" = true;
+          "bluez5.roles" = [ "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" ];
+        };
+      };
 
-      # enable bluetooth audio support
-      "monitor.bluez.properties" = {
-        "bluez5.enable-sbc-xq" = true;
-        "bluez5.enable-msbc" = true;
-        "bluez5.enable-hw-volume" = true;
-        "bluez5.roles" = [ "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" ];
+      "11-bluetooth-autoswitch" = {
+        "wireplumber.settings" = {
+          "bluetooth.autoswitch-to-headset-profile" = false;
+        };
       };
     };
   };

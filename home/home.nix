@@ -83,8 +83,8 @@
       gnupg age pinentry
 
       # tui
-      htop xh gitui bluez
-      pulsemixer ncdu 
+      htop xh gitui ncdu
+      pulsemixer bluetuith
       
       # cli
       ripgrep tealdeer fzf
@@ -165,6 +165,7 @@
 
   services.ssh-agent.enable = true;
   services.gpg-agent.enable = true;
+  services.mpris-proxy.enable = true;
 
   xdg = {
     enable = true;
