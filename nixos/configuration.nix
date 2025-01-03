@@ -141,26 +141,14 @@
   services.pipewire = {
     enable = true;
     alsa.enable = true;
-    alsa.support32Bit = true;
     pulse.enable = true;
-    jack.enable = true;
 
-    # bluetooth support
-    wireplumber.extraConfig = {
-      # enable better audio profiles for bluetooth
-      "10-bluez" = {
-        "monitor.bluez.properties" = {
-          "bluez5.enable-sbc-xq" = true;
-          "bluez5.enable-msbc" = true;
-          "bluez5.enable-hw-volume" = true;
-          "bluez5.roles" = [ "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" ];
-        };
+    wireplumber.extraConfig."10-bluetooth-enhancements" = {
+      "monitor.bluez.properties" = {
+        "bluez5.enable-hw-volume" = true;
       };
-
-      "11-bluetooth-autoswitch" = {
-        "wireplumber.settings" = {
-          "bluetooth.autoswitch-to-headset-profile" = false;
-        };
+      "wireplumber-settings" = {
+        "bluetooth.autoswitch-to-headset-profile" = false;
       };
     };
   };
