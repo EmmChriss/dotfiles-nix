@@ -2,16 +2,6 @@
 
 let 
   tomlFormat = pkgs.formats.toml { };
-  backupSecrets = pkgs.writeShellApplication {
-    name = "backup-keys";
-    runtimeInputs = with pkgs; [ rage rclone rustic ];
-    text = ''
-      ping -c3 linux.org >/dev/null 2>&1 || exit 1
-
-      tmp="$(mktemp --suffix .tar.gz)"
-      tar czf secrets.tar.gz .ssh .gnupg .megaCmd .password-store .pki      
-    '';
-  };
   backupScript = pkgs.writeShellApplication {
     name = "backup-rustic";
     runtimeInputs = with pkgs; [ age rclone rustic libnotify ];
@@ -25,25 +15,23 @@ let
       } || notify-send "Backup failed"
 
       {
+        cd /home/morga
         notify-send "Starting secrets backup.."
-
-        pushd /home/morga
-        trap EXIT popd
 
         # compress, encrypt and upload secrets
         tar czf - .age .ssh .gnupg .megaCmd .password-store .pki \
-        | age -i /home/morga/.age/key-secrets.txt \
-        | rclone sync - mega:Secrets/secrets.tar.gz.age
+        | age -e -i .age/key-secrets.txt \
+        | rclone rcat --size-only mega:Secrets/secrets.tar.gz.age
 
-        # upload encrypted key file
-        rclone sync /home/morga/.age/key-secrets.txt.age mega:Secrets/key-secrets.txt.age
+        # also upload encrypted key file
+        rclone rcat --size-only mega:Secrets/key-secrets.txt.age < .age/key-secrets.txt.age
       } || notify-send "Secrets backup failed"
       
-      {
-        notify-send "Cleaning backup.."
+      # {
+      #   notify-send "Cleaning backup.."
 
-        rustic check && rustic forget --prune
-      } || notify-send "Cleaning backup failed"
+      #   rustic check && rustic forget --prune
+      # } || notify-send "Cleaning backup failed"
       
       notify-send "Backup successfull"
     '';
