@@ -16,6 +16,7 @@ let
 
       {
         cd /home/morga
+        export RCLONE_PASSWORD_COMMAND="pass rclone/config"
         notify-send "Starting secrets backup.."
 
         # compress, encrypt and upload secrets

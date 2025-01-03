@@ -73,7 +73,7 @@
 
       # wayland
       wl-clipboard grim
-      slurp libnotify
+      slurp libnotify cliphist 
       wf-recorder # screen recorder on wayland
     
       # cloud
