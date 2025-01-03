@@ -2,15 +2,50 @@
 
 let 
   tomlFormat = pkgs.formats.toml { };
-  backupScript = pkgs.writeShellApplication {
-    name = "rustic-backup";
-    runtimeInputs = with pkgs; [ rclone rustic libnotify ];
+  backupSecrets = pkgs.writeShellApplication {
+    name = "backup-keys";
+    runtimeInputs = with pkgs; [ rage rclone rustic ];
     text = ''
-      notify-send "Starting backup.."
-      rustic backup
-      notify-send "Cleaning backup.."
-      rustic verify && rustic forget --prune
-      notify-send "Backup finished"
+      ping -c3 linux.org >/dev/null 2>&1 || exit 1
+
+      tmp="$(mktemp --suffix .tar.gz)"
+      tar czf secrets.tar.gz .ssh .gnupg .megaCmd .password-store .pki      
+    '';
+  };
+  backupScript = pkgs.writeShellApplication {
+    name = "backup-rustic";
+    runtimeInputs = with pkgs; [ age rclone rustic libnotify ];
+    text = ''
+      ping -c3 linux.org >/dev/null 2>&1 || exit 1
+    
+      {
+        notify-send "Starting backup.."
+
+        rustic backup
+      } || notify-send "Backup failed"
+
+      {
+        notify-send "Starting secrets backup.."
+
+        pushd /home/morga
+        trap EXIT popd
+
+        # compress, encrypt and upload secrets
+        tar czf - .age .ssh .gnupg .megaCmd .password-store .pki \
+        | age -i /home/morga/.age/key-secrets.txt \
+        | rclone sync - mega:Secrets/secrets.tar.gz.age
+
+        # upload encrypted key file
+        rclone sync /home/morga/.age/key-secrets.txt.age mega:Secrets/key-secrets.txt.age
+      } || notify-send "Secrets backup failed"
+      
+      {
+        notify-send "Cleaning backup.."
+
+        rustic check && rustic forget --prune
+      } || notify-send "Cleaning backup failed"
+      
+      notify-send "Backup successfull"
     '';
   };
 in
@@ -68,8 +103,9 @@ in
   systemd.user.timers.rustic-backup = {
     Unit.Description = "automatic remote backup snapshots";
     Timer = {
-      OnBootSec = "10m";
-      OnUnitActiveSec = "24h";
+      Persistent = true;
+      OnCalendar = "daily";
+      RandomizedDelaySec = "1h";
     };
     Install = { WantedBy = [ "timers.target" ]; };
   };
