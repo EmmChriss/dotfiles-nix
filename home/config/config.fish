@@ -58,3 +58,4 @@ set -x BAT_THEME TwoDark
 
 # ctrl-f to open file manager
 bind \cf 'lf; commandline -f repaint'
+bind \cc 'cliphist list | fzf --no-sort | cliphist decode | wl-copy'

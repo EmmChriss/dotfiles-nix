@@ -73,8 +73,9 @@
 
       # wayland
       wl-clipboard grim
-      slurp libnotify cliphist 
+      slurp libnotify
       wf-recorder # screen recorder on wayland
+      playerctl
     
       # cloud
       heroku flyctl megacmd
@@ -166,6 +167,11 @@
   services.ssh-agent.enable = true;
   services.gpg-agent.enable = true;
   services.mpris-proxy.enable = true;
+  services.playerctld.enable = true;
+  services.cliphist = {
+    enable = true;
+    systemdTarget = "hyprland-session.target";
+  };
 
   xdg = {
     enable = true;
