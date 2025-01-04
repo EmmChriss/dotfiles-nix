@@ -5,6 +5,9 @@
     # Stable nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
 
+    # Unstable nixpkgs
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/master";
+
     # NixOS Hardware - master
     nixos-hardware.url = "github:NixOs/nixos-hardware/master";
 
@@ -82,6 +85,9 @@
               inputs.nur.overlays.default
               inputs.yazi.overlays.default
 
+              # access unstable packages through pkgs.unstable
+              self.overlays.unstable-packages
+
               # Fenix workaround for stable nixpkgs caching; ie. instead of:
               # inputs.fenix.overlays.default
               # See: https://github.com/nix-community/fenix
@@ -91,6 +97,14 @@
                   inherit (inputs) fenix;
                   pkgs = fenix.inputs.nixpkgs.legacyPackages.${super.system};
                 in fenix.overlays.default pkgs pkgs
+              )
+
+              # use helix-editor from nixpkgs-unstable
+              (_: super: 
+                let
+                  inherit (inputs) nixpkgs-unstable;
+                  pkgs = nixpkgs-unstable.legacyPackages.${super.system};
+                in { inherit (pkgs) helix; }
               )
             ];
           }

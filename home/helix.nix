@@ -44,6 +44,11 @@
           render = true;
           character = "╎";
         };
+        end-of-line-diagnostics = "hint";
+        inline-diagnostics = {
+          cursor-line = "error";
+          other-lines = "error";
+        };
       };
       keys.normal = {
         # swap yanking and non-yanking delete and change
