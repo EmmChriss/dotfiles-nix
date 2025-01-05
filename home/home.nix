@@ -31,6 +31,18 @@
     username = "morga";
     homeDirectory = "/home/morga";
 
+    sessionVariables = {
+      EDITOR = "hx";
+      VISUAL = "hx";
+      PAGER = "less";
+      TERMINAL = "alacritty";
+      BROWSER = "librewolf";
+
+      # configure tui apps
+      LESS = "-SIRNs --incsearch";
+      BAT_THEME = "TwoDark";
+    };
+
     shellAliases = {
       # EDITOR
       helix = "hx";

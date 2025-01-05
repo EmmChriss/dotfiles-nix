@@ -87,6 +87,9 @@
         "WLR_NO_HARDWARE_CURSORS, 1"
 
         "_JAVA_AWT_WM_NONREPARENTING, 1"
+        "_JAVA_OPTIONS, -Dsun.java2d.opengl=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
+        "CRYPTOGRAPHY_OPENSSL_NO_LEGACY, 1"
+        "NODE_OPTIONS, --max-old-space-size=1024"
       ];
 
       # See https://wiki.hyprland.org/Configuring/Variables/ for more

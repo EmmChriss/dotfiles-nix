@@ -33,8 +33,15 @@ let
       { name = "colored-man"; src = colored-man-pages.src; }
     ]);
     functions.fish_greeting = "";
-    interactiveShellInit = builtins.readFile ./config/config.fish + ''
+
+    # TODO: check out Hydro documentation
+    # See: https://github.com/jorgebucaran/hydro
+    interactiveShellInit = ''
+      # mark subshells with FISH_TOP=1
       test -z "$FISH_TOP" && ${lib.getExe greetings} && set -x FISH_TOP 1
+
+      # ctrl-f to open file manager
+      bind \cf 'lf; commandline -f repaint'
     '';
   };
 }
