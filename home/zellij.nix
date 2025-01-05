@@ -1,18 +1,12 @@
 { config, ... }:
 
 {
-  programs.zellij = {
-    enable = true;
+  programs.zellij.enable = true;
 
-    # shell integration simply autostarts zellij on shell start
-    # TODO: write (maybe dir-based) zellij start/attach script; configure zellij to deatach on quit
-    # enableFishIntegration = true;
-    # enableBashIntegration = true;
-  };
-
-  # home-manager doesn't yet support the KDL file format used by new zellij versions
-  # NOTE: actually, nix supports KDL
-  # TODO: port config to nix, eliminate native format
+  # NOTE(2025-01): home-manager KDL support is generic and not up to standard;
+  # fixing the toKDL generator was deemed unworthy of anyone's time and there
+  # seems to be no alternative solution that is Zellij specific. In the mean
+  # while, this seems to be the recommended solution.
   home.file."${config.home.homeDirectory}/.config/zellij/config.kdl" = {
     enable = true;
     source = ./config/zellij.kdl;
