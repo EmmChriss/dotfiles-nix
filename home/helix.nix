@@ -1,13 +1,41 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 # TODO: maybe colorize
 # TODO: try nixd instead of nil
 # NOTE: could not get helix to use nixd instead of nil last time
+let
+  yazi-picker = pkgs.writeShellApplication {
+    name = "yazi-picker";
+    runtimeInputs = with pkgs; [ yazi zellij ];
+    text = ''
+      paths=$(yazi --chooser-file=/dev/stdout | while read -r; do printf "%q " "$REPLY"; done)
+
+      if [[ -n "$paths" ]]; then
+      	zellij action toggle-floating-panes
+      	zellij action write 27 # send <Escape> key
+      	zellij action write-chars ":$1 $paths"
+      	zellij action write 13 # send <Enter> key
+      else
+      	zellij action toggle-floating-panes
+      fi
+    '';
+  };
+  open-yazi-picker = pkgs.writeShellApplication {
+    name = "open-yazi-picker";
+    runtimeInputs = with pkgs; [ zellij yazi-picker ];
+    text = ''
+      zellij run -c -f -x 10% -y 10% --width 80% --height 80% -- bash ${lib.getExe yazi-picker} open
+    '';
+  };
+in
 {
   programs.helix = {
     enable = true;
     defaultEditor = true;
     extraPackages = with pkgs; [
+      # import script into user profile
+      open-yazi-picker
+    
       marksman
       # nixd
       nil
@@ -57,8 +85,13 @@
         c = "change_selection_noyank";
         A-c = "change_selection";
 
-        # join and yank to clipboard
-        space.y = ":clipboard-yank-join";
+        space = {
+          # join and yank to clipboard
+          y = ":clipboard-yank-join";
+
+          # file picker in yazi with zellij
+          z = ":sh open-yazi-picker";
+        };
       };
     };
     languages = {
