@@ -149,6 +149,9 @@ in
         # drop to shell
         { on = "!"; run = ''shell "$SHELL" --block''; desc = "Open shell here"; }
 
+        # follow symlink
+        { on = ["g" "l"]; run = ''shell 'ya emit cd "$(readlink -f "$1")"' ''; desc = "Follow hovered symlink"; }
+
         # drag and drop files
         { on = "<C-n>"; run = ''shell 'dragon -x -i -T "$1"' ''; }
       
