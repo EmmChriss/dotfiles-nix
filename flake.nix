@@ -32,6 +32,7 @@
 
     # Hyprland: upstream hyprland releases; uses cachix
     # NOTE: pinned version to avoid cache misses on newer versions
+    # WARN(2025-01-09): Hyprland v0.46.2 does not compile with current config
     hyprland.url = "https://github.com/hyprwm/Hyprland/archive/refs/tags/v0.45.2.tar.gz";
 
     # Fenix: upstream rust profiles overlays
