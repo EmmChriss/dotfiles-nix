@@ -283,6 +283,13 @@
     };
   };
 
+  # suspend on lid switch only on battery
+  services.logind = {
+    lidSwitch = "suspend";
+    lidSwitchDocked = "ignore";
+    lidSwitchExternalPower = "ignore";
+  };
+
   # system76 scheduler for extra performance
   services.system76-scheduler = {
     enable = true;
