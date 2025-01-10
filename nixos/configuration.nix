@@ -101,6 +101,8 @@
   hardware = {
     bluetooth = {
       enable = true;
+
+      # enables fetchin bluetooth headset battery status
       settings.General.Experimental = true;
     };
 
@@ -111,11 +113,12 @@
 
     nvidia = {
       # modesetting is usually needed
-      # TODO: verify if GNOME could be used instead on nouveau
       modesetting.enable = true;
       nvidiaPersistenced = true;
-      powerManagement.enable = true;
-      powerManagement.finegrained = true;
+      powerManagement = {
+        enable = true;
+        finegrained = true;
+      };
 
       open = false;
       nvidiaSettings = false;
@@ -133,11 +136,15 @@
 
   environment.systemPackages = [
     # Power monitor with system access
+    # NOTE: powertop can be started as a service, but it messes with my wireless
+    # mouse, and I didn't look into how to disable just that
+    # powerManagement.powertop.enable = true;
     pkgs.powertop
   ];
 
   # Audio
-  security.rtkit.enable = true; # see NixOS Wiki:Audio
+  # see NixOS Wiki:Audio
+  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -145,9 +152,11 @@
 
     wireplumber.extraConfig."10-bluetooth-enhancements" = {
       "monitor.bluez.properties" = {
+        # enable hardware volume
         "bluez5.enable-hw-volume" = true;
       };
       "wireplumber-settings" = {
+        # do not switch to headset profile ever
         "bluetooth.autoswitch-to-headset-profile" = false;
       };
     };
@@ -189,12 +198,6 @@
     '';
   };
 
-  # define editor globally
-  environment.variables = {
-    EDITOR = "hx";
-    VISUAL = "hx";
-  };
-
   # Graphics settings
   services.xserver = {
     enable = true;
@@ -213,29 +216,6 @@
     xkb.layout = "us";
   };
 
-  # Keep GNOME installed as alternative
-  # TODO: look into GNOME-based desktop
-  # eg: pop-shell, TidalWM, material-shell, Forge, tiling-shell
-  services.xserver.desktopManager.gnome.enable = true;
-  environment.gnome.excludePackages = (with pkgs; [
-    gnome-photos
-    gnome-tour
-    gedit # text editor
-  ]) ++ (with pkgs; [
-    cheese # webcam tool
-    gnome-music
-    gnome-terminal
-    epiphany # web browser
-    geary # email reader
-    evince # document viewer
-    gnome-characters
-    totem # video player
-    tali # poker game
-    iagno # go game
-    hitori # sudoku game
-    atomix # puzzle game
-  ]);
-  
   # NOTE: hyprland is installed here, but configured in home-manager
   programs.hyprland = {
     enable = true;
@@ -308,11 +288,6 @@
     enable = true;
     useStockConfig = true;
   };
-
-  # powertop auto tuning
-  # WARN: messes with wireless mouse; disabled for now
-  # TODO: find fix
-  # powerManagement.powertop.enable = true;
 
   programs.gnupg.agent = {
     enable = true;

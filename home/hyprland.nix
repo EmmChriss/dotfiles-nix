@@ -216,9 +216,9 @@
       "$terminal" = "alacritty";
       "$browser"  = "librewolf";
       "$editor"   = "helix";
-      "$clipman" = "cliphist list | tofi | cliphist decode | wl-copy";
-      "$launcher" = "tofi-run --prompt-text= --placeholder-text='Run application' | xargs hyprctl dispatch exec --";
-      "$dlauncher" = "tofi-drun --prompt-text= --placeholder-text='Run application' --drun-launch=true";
+      "$clipman" = "cliphist list | tofi --prompt-text= --placeholder-text='Copy' | cliphist decode | wl-copy";
+      "$launcher" = "tofi-run --prompt-text= --placeholder-text='Run application' | xargs uwsm app --";
+      "$dlauncher" = "tofi-drun --prompt-text= --placeholder-text='Run application' | xargs uwsm app --";
       "$printscr" = ''grim -g "$(hyprctl clients -j | jq -r ".[] | select(.workspace.id | IN($(hyprctl -j monitors | jq 'map(.activeWorkspace.id) | join(",")' | tr -d \")))" | jq -r ".at,.size" | jq -s "add" | jq '_nwise(4)' | jq -r '"\(.[0]),\(.[1]) \(.[2])x\(.[3])"'| slurp)" - | swappy -f -'';
       "$playerctl" = "${lib.getExe pkgs.playerctl}";
 

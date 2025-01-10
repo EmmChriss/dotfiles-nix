@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.tofi = {
@@ -12,7 +12,7 @@
       padding-top = "35%";
       result-spacing = "25";
       num-results = "5";
-      # font = "/usr/share/fonts/noto/NotoSansMono-Regular.ttf";
+      font = "${pkgs.open-fonts}/share/fonts/truetype/NotoSansMono-Regular.ttf";
       hint-font = "false";
       background-color = "#000A";
       input-color = "#88c0d0";
@@ -21,7 +21,7 @@
       text-cursor-style = "block";
       text-cursor-corner-radius = "3";
       text-cursor-thickness = "5";
-      fuzzy-match = "true";
+      matching-algorithm = "fuzzy";
     };
   };
 }

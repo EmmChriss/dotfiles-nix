@@ -147,8 +147,13 @@
       lfs.enable = true;
 
       # git diff highlighter
-      # delta.enable = true;
-      difftastic.enable = true;
+      delta = {
+        enable = true;
+        options = {
+          navigate = true;
+          side-by-side = true;
+        };
+      };
       
       userName = "EmmChriss";
       userEmail = "emmchris@protonmail.com";
@@ -164,7 +169,7 @@
     direnv = {
       enable = true;
       nix-direnv.enable = true;
-      config.whitelist.prefix = [ "/home/morga/Project" ];
+      config.whitelist.prefix = [ "/home/" ];
     };
   };
 

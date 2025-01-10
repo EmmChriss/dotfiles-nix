@@ -83,6 +83,9 @@
           # Enable overlays
           {
             nixpkgs.overlays = [
+              self.overlays.modifications
+              self.overlays.additions
+            
               inputs.nur.overlays.default
               inputs.yazi.overlays.default
 
