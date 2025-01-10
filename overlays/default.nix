@@ -10,6 +10,11 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
+
+    # tofi: patch in support for printing selected .desktop file in drun mode
+    tofi = prev.tofi.overrideAttrs (old: {
+      patches = (prev.patches or []) ++ [ ./tofi-drun-print-desktop.patch ];
+    });
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will

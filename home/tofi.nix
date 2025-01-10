@@ -21,7 +21,7 @@
       text-cursor-style = "block";
       text-cursor-corner-radius = "3";
       text-cursor-thickness = "5";
-      matching-algorithm = "fuzzy";
+      fuzzy-match = "true";
     };
   };
 }

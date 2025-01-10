@@ -80,7 +80,7 @@
       alacritty librewolf 
       libnotify dunst tofi
       (nerdfonts.override { fonts = ["IosevkaTerm"]; })
-      teams-for-linux
+      teams-for-linux file-roller
       popcorntime
 
       # wayland

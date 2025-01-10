@@ -1,0 +1,99 @@
+diff --git a/completions/tofi b/completions/tofi
+index 3983090..f22db8d 100644
+--- a/completions/tofi
++++ b/completions/tofi
+@@ -82,6 +82,7 @@ _tofi()
+ 		--hide-input
+ 		--hidden-character
+ 		--drun-launch
++		--drun-print-desktop
+ 		--terminal
+ 		--hint-font
+ 		--late-keyboard-init
+diff --git a/doc/tofi.5.md b/doc/tofi.5.md
+index e976ef7..324b573 100644
+--- a/doc/tofi.5.md
++++ b/doc/tofi.5.md
+@@ -134,6 +134,14 @@ options.
+ >
+ > Default: true
+ 
++**drun-print-desktop**=*true\|false*
++
++> If true, print the path to the selected .desktop file.
++> Otherwise, print the Exec line of the .desktop file.
++> This option has no effect if *drun-launch* is set to true.
++> 
++> Default: false
++
+ **late-keyboard-init**=*true\|false*
+ 
+ > Delay keyboard initialisation until after the first draw to screen.
+diff --git a/doc/tofi.5.scd b/doc/tofi.5.scd
+index 29547e0..712fd7f 100644
+--- a/doc/tofi.5.scd
++++ b/doc/tofi.5.scd
+@@ -115,6 +115,13 @@ options.
+ 
+ 	Default: true
+ 
++*drun-print-desktop*=_true|false_
++	If true, print the path to the selected .desktop file.
++	Otherwise, print the Exec line of the .desktop file.
++	This option has no effect if *drun-launch* is set to true.
++
++	Default: false
++
+ *late-keyboard-init*=_true|false_
+ 	Delay keyboard initialisation until after the first draw to screen.
+ 	This option is experimental, and will cause tofi to miss keypresses
+diff --git a/src/config.c b/src/config.c
+index b78e3af..31220a5 100644
+--- a/src/config.c
++++ b/src/config.c
+@@ -717,6 +717,11 @@ bool parse_option(struct tofi *tofi, const char *filename, size_t lineno, const
+ 	} else if (strcasecmp(option, "drun-print-exec") == 0) {
+ 		log_warning("drun-print-exec is deprecated, as it is now always true.\n"
+ 				"           This option may be removed in a future version of tofi.\n");
++	} else if (strcasecmp(option, "drun-print-desktop") == 0) {
++		bool val = parse_bool(filename, lineno, value, &err);
++		if (!err) {
++			tofi->drun_print_desktop = val;
++		}
+ 	} else if (strcasecmp(option, "terminal") == 0) {
+ 		snprintf(tofi->default_terminal, N_ELEM(tofi->default_terminal), "%s", value);
+ 	} else if (strcasecmp(option, "hint-font") == 0) {
+diff --git a/src/main.c b/src/main.c
+index a59ac78..5d87160 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -918,6 +918,7 @@ const struct option long_options[] = {
+ 	{"hidden-character", required_argument, NULL, 0},
+ 	{"drun-launch", required_argument, NULL, 0},
+ 	{"drun-print-exec", required_argument, NULL, 0},
++	{"drun-print-desktop", required_argument, NULL, 0},
+ 	{"terminal", required_argument, NULL, 0},
+ 	{"hint-font", required_argument, NULL, 0},
+ 	{"multi-instance", required_argument, NULL, 0},
+@@ -1034,6 +1035,9 @@ static bool do_submit(struct tofi *tofi)
+ 		char *path = app->path;
+ 		if (tofi->drun_launch) {
+ 			drun_launch(path);
++		} else if (tofi->drun_print_desktop) {
++			fputs(path, stdout);
++			fputc('\n', stdout);
+ 		} else {
+ 			drun_print(path, tofi->default_terminal);
+ 		}
+diff --git a/src/tofi.h b/src/tofi.h
+index 571eab8..263e325 100644
+--- a/src/tofi.h
++++ b/src/tofi.h
+@@ -97,6 +97,7 @@ struct tofi {
+ 	bool late_keyboard_init;
+ 	bool drun_launch;
+ 	bool drun_print_exec;
++	bool drun_print_desktop;
+ 	bool fuzzy_match;
+ 	bool require_match;
+ 	bool auto_accept_single;
