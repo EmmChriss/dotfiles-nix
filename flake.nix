@@ -3,13 +3,19 @@
 
   inputs = {
     # Stable nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs = {
+      url = "github:nixos/nixpkgs/nixos-24.11";
+    };
 
     # Unstable nixpkgs
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/master";
+    nixpkgs-unstable = {
+      url = "github:nixos/nixpkgs/nixos-unstable";
+    };
 
     # NixOS Hardware - master
-    nixos-hardware.url = "github:NixOs/nixos-hardware/master";
+    nixos-hardware = {
+      url = "github:NixOs/nixos-hardware/master";
+    };
 
     # Home Manager
     home-manager = {
@@ -18,11 +24,15 @@
     };
 
     # Flake Utils: couple of utility functions
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+    };
 
     # Nix Colors: manage your colorschemes
     # TODO: use this for something
-    # nix-colors.url = "github:misterio77/nix-colors";
+    # nix-colors = {
+    #   url = "github:misterio77/nix-colors";
+    # };
 
     # Nur: Nix User Repository overlays
     nur = {
@@ -33,7 +43,11 @@
     # Hyprland: upstream hyprland releases; uses cachix
     # NOTE: pinned version to avoid cache misses on newer versions
     # WARN(2025-01-09): Hyprland v0.46.2 does not compile with current config
-    hyprland.url = "https://github.com/hyprwm/Hyprland/archive/refs/tags/v0.45.2.tar.gz";
+    hyprland = {
+      url = "https://github.com/hyprwm/Hyprland/archive/refs/tags/v0.45.2.tar.gz";
+      # url = "github:hyprwm/Hyprland";
+      # inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Fenix: upstream rust profiles overlays
     fenix = {
@@ -43,7 +57,9 @@
 
     # Yazi: terminal file manager upstream releases
     # NOTE: pinned version for potential backward-incompatible changes
-    yazi.url = "https://github.com/sxyazi/yazi/archive/refs/tags/v0.4.2.tar.gz";
+    yazi = {
+      url = "https://github.com/sxyazi/yazi/archive/refs/tags/v0.4.2.tar.gz";
+    };
   };
 
   outputs = { self, systems, flake-utils, nixpkgs, ... }@inputs:
