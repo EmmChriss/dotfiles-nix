@@ -83,14 +83,22 @@
           # Enable overlays
           {
             nixpkgs.overlays = [
+              # import some of our own overlays
               self.overlays.modifications
               self.overlays.additions
-            
-              inputs.nur.overlays.default
-              inputs.yazi.overlays.default
 
               # access unstable packages through pkgs.unstable
               self.overlays.unstable-packages
+
+              # import package flake overlays
+              inputs.nur.overlays.default
+              inputs.yazi.overlays.default
+
+              # inputs.hyprland.overlays.default
+              # # for hyprland, overlay the mesa driver packages
+              # (_: super: {
+              #   inherit (inputs.hyprland.inputs.nixpkgs.legacyPackages.${super.system}) mesa;
+              # })
 
               # Fenix workaround for stable nixpkgs caching; ie. instead of:
               # inputs.fenix.overlays.default
@@ -101,14 +109,6 @@
                   inherit (inputs) fenix;
                   pkgs = fenix.inputs.nixpkgs.legacyPackages.${super.system};
                 in fenix.overlays.default pkgs pkgs
-              )
-
-              # use helix-editor from nixpkgs-unstable
-              (_: super: 
-                let
-                  inherit (inputs) nixpkgs-unstable;
-                  pkgs = nixpkgs-unstable.legacyPackages.${super.system};
-                in { inherit (pkgs) helix; }
               )
             ];
           }

@@ -106,10 +106,7 @@
       settings.General.Experimental = true;
     };
 
-    graphics = {
-      enable = true;
-      package = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.mesa.drivers;
-    };
+    graphics.enable = true;
 
     nvidia = {
       # modesetting is usually needed
@@ -219,8 +216,6 @@
   # NOTE: hyprland is installed here, but configured in home-manager
   programs.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     withUWSM = true;
     xwayland.enable = true;
   };
@@ -308,6 +303,9 @@
     enable = true;
     autoPrune.enable = true;
   };
+
+  # enable nix-ld
+  programs.nix-ld.enable = true;
 
   # DO NOT CHANGE
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion

@@ -5,7 +5,6 @@
   # WARN: do not set any additional options, use the Hyprland that is installed system-wide
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     systemd.variables = ["--all"];
 
     # TODO: separate settings from binds
