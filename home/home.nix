@@ -41,6 +41,9 @@
       # configure tui apps
       LESS = "-SIRNs --incsearch";
       BAT_THEME = "TwoDark";
+
+      # save all rust builds to same place
+      CARGO_TARGET_DIR = "/home/morga/.cache/target";
     };
 
     shellAliases = {
@@ -75,6 +78,8 @@
     packages = with pkgs; [
       # uni
       protege-distribution
+
+      prelockd
       
       # gui
       alacritty librewolf 
@@ -87,7 +92,7 @@
       wl-clipboard grim
       slurp libnotify
       wf-recorder # screen recorder on wayland
-      playerctl
+      playerctl swappy
     
       # cloud
       heroku flyctl megacmd
@@ -186,10 +191,7 @@
   services.gpg-agent.enable = true;
   services.mpris-proxy.enable = true;
   services.playerctld.enable = true;
-  services.cliphist = {
-    enable = true;
-    systemdTarget = "hyprland-session.target";
-  };
+  services.cliphist.enable = true;
 
   xdg = {
     enable = true;

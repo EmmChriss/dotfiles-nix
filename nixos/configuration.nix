@@ -278,6 +278,21 @@
     };
   };
 
+  # configure systemd-oomd for user processes
+  systemd.oomd = {
+    # TODO:
+    # - make sure session.slice spawns no processes (eg. Hyprland spawns nothing)
+    # - custom slice config for app.slice
+    # - disable user slices; that way only apps should ever get killed in OOM situtation
+    # for custom slice config see: https://github.com/NixOS/nixpkgs/blob/1dab772dd4a68a7bba5d9460685547ff8e17d899/nixos/modules/system/boot/systemd/oomd.nix#L63
+  
+    # enable = true; # enabled by default
+    # following Fedora convention: https://github.com/NixOS/nixpkgs/blob/1dab772dd4a68a7bba5d9460685547ff8e17d899/nixos/modules/system/boot/systemd/oomd.nix#L20
+    enableRootSlice = true;
+    enableSystemSlice = false;
+    enableUserSlices = true;
+  };
+
   # suspend on lid switch only on battery
   services.logind = {
     lidSwitch = "suspend";

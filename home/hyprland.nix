@@ -1,11 +1,32 @@
-{ pkgs, lib, inputs, ... }:
+{ pkgs, lib, ... }:
 
+let
+  inherit (lib) getExe;
+  hypr-slurp= pkgs.writeShellApplication {
+    name = "hypr-slurp";
+    runtimeInputs = with pkgs; [ hyprland jq slurp ];
+    text = ''
+      hyprctl clients -j |\
+      jq -r ".[] | select(.workspace.id | IN($(hyprctl -j monitors | jq 'map(.activeWorkspace.id) | join(",")' | tr -d \")))" |\
+      jq -r ".at,.size" |\
+      jq -s "add" |\
+      jq '_nwise(4)' |\
+      jq -r '"\(.[0]),\(.[1]) \(.[2])x\(.[3])"' |\
+      slurp
+    '';
+  };
+  printscrOutput = ''"$HOME/Media/Pictures/Screenshots/$(date +'%Y-%m-%d-%T').png"'';
+  sattyArgs = ''--early-exit --copy-command wl-copy --save-after-copy'';
+  grimArgs = ''-c -l9 -t ppm'';
+in
 {
   # enable hyprland
   # WARN: do not set any additional options, use the Hyprland that is installed system-wide
   wayland.windowManager.hyprland = {
     enable = true;
-    systemd.variables = ["--all"];
+
+    # NOTE: in UWSM-managed environments, this is a conflict
+    systemd.enable = false;
 
     # TODO: separate settings from binds
     # TODO: think about modal keybinds stuff, would be cool huh?
@@ -52,6 +73,14 @@
       #
       # Autostart
       #
+
+      exec = [
+        # try restarting units that failed
+        # solves stuff caused by UWSM in graphical user units
+        # NOTE: forcefully reset and restart failed units
+        "systemctl --user --quiet list-units --failed | xargs -I{} sh -c 'systemctl --user stop {}; systemctl --user reset-failed {}; systemctl --user restart {}'"
+      ];
+      
       # TODO: find nix solution for these
 
       # set wallpaper
@@ -212,14 +241,15 @@
 
       # PROGRAMS
       "$exitcmd" = "hyprctl dispatch exit";
-      "$terminal" = "alacritty";
-      "$browser"  = "librewolf";
+      "$terminal" = "xargs uwsm app -- alacritty";
+      "$browser"  = "xargs uwsm app -- librewolf";
       "$editor"   = "helix";
       "$clipman" = "cliphist list | tofi --prompt-text= --placeholder-text='Copy' | cliphist decode | wl-copy";
       "$launcher" = "tofi-run --prompt-text= --placeholder-text='Run application' | xargs uwsm app --";
       "$dlauncher" = "tofi-drun --prompt-text= --placeholder-text='Run application' --drun-print-desktop=true | xargs uwsm app --";
-      "$printscr" = ''grim -g "$(hyprctl clients -j | jq -r ".[] | select(.workspace.id | IN($(hyprctl -j monitors | jq 'map(.activeWorkspace.id) | join(",")' | tr -d \")))" | jq -r ".at,.size" | jq -s "add" | jq '_nwise(4)' | jq -r '"\(.[0]),\(.[1]) \(.[2])x\(.[3])"'| slurp)" - | swappy -f -'';
-      "$playerctl" = "${lib.getExe pkgs.playerctl}";
+      "$printscr" = ''${getExe pkgs.grim} ${grimArgs} - | ${getExe pkgs.satty} ${sattyArgs} -f - -o ${printscrOutput}'';
+      "$printscrSelect" = ''${getExe pkgs.grim} ${grimArgs} -g "$(${getExe hypr-slurp})" - | ${getExe pkgs.satty} ${sattyArgs} -f - -o ${printscrOutput}'';
+      "$playerctl" = "${getExe pkgs.playerctl}";
 
       bind = [
         # show/hide nwg-dock
@@ -334,6 +364,7 @@
       
         # screenshot
         ", Print, exec, $printscr"
+        "$mainMod, Print, exec, $printscrSelect"
 
         # audio: toggle mute
         ", XF86AudioMute, exec, vol mute"

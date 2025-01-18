@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   home.packages = with pkgs; [
@@ -18,7 +18,8 @@
     enable = true;
     systemd = {
       enable = true;
-      target = "hyprland-session.target";
+      # only for hyprland
+      target = "wayland-session@Hyprland.target";
     };
     settings.mainBar = {
       layer = "top";
