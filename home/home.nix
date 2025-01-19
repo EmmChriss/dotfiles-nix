@@ -174,7 +174,13 @@
     direnv = {
       enable = true;
       nix-direnv.enable = true;
-      config.whitelist.prefix = [ "/home/" ];
+      config = {
+        whitelist.prefix = [ "~/Project" ];
+        global = {
+          load_dotenv = true;
+          strict_env = true;
+        };
+      };
     };
   };
 
