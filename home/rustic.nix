@@ -28,11 +28,11 @@ let
         rclone rcat --size-only mega:Secrets/key-secrets.txt.age < .age/key-secrets.txt.age
       } || notify-send "Secrets backup failed"
       
-      # {
-      #   notify-send "Cleaning backup.."
+      {
+        notify-send "Cleaning backup.."
 
-      #   rustic check && rustic forget --prune
-      # } || notify-send "Cleaning backup failed"
+        rustic check && rustic forget --prune
+      } || notify-send "Cleaning backup failed"
       
       notify-send "Backup successfull"
     '';
@@ -68,7 +68,11 @@ in
     backup = {
       exclude-if-present = [".nobackup" "CACHEDIR.TAG"];
       custom-ignorefiles = [".rusticignore" ".backupignore"];
-      iglobs = ["!downloads" "!node_modules" "!target" "!venv" "!.cache" "!.local/state"];
+      iglobs = [
+        "!downloads" "!node_modules" "!target" "!venv"
+        "!.cache" "!.local/state" "!.cargo" "!.npm" "!.pnpm"
+        "!uv"
+      ];
       one-file-system = true;
       snapshots = [
         { sources = ["/home/"]; }
