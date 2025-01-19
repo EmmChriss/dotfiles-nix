@@ -35,12 +35,12 @@
     # WARN(2025-01-09): Hyprland v0.46.2 does not compile with current config
     hyprland.url = "https://github.com/hyprwm/Hyprland/archive/refs/tags/v0.45.2.tar.gz";
 
-    # Fenix: upstream rust profiles overlays
-    fenix = {
-      url = "github:nix-community/fenix";
+    # rust-overlay: rolling rust releases with configurable components
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    
     # Yazi: terminal file manager upstream releases
     # NOTE: pinned version for potential backward-incompatible changes
     yazi.url = "https://github.com/sxyazi/yazi/archive/refs/tags/v0.4.2.tar.gz";
@@ -100,16 +100,7 @@
               #   inherit (inputs.hyprland.inputs.nixpkgs.legacyPackages.${super.system}) mesa;
               # })
 
-              # Fenix workaround for stable nixpkgs caching; ie. instead of:
-              # inputs.fenix.overlays.default
-              # See: https://github.com/nix-community/fenix
-              # See: https://github.com/nix-community/fenix/issues/79
-              (_: super: 
-                let
-                  inherit (inputs) fenix;
-                  pkgs = fenix.inputs.nixpkgs.legacyPackages.${super.system};
-                in fenix.overlays.default pkgs pkgs
-              )
+              inputs.rust-overlay.overlays.default
             ];
           }
         

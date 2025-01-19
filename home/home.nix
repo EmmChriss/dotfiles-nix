@@ -46,6 +46,10 @@
       CARGO_TARGET_DIR = "/home/morga/.cache/target";
     };
 
+    sessionPath = [
+      "$HOME/.cargo/bin"
+    ];
+
     shellAliases = {
       # EDITOR
       helix = "hx";
@@ -120,9 +124,10 @@
       git python3 lua zig uv
 
       # rust
-      (fenix.stable.withComponents [
-        "cargo" "clippy" "rust-src" "rustc" "rustfmt"
-      ])
+      (rust-bin.stable.latest.default.override {
+        extensions = [ "rustc" "rust-src" "rustfmt" "cargo" "clippy" "rust-analyzer" ];
+        targets = [ "wasm32-unknown-unknown" ];
+      })
 
       # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
       # TODO: overwrite/create dbeaver.desktop
