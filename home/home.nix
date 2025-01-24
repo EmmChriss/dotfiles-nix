@@ -86,7 +86,7 @@
       prelockd
       
       # gui
-      alacritty librewolf 
+      alacritty librewolf ungoogled-chromium
       libnotify dunst tofi
       (nerdfonts.override { fonts = ["IosevkaTerm"]; })
       teams-for-linux file-roller
@@ -182,6 +182,7 @@
       config = {
         whitelist.prefix = [ "~/Project" ];
         global = {
+          hide_env_diff = true;
           load_dotenv = true;
           strict_env = true;
         };
