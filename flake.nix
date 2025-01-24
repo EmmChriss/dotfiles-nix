@@ -20,21 +20,6 @@
     # Flake Utils: couple of utility functions
     flake-utils.url = "github:numtide/flake-utils";
 
-    # Nix Colors: manage your colorschemes
-    # TODO: use this for something
-    # nix-colors.url = "github:misterio77/nix-colors";
-
-    # Nur: Nix User Repository overlays
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Hyprland: upstream hyprland releases; uses cachix
-    # NOTE: pinned version to avoid cache misses on newer versions
-    # WARN(2025-01-09): Hyprland v0.46.2 does not compile with current config
-    hyprland.url = "https://github.com/hyprwm/Hyprland/archive/refs/tags/v0.45.2.tar.gz";
-
     # rust-overlay: rolling rust releases with configurable components
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
@@ -91,15 +76,7 @@
               self.overlays.unstable-packages
 
               # import package flake overlays
-              inputs.nur.overlays.default
               inputs.yazi.overlays.default
-
-              # inputs.hyprland.overlays.default
-              # # for hyprland, overlay the mesa driver packages
-              # (_: super: {
-              #   inherit (inputs.hyprland.inputs.nixpkgs.legacyPackages.${super.system}) mesa;
-              # })
-
               inputs.rust-overlay.overlays.default
             ];
           }
