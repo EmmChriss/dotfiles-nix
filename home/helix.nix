@@ -52,6 +52,7 @@ in
       # lua-language-server
       # yaml-language-server
       # llvmPackages_19.clang-tools # provides clangd
+      gdtoolkit_4
     ];
     ignores = [
       "target/"
@@ -63,10 +64,13 @@ in
       editor = {
         mouse = false;
         color-modes = true;
-        rulers = [80 100 120 160];
+        rulers = [80 120 160];
         bufferline = "multiple";
         file-picker.hidden = false;
-        lsp.display-messages = true;
+        lsp = {
+          display-messages = true;
+          display-progress-messages = true;
+        };
         whitespace.render = "none";
         indent-guides = {
           render = true;
@@ -74,8 +78,8 @@ in
         };
         end-of-line-diagnostics = "hint";
         inline-diagnostics = {
-          cursor-line = "error";
-          other-lines = "error";
+          cursor-line = "hint";
+          other-lines = "disable";
         };
       };
       keys.normal = {
