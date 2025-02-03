@@ -90,7 +90,7 @@
       libnotify dunst tofi
       (nerdfonts.override { fonts = ["IosevkaTerm"]; })
       teams-for-linux file-roller
-      popcorntime
+      popcorntime typora godot_4
 
       # wayland
       wl-clipboard grim
