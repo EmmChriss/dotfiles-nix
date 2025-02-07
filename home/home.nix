@@ -87,10 +87,11 @@
       
       # gui
       alacritty librewolf ungoogled-chromium
-      libnotify dunst tofi
+      libnotify dunst tofi reaper
       (nerdfonts.override { fonts = ["IosevkaTerm"]; })
       teams-for-linux file-roller
       popcorntime typora godot_4
+      libreoffice
 
       # wayland
       wl-clipboard grim
