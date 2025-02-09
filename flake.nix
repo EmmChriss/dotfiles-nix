@@ -32,7 +32,9 @@
   };
 
   outputs = { self, systems, flake-utils, nixpkgs, ... }@inputs:
-  let pkgs = system: nixpkgs.legacyPackages.${system};
+  let
+    pkgs = system: nixpkgs.legacyPackages.${system};
+    system = "x86_64-linux";
   in
   {
 
@@ -61,9 +63,19 @@
 
     # merged system config and home-manager config
     # they build together but are in separate namespaces
-    nixosConfigurations = {
+    nixosConfigurations =
+    let _inputs = inputs // {
+      pkgs = import nixpkgs {
+        inherit system;
+        config = {
+          allowUnfree = true;
+          allowUnfreePredicate = _: true;
+        };
+      };
+    };
+    in {
       morga = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        inherit system;
         modules = [
           # Enable overlays
           {
@@ -76,8 +88,8 @@
               self.overlays.unstable-packages
 
               # import package flake overlays
-              inputs.yazi.overlays.default
-              inputs.rust-overlay.overlays.default
+              _inputs.yazi.overlays.default
+              _inputs.rust-overlay.overlays.default
             ];
           }
         
@@ -101,18 +113,18 @@
           ./nixos/configuration.nix
 
           # Home-manager configuration; all rooted in home.nix
-          inputs.home-manager.nixosModules.home-manager
+          _inputs.home-manager.nixosModules.home-manager
           {
             home-manager = {
               backupFileExtension = "homenew";
               useUserPackages = true;
               useGlobalPkgs = true;
-              extraSpecialArgs = { inherit inputs; };
+              extraSpecialArgs = { inputs = _inputs; };
               users.morga = ./home/home.nix;
             };
           }
         ];
-        specialArgs = { inherit inputs; };
+        specialArgs = { inputs = _inputs; };
       };
     };
   };

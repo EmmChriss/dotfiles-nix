@@ -86,12 +86,12 @@
       prelockd
       
       # gui
-      alacritty librewolf ungoogled-chromium
+      alacritty librewolf-bin ungoogled-chromium
       libnotify dunst tofi reaper
       (nerdfonts.override { fonts = ["IosevkaTerm"]; })
       teams-for-linux file-roller
       popcorntime typora godot_4
-      libreoffice
+      libreoffice teamviewer
 
       # wayland
       wl-clipboard grim
