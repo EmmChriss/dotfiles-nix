@@ -103,6 +103,10 @@ in
       language-server = {
         # nixd.command = "${pkgs.nixd}/bin/nixd";
         nil.command = "${pkgs.nil}/bin/nil";
+        typescript-language-server = {
+          command = "${lib.getExe pkgs.bun}";
+          args = ["${pkgs.typescript-language-server}/lib/node_modules/typescript-language-server/lib/cli.mjs" "--stdio"];
+        };
       };
 
       # language configurations
