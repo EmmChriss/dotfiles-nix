@@ -87,7 +87,12 @@ window#waybar {
 #cpu {
 }
 
-#memory {
+#memory.warning {
+    color: yellow;
+}
+
+#memory.critical {
+    color: red;
 }
 
 #network {

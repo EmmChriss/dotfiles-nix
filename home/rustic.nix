@@ -71,7 +71,7 @@ in
       iglobs = [
         "!downloads" "!node_modules" "!target" "!venv"
         "!.cache" "!.local/state" "!.cargo" "!.npm" "!.pnpm"
-        "!uv" "!dump*.tar"
+        "!uv" "!dump*.tar" "!Trash" "!teams-for-linux"
       ];
       one-file-system = true;
       snapshots = [

@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -58,7 +58,15 @@
 
       cpu.format = "U:{usage}% L:{load} ";
 
-      memory.format = "M:{percentage}% S:{swapPercentage}% F:{avail}G ";
+      memory = {
+        format = "F:{avail}G ";
+        interval = 1;
+        states = {
+          good = 70;
+          warning = 85;
+          critical = 90;
+        };
+      };
 
       battery = {
         states = {

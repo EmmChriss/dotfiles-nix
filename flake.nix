@@ -33,11 +33,11 @@
 
   outputs = { self, systems, flake-utils, nixpkgs, ... }@inputs:
   let
+    inherit (self) outputs;
     pkgs = system: nixpkgs.legacyPackages.${system};
     system = "x86_64-linux";
   in
   {
-
     # Your custom packages
     # Accessible through 'nix build', 'nix shell', etc
     packages = flake-utils.lib.eachDefaultSystem (system: import ./pkgs (pkgs system));
@@ -124,7 +124,7 @@
             };
           }
         ];
-        specialArgs = { inputs = _inputs; };
+        specialArgs = { inputs = _inputs; inherit outputs; };
       };
     };
   };

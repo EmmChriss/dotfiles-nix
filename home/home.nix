@@ -86,7 +86,7 @@
       prelockd
       
       # gui
-      alacritty librewolf-bin ungoogled-chromium
+      alacritty librewolf ungoogled-chromium
       libnotify dunst tofi reaper
       (nerdfonts.override { fonts = ["IosevkaTerm"]; })
       teams-for-linux file-roller
