@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, lib, ... }:
+{ config, pkgs, inputs, outputs, lib, ... }:
 
 # Template: https://github.com/Misterio77/nix-starter-configs; standard variant
 {
@@ -22,6 +22,9 @@
 
     # Handles setting timezone manually and automatically
     ./timezone.nix
+
+    # Deduplicate files system-wide
+    outputs.nixosModules.duperemove
   ];
 
   # remove unnecessary preinstalled packages
@@ -304,6 +307,15 @@
   services.system76-scheduler = {
     enable = true;
     useStockConfig = true;
+  };
+
+  # deduplicate files system-wide
+  services.duperemove = {
+    enable = true;
+    hashfile = "/var/lib/duperemove.db";
+    paths = [ "/home" ];
+    extraArgs = "-dr";
+    systemdInterval = "weekly";
   };
 
   programs.gnupg.agent = {
