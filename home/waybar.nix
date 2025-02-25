@@ -74,8 +74,10 @@
           warning = 30;
           critical = 15;
         };
-        format = "{time} {capacity}% {icon}";
-        format-good = "{capacity}% {icon}";
+        interval = 10;
+        format = "{capacity}% {icon}";
+        format-discharging = "{time} {capacity}% {icon}";
+        tooltip-format = "{time} {power}W";
         format-icons = ["" "" "" "" ""];
       };
 
