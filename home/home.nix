@@ -81,7 +81,6 @@
 
     packages = with pkgs; [
       # uni
-      protege-distribution
 
       prelockd
       
@@ -91,7 +90,7 @@
       (nerdfonts.override { fonts = ["IosevkaTerm"]; })
       teams-for-linux file-roller
       popcorntime typora godot_4
-      libreoffice teamviewer
+      libreoffice
 
       # wayland
       wl-clipboard grim
@@ -120,7 +119,7 @@
       steam-run-free # just run some ld-loading program 
 
       # dev tools
-      pnpm nodejs docker-compose
+      bun nodejs docker-compose
       psmisc postgresql pgcli
       git python3 lua zig uv
 
@@ -131,13 +130,20 @@
       })
 
       # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
-      # TODO: overwrite/create dbeaver.desktop
-      # (let wrapped = writeShellScriptBin "dbeaver" "GDK_BACKEND=x11 exec ${dbeaver-bin}/bin/dbeaver";
-      # in pkgs.symlinkJoin {
-      #   name = "dbeaver";
-      #   paths = [wrapped dbeaver-bin]; 
-      # })
-      dbeaver-bin
+      (symlinkJoin {
+        name = "dbeaver";
+        paths = [ dbeaver-bin ];
+        buildInputs = [ makeWrapper ];
+        postBuild = ''
+          rm $out/bin/dbeaver
+          makeWrapper ${dbeaver-bin}/bin/dbeaver $out/bin/dbeaver \
+            --set GDK_BACKEND x11
+
+          rm $out/share/applications/dbeaver.desktop
+          substitute ${dbeaver-bin}/share/applications/dbeaver.desktop $out/share/applications/dbeaver.desktop \
+            --replace-fail ${dbeaver-bin}/bin/dbeaver $out/bin/dbeaver
+        '';
+      })
     ];
   };
 
