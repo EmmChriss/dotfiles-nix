@@ -225,7 +225,7 @@
 
   # GPU Acceleration
   hardware.graphics.extraPackages = [
-    pkgs.rocmPackages.clr.icd # AMD OpenCL
+    # pkgs.rocmPackages.clr.icd # AMD OpenCL
     pkgs.amdvlk # AMD Vulkan
   ];
 
