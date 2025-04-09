@@ -1,9 +1,9 @@
 #!/bin/sh
 nix flake update
-sudo nixos-rebuild switch --flake . --upgrade
-sudo nix-collect-garbage -d
+nix flake archive
+nh os switch .
+nh clean all --keep-since 1h # keep current generations, you can manually clean up afterwards
 sudo nix store optimise
-sudo nix store verify --all
-sudo nix store repair --all
+nix-store --verify --repair --check-contents
 nix run nixpkgs#bleachbit # system cleaning: tmpfiles, backups, history, etc
 # nix run nixpkgs#pcmanfm # file manager to inspect results

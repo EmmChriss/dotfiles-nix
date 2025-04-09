@@ -19,12 +19,6 @@
 
     # Flake Utils: couple of utility functions
     flake-utils.url = "github:numtide/flake-utils";
-
-    # rust-overlay: rolling rust releases with configurable components
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     
     # Yazi: terminal file manager upstream releases
     # NOTE: pinned version for potential backward-incompatible changes
@@ -89,7 +83,6 @@
 
               # import package flake overlays
               _inputs.yazi.overlays.default
-              _inputs.rust-overlay.overlays.default
             ];
           }
         

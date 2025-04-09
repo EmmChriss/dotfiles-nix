@@ -39,7 +39,7 @@ in
       # marksman
       # nixd
       nil
-      rust-analyzer
+      # rust-analyzer # installed through rustup
       # python312Packages.python-lsp-server
       # taplo # toml
       # zls

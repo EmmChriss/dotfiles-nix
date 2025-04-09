@@ -122,14 +122,10 @@
       bun nodejs docker-compose
       psmisc postgresql pgcli
       git python3 lua zig uv
-
-      # rust
-      (rust-bin.stable.latest.default.override {
-        extensions = [ "rustc" "rust-src" "rustfmt" "cargo" "clippy" "rust-analyzer" ];
-        targets = [ "wasm32-unknown-unknown" ];
-      })
+      rustup
 
       # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
+      # TODO: make this an overlay
       (symlinkJoin {
         name = "dbeaver";
         paths = [ dbeaver-bin ];
