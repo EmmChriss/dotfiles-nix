@@ -89,8 +89,12 @@
       libnotify dunst tofi reaper
       nerd-fonts.iosevka-term
       teams-for-linux file-roller
-      popcorntime typora godot_4
-      libreoffice libresprite
+      popcorntime typora
+      libreoffice
+
+      # gamedev
+      godot_4
+      libresprite aseprite
 
       # wayland
       wl-clipboard grim
