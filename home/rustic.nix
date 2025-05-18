@@ -31,8 +31,14 @@ let
       {
         notify-send "Cleaning backup.."
 
-        rustic check && rustic forget --prune
+        rustic forget --prune --instant-delete --fast-repack --no-resize
       } || notify-send "Cleaning backup failed"
+
+      {
+        notify-send "Repairing backup.."
+
+        rustic repair index
+      } || notify-send "Repairing backup failed"
       
       notify-send "Backup successfull"
     '';
