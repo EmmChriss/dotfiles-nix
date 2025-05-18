@@ -43,13 +43,6 @@ in
     # TODO: check out Hydro documentation
     # See: https://github.com/jorgebucaran/hydro
     interactiveShellInit = ''
-      # detect nix shells started with nix-shell, nix run, nix develop
-      ${pkgs.any-nix-shell}/bin/any-nix-shell fish | source
-        
-      # mark nix shells
-      set --global hydro_color_start "--bold"
-      set --global hydro_symbol_start (${pkgs.any-nix-shell}/bin/nix-shell-info)' '
-    
       # mark subshells with FISH_TOP=1
       test -z "$FISH_TOP" && ${lib.getExe greetings} && set -x FISH_TOP 1
 
