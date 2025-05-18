@@ -228,12 +228,6 @@ in
           animate_mouse_windowdragging = "true";
       };
       
-      # RULES
-      windowrule = [
-        "noblur,.*Peek.*"
-        "noblur,.*DBeaver.*"
-      ];
-
       # KEYBINDS
       # See bind modifiers: https://wiki.hyprland.org/Configuring/Binds/#bind-flags
       "$mainMod" = "SUPER";

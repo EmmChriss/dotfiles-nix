@@ -90,7 +90,7 @@
       nerd-fonts.iosevka-term
       teams-for-linux file-roller
       popcorntime typora
-      libreoffice
+      libreoffice vlc
 
       # gamedev
       godot_4

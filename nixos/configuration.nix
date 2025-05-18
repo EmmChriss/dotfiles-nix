@@ -229,9 +229,12 @@
     pkgs.amdvlk # AMD Vulkan
   ];
 
-  # Restrict GPU Accel to AMD
-  environment.variables.VK_ICD_FILENAMES =
-    "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+  # verify setup with `vulkaninfo`, `glxinfo`, `clinfo`, `vainfo`, `vdpauinfo`
+  # prefer Intel's VA-API over Nvidia's VDPAU, still use the AMD VDPAU driver
+  environment.variables = {
+    LIBVA_DRIVER_NAME = "radeonsi";
+    VDPAU_DRIVER = "radeonsi";
+  };
 
   # BATTERY: secondary boot config that switches off NVIDIA card
   specialisation.battery.configuration = { ... }: {
@@ -245,6 +248,13 @@
       nvidiaPersistenced = lib.mkForce false;
       prime.offload.enable = lib.mkForce false;
       prime.offload.enableOffloadCmd = lib.mkForce false;
+    };
+
+    # Restrict GPU Accel to AMD
+    environment.variables = {
+      VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+      LIBVA_DRIVER_NAME = "radeonsi";
+      VDPAU_DRIVER = "radeonsi";
     };
   };
 
