@@ -87,10 +87,10 @@
       # gui
       alacritty librewolf ungoogled-chromium
       libnotify dunst tofi reaper
-      (nerdfonts.override { fonts = ["IosevkaTerm"]; })
+      nerd-fonts.iosevka-term
       teams-for-linux file-roller
       popcorntime typora godot_4
-      libreoffice
+      libreoffice libresprite
 
       # wayland
       wl-clipboard grim
@@ -122,10 +122,10 @@
       bun nodejs docker-compose
       psmisc postgresql pgcli
       git python3 lua zig uv
-      rustup
+      rustup clang
 
       # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
-      # TODO: make this an overlay
+      # TODO: maybe make this an overlay
       (symlinkJoin {
         name = "dbeaver";
         paths = [ dbeaver-bin ];
