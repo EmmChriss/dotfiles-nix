@@ -232,8 +232,10 @@
   # verify setup with `vulkaninfo`, `glxinfo`, `clinfo`, `vainfo`, `vdpauinfo`
   # prefer Intel's VA-API over Nvidia's VDPAU, still use the AMD VDPAU driver
   environment.variables = {
-    LIBVA_DRIVER_NAME = "radeonsi";
-    VDPAU_DRIVER = "radeonsi";
+    # LIBVA_DRIVER_NAME = "radeonsi";
+    # VDPAU_DRIVER = "radeonsi";
+    # LIBVA_DRIVER_NAME = "nvidia";
+    # VDPAU_DRIVER = "nvidia";
   };
 
   # BATTERY: secondary boot config that switches off NVIDIA card
@@ -252,9 +254,9 @@
 
     # Restrict GPU Accel to AMD
     environment.variables = {
-      VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
-      LIBVA_DRIVER_NAME = "radeonsi";
-      VDPAU_DRIVER = "radeonsi";
+      # VK_ICD_FILENAMES = lib.mkForce "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+      # LIBVA_DRIVER_NAME = lib.mkForce "radeonsi";
+      # VDPAU_DRIVER = lib.mkForce "radeonsi";
     };
   };
 
