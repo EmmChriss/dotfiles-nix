@@ -20,6 +20,33 @@ let
   grimArgs = ''-c -l9 -t ppm'';
 in
 {
+  xdg.configFile."uwsm/env-hyprland" = { text =
+    ''
+      export AQ_DRM_DEVICES=$(readlink -f /dev/dri/by-path/pci-0000:05:00.0-card):$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card)
+    ''; };
+
+  xdg.configFile."uwsm/env" = { text =
+    ''
+      export XCURSOR_SIZE=24
+
+      export QT_QPA_PLATFORM='wayland;xcb'
+      export QT_AUTO_SCREEN_SCALE_FACTOR=1
+      export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+
+      export ELECTRON_OZONE_PLATFORM_HINT=auto
+      export GDK_BACKEND=wayland,x11
+      export SDL_VIDEODRIVER=wayland
+      export CLUTTER_BACKEND=wayland
+
+      export MOZ_ENABLE_WAYLAND=1
+
+      export _JAVA_AWT_WM_NONREPARENTING=1
+      export _JAVA_OPTIONS='-Dsun.java2d.opengl=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
+      export CRYPTOGRAPHY_OPENSSL_NO_LEGACY='1'
+      export NODE_OPTIONS='--max-old-space-size=1024'
+      export OGL_DEDICATED_HW_STATE_PER_CONTEXT='ENABLE_ROBUST'
+    ''; };
+
   # enable hyprland
   # WARN: do not set any additional options, use the Hyprland that is installed system-wide
   wayland.windowManager.hyprland = {
@@ -37,26 +64,27 @@ in
         disable_time = false;
       };
 
+      cursor.use_cpu_buffer = true;
+
       # Monitors
       # See https://wiki.hyprland.org/Configuring/Monitors/
       monitor = [
-        ",preferred,auto,auto"
-        "desc:AU Optronics 0xD1ED,preferred,auto,1.0"
+        ",preferred,auto,1"
       ];
 
       # Workspaces
       # TODO: generate this
       workspace = [
-        "1,monitor:desc:AU Optronics 0xD1ED,name:1,default:true"
-        "2,monitor:desc:AU Optronics 0xD1ED,name:2"
-        "3,monitor:desc:AU Optronics 0xD1ED,name:3"
-        "4,monitor:desc:AU Optronics 0xD1ED,name:4"
-        "5,monitor:desc:AU Optronics 0xD1ED,name:5"
-        "6,monitor:desc:AU Optronics 0xD1ED,name:6"
-        "7,monitor:desc:AU Optronics 0xD1ED,name:7"
-        "8,monitor:desc:AU Optronics 0xD1ED,name:8"
-        "9,monitor:desc:AU Optronics 0xD1ED,name:9"
-        "10,monitor:desc:AU Optronics 0xD1ED,name:10"
+        "1,monitor:eDP-1,name:1,default:true"
+        "2,monitor:eDP-1,name:2"
+        "3,monitor:eDP-1,name:3"
+        "4,monitor:eDP-1,name:4"
+        "5,monitor:eDP-1,name:5"
+        "6,monitor:eDP-1,name:6"
+        "7,monitor:eDP-1,name:7"
+        "8,monitor:eDP-1,name:8"
+        "9,monitor:eDP-1,name:9"
+        "10,monitor:eDP-1,name:10"
 
         "11,monitor:HDMI-A-1,name:I,default:true"
         "12,monitor:HDMI-A-1,name:II"
@@ -68,6 +96,18 @@ in
         "18,monitor:HDMI-A-1,name:VIII"
         "19,monitor:HDMI-A-1,name:IX"
         "20,monitor:HDMI-A-1,name:X"
+
+        # smart gaps part 1; see windowrules for part 2
+        "w[tv1], gapsout:0, gapsin:0"
+        "f[1], gapsout:0, gapsin:0"
+      ];
+
+      # smart gaps part 2
+      windowrule = [
+        "bordersize 0, floating:0, onworkspace:w[tv1]"
+        "rounding 0, floating:0, onworkspace:w[tv1]"
+        "bordersize 0, floating:0, onworkspace:f[1]"
+        "rounding 0, floating:0, onworkspace:f[1]"
       ];
 
       #
@@ -97,27 +137,6 @@ in
 
       # Environment
       env = [
-        "XCURSOR_SIZE,24"
-        "WLR_BACKEND,vulkan"
-        "WLR_DRM_DEVICES,/dev/dri/card0:/dev/dri/card1"
-        "ELECTRON_OZONE_PLATFORM_HINT,auto"
-        "GDK_BACKEND,         wayland,x11"
-        "QT_QPA_PLATFORM,     wayland"
-        "SDL_VIDEODRIVER,     wayland"
-        "CLUTTER_BACKEND,     wayland"
-        "XDG_CURRENT_DESKTOP, Hyprland"
-        "XDG_SESSION_TYPE,    wayland"
-        "XDG_SESSION_DESKTOP, Hyprland"
-
-        "QT_AUTO_SCREEN_SCALE_FACTOR, 1"
-        "QT_WAYLAND_DISABLE_WINDOWDECORATION, 1"
-        "MOZ_ENABLE_WAYLAND, 1"
-        "WLR_NO_HARDWARE_CURSORS, 1"
-
-        "_JAVA_AWT_WM_NONREPARENTING, 1"
-        "_JAVA_OPTIONS, -Dsun.java2d.opengl=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
-        "CRYPTOGRAPHY_OPENSSL_NO_LEGACY, 1"
-        "NODE_OPTIONS, --max-old-space-size=1024"
       ];
 
       # See https://wiki.hyprland.org/Configuring/Variables/ for more
