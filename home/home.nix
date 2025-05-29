@@ -91,6 +91,7 @@
       teams-for-linux file-roller
       popcorntime typora
       libreoffice vlc
+      gimp inkscape
 
       # gamedev
       godot_4
@@ -126,7 +127,8 @@
       bun nodejs docker-compose
       psmisc postgresql pgcli
       git python3 lua zig uv
-      rustup clang
+      rustup clang pkg-config
+      openssl
 
       # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
       # TODO: maybe make this an overlay
