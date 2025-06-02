@@ -120,24 +120,6 @@ in
         # NOTE: forcefully reset and restart failed units
         "systemctl --user --quiet list-units --failed | xargs -I{} sh -c 'systemctl --user stop {}; systemctl --user reset-failed {}; systemctl --user restart {}'"
       ];
-      
-      # TODO: find nix solution for these
-
-      # set wallpaper
-      # exec = killall swaybg; swaybg -i ~/.walls/current &
-
-      # night screen daemon
-      # exec-once = wlsunset -t 4500 -T 6500 -l 44.4759 -L 25.8142 -g 1.0
-
-      # notification daemon
-      # exec = killall swaync; swaync -c /home/morga/.config/swaync/hyprland.json -s /home/morga/.config/swaync/hyprland-1.css
-
-      # lock on idle
-      # exec = swayidle timeout 1200 nwg-lock
-
-      # Environment
-      env = [
-      ];
 
       # See https://wiki.hyprland.org/Configuring/Variables/ for more
       input = {

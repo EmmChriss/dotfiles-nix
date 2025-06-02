@@ -15,26 +15,6 @@
     tofi = super.tofi.overrideAttrs (old: {
       patches = (old.patches or []) ++ [ ./tofi-drun-print-desktop.patch ];
     });
-
-    # alacritty: master
-    # alacritty = super.alacritty.overrideAttrs (old: rec {
-    #   src = super.fetchFromGitHub {
-    #     owner = "alacritty";
-    #     repo = "alacritty";
-    #     rev = "28910e3adc9d48edc4f43008d987eecd869ded31";
-    #     hash = "sha256-Ege7Cb4YE9j1AWt7+rMsXE1t7ZTO/jv469cHDV2BywM=";
-    #   };
-
-    #   cargoDeps = old.cargoDeps.overrideAttrs (super.lib.const {
-    #     name = "alacritty-vendor.tar.gz";
-    #     inherit src;
-    #     outputHash = "sha256-IP100T9dJa8TRlFruhwu0qUVcVq0IVxBTXWga1cj80U=";
-    #   });
-    #   # cargoHash = "sha256-IP100T9dJa8TRlFruhwu0qUVcVq0IVxBTXWga1cj80U=";
-    # });
-
-    # helix: nixpkgs-unstable
-    helix = inputs.nixpkgs-unstable.legacyPackages.${super.system}.helix;
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will

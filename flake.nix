@@ -13,8 +13,7 @@
 
     # Home Manager
     home-manager = {
-      # url = "github:nix-community/home-manager/release-25.05";
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -75,12 +74,18 @@
           # Enable overlays
           {
             nixpkgs.overlays = [
+              # access unstable packages through pkgs.unstable
+              self.overlays.unstable-packages
+
+              # use the unstable version of some packages
+              (self: super: {
+                helix = super.unstable.helix;
+                satty = super.unstable.satty;
+              })
+            
               # import some of our own overlays
               self.overlays.modifications
               self.overlays.additions
-
-              # access unstable packages through pkgs.unstable
-              self.overlays.unstable-packages
 
               # import package flake overlays
               _inputs.yazi.overlays.default
