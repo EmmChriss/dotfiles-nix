@@ -15,6 +15,18 @@ let
       slurp
     '';
   };
+  start-alacritty = pkgs.writeShellApplication {
+    name = "start-alacritty";
+    runtimeInputs = with pkgs; [ alacritty ];
+    text = ''
+      export ALACRITTY_SOCKET="$XDG_RUNTIME_DIR/alacritty.sock"
+      if test -e "$ALACRITTY_SOCKET"; then
+        alacritty msg create-window
+      else
+        alacritty --socket "$ALACRITTY_SOCKET"
+      fi
+    '';
+  };
   printscrOutput = ''"$HOME/Media/Pictures/Screenshots/$(date +'%Y-%m-%d-%T').png"'';
   sattyArgs = ''--early-exit --copy-command wl-copy --save-after-copy'';
   grimArgs = ''-c -l9 -t ppm'';
@@ -236,7 +248,7 @@ in
 
       # PROGRAMS
       "$exitcmd" = "hyprctl dispatch exit";
-      "$terminal" = "xargs uwsm app -- alacritty";
+      "$terminal" = "xargs uwsm app -- ${getExe start-alacritty}";
       "$browser"  = "xargs uwsm app -- librewolf";
       "$editor"   = "helix";
       "$clipman" = "cliphist list | tofi --prompt-text= --placeholder-text='Copy' | cliphist decode | wl-copy";
