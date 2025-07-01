@@ -114,15 +114,15 @@
     nvidia = {
       # modesetting is usually needed
       modesetting.enable = true;
-      nvidiaPersistenced = true;
+      # nvidiaPersistenced = true;
       powerManagement = {
         enable = true;
         finegrained = true;
       };
 
-      open = false;
+      open = true;
       nvidiaSettings = false;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      # package = config.boot.kernelPackages.nvidiaPackages.stable;
 
       # Configure PRIME offloading
       prime = {
@@ -182,7 +182,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.morga = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "video" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" "video" "docker" "adbusers" ];
   };
 
   # Instead of setting as login shell, run fish immediately when bash starts
@@ -345,6 +345,9 @@
 
   # enable nix-ld
   programs.nix-ld.enable = true;
+
+  # enable android tools and associated udev rules
+  programs.adb.enable = true;
 
   # DO NOT CHANGE
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
