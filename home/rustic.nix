@@ -66,9 +66,10 @@ in
 
     forget = {
       prune = true;
-      keep-within-daily = "7 days";
-      keep-monthly = 5;
-      keep-yearly = 2;
+      keep-last = 2;
+      keep-daily = 2;
+      keep-weekly = 2;
+      keep-monthly = 2;
     };
 
     backup = {
@@ -77,7 +78,7 @@ in
       iglobs = [
         "!downloads" "!node_modules" "!target" "!venv"
         "!.cache" "!.local/state" "!.cargo" "!.npm" "!.pnpm"
-        "!uv" "!dump*.tar" "!Trash" "!teams-for-linux"
+        "!uv" "!Trash" "!teams-for-linux" "!.rustup"
       ];
       one-file-system = true;
       snapshots = [

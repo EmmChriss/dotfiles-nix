@@ -87,16 +87,8 @@ in
       # Workspaces
       # TODO: generate this
       workspace = [
-        "1,monitor:eDP-2,name:1,default:true"
-        "2,monitor:eDP-2,name:2"
-        "3,monitor:eDP-2,name:3"
-        "4,monitor:eDP-2,name:4"
-        "5,monitor:eDP-2,name:5"
-        "6,monitor:eDP-2,name:6"
-        "7,monitor:eDP-2,name:7"
-        "8,monitor:eDP-2,name:8"
-        "9,monitor:eDP-2,name:9"
-        "10,monitor:eDP-2,name:10"
+        "1,monitor:desc:AU Optronics 0xD1ED,name:1,default:true"
+        "r[2-10],monitor:desc:AU Optronics 0xD1ED,name:2"
 
         "11,monitor:HDMI-A-1,name:I,default:true"
         "12,monitor:HDMI-A-1,name:II"

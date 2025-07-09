@@ -88,7 +88,25 @@
 
   # Networking
   networking.hostName = "morga";
-  networking.networkmanager.enable = true;
+  networking = {
+
+    # enable NetworkManager
+    networkmanager = {
+      enable = true;
+      wifi.powersave = true;
+
+      dns = "none";
+    };
+
+    useDHCP = false;
+    dhcpcd.enable = false;
+    nameservers = [
+      "1.1.1.1"
+      "1.0.0.1"
+      "8.8.8.8"
+      "8.8.4.4"
+    ];
+  };
 
   # Locale
   i18n.defaultLocale = "en_US.UTF-8";
@@ -164,6 +182,13 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  # local network device discovery (printers)
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
 
   # Sudo
   security.sudo = {
