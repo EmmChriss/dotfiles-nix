@@ -81,6 +81,7 @@
               (self: super: {
                 helix = super.unstable.helix;
                 satty = super.unstable.satty;
+                jujutsu = super.unstable.jujutsu;
               })
             
               # import some of our own overlays

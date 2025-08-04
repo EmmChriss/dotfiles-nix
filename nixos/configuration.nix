@@ -355,6 +355,7 @@
     systemdInterval = "weekly";
   };
 
+  # enable gpg agent system-wide with ssh-agent emulation
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;

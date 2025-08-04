@@ -254,8 +254,6 @@
     Install.WantedBy = ["default.target"];
   };
 
-  services.ssh-agent.enable = true;
-  services.gpg-agent.enable = true;
   services.mpris-proxy.enable = true;
   services.playerctld.enable = true;
   services.cliphist.enable = true;
