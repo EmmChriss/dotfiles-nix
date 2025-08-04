@@ -25,6 +25,7 @@
     ./pass.nix
     ./hyprland.nix
     ./rustic.nix
+    ./vcs.nix
   ];
 
   home = {
@@ -85,12 +86,11 @@
       prelockd
       
       # gui
-      alacritty librewolf ungoogled-chromium
+      alacritty librewolf
       libnotify dunst tofi reaper
       nerd-fonts.iosevka-term
       teams-for-linux file-roller
-      popcorntime typora
-      libreoffice vlc
+      popcorntime typora vlc
       gimp inkscape
 
       # gamedev
@@ -158,72 +158,6 @@
   };
 
   programs = {
-    # enable git
-    git = {
-      enable = true;
-
-      # git large file support
-      lfs.enable = true;
-
-      # git diff highlighter
-      delta = {
-        enable = true;
-        options = {
-          navigate = true;
-          side-by-side = true;
-        };
-      };
-
-      # automatic git signing
-      signing = {
-        format = "ssh";
-        signByDefault = true;
-        key = "~/.ssh/id_sign.pub";
-      };
-      
-      userName = "EmmChriss";
-      userEmail = "emmchris@protonmail.com";
-    };
-
-    # jujutsu: enhanced git
-    jujutsu = {
-      enable = true;
-      settings = {
-        user = {
-          name = "EmmChriss";
-          email = "emmchris@protonmail.com";
-        };
-
-        colors = {
-          "commit_id prefix" = { bold = true; };
-        };
-
-        revset-aliases = {
-          "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
-        };
-
-        ui = {
-          pager = "delta";
-          diff-formatter = ":git";
-          
-          # edit by default, override with --no-edit
-          movement.edit = true;
-        };
-
-        signing = {
-          behaviour = "drop";
-          backend = "ssh";
-          key = "~/.ssh/id_sign.pub";
-        };
-
-        git = {
-          sign-on-push = true;
-          auto-local-bookmark = true;
-          push-new-bookmarks = true;
-        };
-      };
-    };
-  
     # bat: cat replacement
     bat = {
       enable = true;

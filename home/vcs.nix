@@ -1,0 +1,161 @@
+{ pkgs, ... }:
+
+let
+  signature = "~/.ssh/id_sign.pub";
+  name = "EmmChriss";
+  email = "emmchris@protonmail.com";
+in
+{
+  # enable git
+  programs.git = {
+    enable = true;
+
+    # git large file support
+    lfs.enable = true;
+
+    # git diff highlighter
+    delta = {
+      enable = true;
+      options = {
+        navigate = true;
+        side-by-side = true;
+      };
+    };
+
+    # automatic git signing
+    signing = {
+      format = "ssh";
+      signByDefault = true;
+      key = signature;
+    };
+    
+    userName = name;
+    userEmail = email;
+  };
+
+  # jujutsu: enhanced git
+  programs.jujutsu = {
+    enable = true;
+    settings = {
+      user = { inherit name email; };
+      colors = {
+        commit_id = "magenta";
+        change_id = "cyan";
+        "working_copy empty" = "green";
+        "working_copy placeholder" = "red";
+        "working_copy description placeholder" = "yellow";
+        "working_copy empty description placeholder" = "green";
+        prefix = {
+          bold = true;
+          fg = "cyan";
+        };
+        rest = {
+          bold = false;
+          fg = "bright black";
+        };
+        "node elided" = "yellow";
+        "node working_copy" = "green";
+        "node conflict" = "red";
+        "node immutable" = "red";
+        "node normal" = { bold = false; };
+        "node" = { bold = false; };
+      };
+
+      revset-aliases = {
+        "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
+      };
+
+      ui = {
+        default-command = "status";
+        pager = "${pkgs.delta}/bin/delta";
+        diff-formatter = ":git";
+        diff-editor = ":builtin";
+        
+        # edit by default, override with --no-edit
+        movement.edit = true;
+      };
+
+      templates = {
+        # terser node formatting
+        log_node = ''
+          label("node",
+            coalesce(
+              if(!self, label("elided", "~")),
+              if(current_working_copy, label("working_copy", "@")),
+              if(conflict, label("conflict", "×")),
+              if(immutable, label("immutable", "*")),
+              label("normal", "·")
+            )
+          )
+        '';
+
+        # terser log
+        log = ''
+          if(root,
+            format_root_commit(self),
+            label(if(current_working_copy, "working_copy"),
+              concat(
+                separate(" ",
+                  format_short_change_id_with_hidden_and_divergent_info(self),
+                  if(empty, label("empty", "(empty)")),
+                  if(description,
+                    description.first_line(),
+                    label(if(empty, "empty"), description_placeholder),
+                  ),
+                  bookmarks,
+                  tags,
+                  working_copies,
+                  if(git_head, label("git_head", "HEAD")),
+                  if(conflict, label("conflict", "conflict")),
+                  if(config("ui.show-cryptographic-signatures").as_boolean(),
+                    format_short_cryptographic_signature(signature)),
+                ) ++ "\n",
+              ),
+            )
+          )
+        '';
+
+        # include changes in draft commit file
+        draft_commit_description =''
+            concat(
+              coalesce(description, default_commit_description, "\n"),
+              surround(
+                "\nJJ: This commit contains the following changes:\n", "",
+                indent("JJ:     ", diff.stat(72)),
+              ),
+              "\nJJ: ignore-rest\n",
+              diff.git(),
+            )
+        '';
+      };
+
+      aliases = {
+        d = ["diff"];
+        l = ["log"];
+        ll = ["log" "-r" ".."];
+        s = ["status"];
+        p = ["prev"];
+        n = ["next"];
+        e = ["edit"];
+        ed = ["edit"];
+        # use `jj tug` to bring the last bookmark to the parent change
+        tug = ["bookmark" "move" "--from" "heads(::@- & bookmarks())" "--to" "@-"];
+      };
+      
+      signing = {
+        behaviour = "drop";
+        backend = "ssh";
+        key = signature;
+
+        backends.ssh.allowed-signers = "~/.ssh/allowed-signers";
+        backends.ssh.revocation-list = "~/.ssh/revocation-list";
+      };
+
+      git = {
+        sign-on-push = true;
+        auto-local-bookmark = true;
+        push-new-bookmarks = true;
+      };
+    };
+  };
+}
