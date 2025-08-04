@@ -132,7 +132,7 @@
     nvidia = {
       # modesetting is usually needed
       modesetting.enable = true;
-      # nvidiaPersistenced = true;
+      nvidiaPersistenced = true;
       powerManagement = {
         enable = true;
         finegrained = true;
@@ -140,7 +140,6 @@
 
       open = true;
       nvidiaSettings = false;
-      # package = config.boot.kernelPackages.nvidiaPackages.stable;
 
       # Configure PRIME offloading
       prime = {
