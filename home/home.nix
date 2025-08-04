@@ -173,9 +173,55 @@
           side-by-side = true;
         };
       };
+
+      # automatic git signing
+      signing = {
+        format = "ssh";
+        signByDefault = true;
+        key = "~/.ssh/id_sign.pub";
+      };
       
       userName = "EmmChriss";
       userEmail = "emmchris@protonmail.com";
+    };
+
+    # jujutsu: enhanced git
+    jujutsu = {
+      enable = true;
+      settings = {
+        user = {
+          name = "EmmChriss";
+          email = "emmchris@protonmail.com";
+        };
+
+        colors = {
+          "commit_id prefix" = { bold = true; };
+        };
+
+        revset-aliases = {
+          "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
+        };
+
+        ui = {
+          pager = "delta";
+          diff-formatter = ":git";
+          
+          # edit by default, override with --no-edit
+          movement.edit = true;
+        };
+
+        signing = {
+          behaviour = "drop";
+          backend = "ssh";
+          key = "~/.ssh/id_sign.pub";
+        };
+
+        git = {
+          sign-on-push = true;
+          auto-local-bookmark = true;
+          push-new-bookmarks = true;
+        };
+      };
     };
   
     # bat: cat replacement
