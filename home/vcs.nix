@@ -73,6 +73,9 @@ in
         
         # edit by default, override with --no-edit
         movement.edit = true;
+
+        # verify signatures only when `show`-ing change
+        show-cryptographic-signatures = true;
       };
 
       templates = {
@@ -107,8 +110,6 @@ in
                   working_copies,
                   if(git_head, label("git_head", "HEAD")),
                   if(conflict, label("conflict", "conflict")),
-                  if(config("ui.show-cryptographic-signatures").as_boolean(),
-                    format_short_cryptographic_signature(signature)),
                 ) ++ "\n",
               ),
             )
