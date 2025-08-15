@@ -88,7 +88,15 @@ in
       # TODO: generate this
       workspace = [
         "1,monitor:desc:AU Optronics 0xD1ED,name:1,default:true"
-        "r[2-10],monitor:desc:AU Optronics 0xD1ED,name:2"
+        "2,monitor:desc:AU Optronics 0xD1ED,name:2"
+        "3,monitor:desc:AU Optronics 0xD1ED,name:3"
+        "4,monitor:desc:AU Optronics 0xD1ED,name:4"
+        "5,monitor:desc:AU Optronics 0xD1ED,name:5"
+        "6,monitor:desc:AU Optronics 0xD1ED,name:6"
+        "7,monitor:desc:AU Optronics 0xD1ED,name:7"
+        "8,monitor:desc:AU Optronics 0xD1ED,name:8"
+        "9,monitor:desc:AU Optronics 0xD1ED,name:9"
+        "10,monitor:desc:AU Optronics 0xD1ED,name:10"
 
         "11,monitor:HDMI-A-1,name:I,default:true"
         "12,monitor:HDMI-A-1,name:II"
@@ -106,8 +114,8 @@ in
         "f[1], gapsout:0, gapsin:0"
       ];
 
-      # smart gaps part 2
       windowrule = [
+        # smart gaps part 2
         "bordersize 0, floating:0, onworkspace:w[tv1]"
         "rounding 0, floating:0, onworkspace:w[tv1]"
         "bordersize 0, floating:0, onworkspace:f[1]"

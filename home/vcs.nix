@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  signature = "~/.ssh/id_sign.pub";
+  signature = "~/.ssh/id_2025_sign.pub";
   name = "EmmChriss";
   email = "emmchris@protonmail.com";
 in
@@ -38,6 +38,11 @@ in
     enable = true;
     settings = {
       user = { inherit name email; };
+
+      snapshot = {
+        auto-update-stale = true;
+      };
+
       colors = {
         commit_id = "magenta";
         change_id = "cyan";
@@ -62,7 +67,7 @@ in
       };
 
       revset-aliases = {
-        "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
+        "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine()) | remote_bookmarks() | tags()";
       };
 
       ui = {

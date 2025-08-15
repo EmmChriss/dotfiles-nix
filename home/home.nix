@@ -86,7 +86,7 @@
       prelockd
       
       # gui
-      alacritty librewolf
+      alacritty librewolf ungoogled-chromium
       libnotify dunst tofi reaper
       nerd-fonts.iosevka-term
       teams-for-linux file-roller

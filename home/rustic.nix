@@ -6,14 +6,10 @@ let
     name = "backup-rustic";
     runtimeInputs = with pkgs; [ age rclone rustic libnotify ];
     text = ''
+      # make sure we even have internet connectivity
       ping -c3 linux.org >/dev/null 2>&1 || exit 1
-    
-      {
-        notify-send "Starting backup.."
 
-        rustic backup
-      } || notify-send "Backup failed"
-
+      # start with a low-bandwidth secrets backup
       {
         cd /home/morga
         export RCLONE_PASSWORD_COMMAND="pass rclone/config"
@@ -27,7 +23,14 @@ let
         # also upload encrypted key file
         rclone rcat --size-only mega:Secrets/key-secrets.txt.age < .age/key-secrets.txt.age
       } || notify-send "Secrets backup failed"
-      
+
+      # do full backup
+      {
+        notify-send "Starting backup.."
+
+        rustic backup
+      } || notify-send "Backup failed"
+
       {
         notify-send "Cleaning backup.."
 
