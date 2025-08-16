@@ -320,6 +320,15 @@
   # enable zram memory compression instead of swapping
   zramSwap.enable = true;
 
+  # according to Arch Wiki, Pop OS uses these settings with zram
+  # https://wiki.archlinux.org/title/Zram
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 180;
+    "vm.watermark_boost_factor" = 0;
+    "vm.watermark_scale_factor" = 125;
+    "vm.page-cluster" = 0;
+  };
+
   # enable automatic swap file creation and management on disk
   services.swapspace.enable = true;
 
