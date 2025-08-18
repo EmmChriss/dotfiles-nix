@@ -318,7 +318,10 @@
   };
 
   # enable zram memory compression instead of swapping
-  zramSwap.enable = true;
+  zramSwap = {
+    enable = true;
+    memoryPercent = 100;
+  };
 
   # according to Arch Wiki, Pop OS uses these settings with zram
   # https://wiki.archlinux.org/title/Zram
