@@ -71,7 +71,7 @@ in
       };
 
       ui = {
-        default-command = "status";
+        default-command = "combo";
         pager = "${pkgs.delta}/bin/delta";
         diff-formatter = ":git";
         diff-editor = ":builtin";
@@ -106,11 +106,11 @@ in
                 separate(" ",
                   format_short_change_id_with_hidden_and_divergent_info(self),
                   if(empty, label("empty", "(empty)")),
+                  bookmarks,
                   if(description,
                     description.first_line(),
                     label(if(empty, "empty"), description_placeholder),
                   ),
-                  bookmarks,
                   tags,
                   working_copies,
                   if(git_head, label("git_head", "HEAD")),
@@ -136,15 +136,24 @@ in
       };
 
       aliases = {
+        combo =
+          let cmd = ''
+              set -euo pipefail
+              jj s --no-pager
+              jj l --no-pager
+            '';
+          in ["util" "exec" "--" "bash" "-c" cmd ""];
         d = ["diff"];
-        l = ["log"];
+        l = ["log" "-r" "@ | latest(heads(::@- & bookmarks())::@-, 3) | heads(::@- & bookmarks())"];
         ll = ["log" "-r" ".."];
+        lb = ["log" "-r" "@ | ::@- & bookmarks()"];
+        lt = ["log" "-r" "(trunk()..@):: | (trunk()..@)-"];
         s = ["status"];
-        p = ["prev"];
-        n = ["next"];
         e = ["edit"];
         ed = ["edit"];
-        # use `jj tug` to bring the last bookmark to the parent change
+        # use `jj tug` to bring the last bookmark(s) to the parent change
+        # NOTE: multiple bookmarks pointing to the same revision will all be pulled
+        # use with `jj lb` to see which bookmark/bookmarks will be pulled
         tug = ["bookmark" "move" "--from" "heads(::@- & bookmarks())" "--to" "@-"];
       };
       
