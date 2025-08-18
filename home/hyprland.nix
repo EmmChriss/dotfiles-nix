@@ -82,6 +82,7 @@ in
       # See https://wiki.hyprland.org/Configuring/Monitors/
       monitor = [
         ",preferred,auto,1"
+        "desc:Philips Consumer Electronics Company Philips 226V4 UK01342044314,preferred,auto-left,1"
       ];
 
       # Workspaces
