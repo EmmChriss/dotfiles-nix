@@ -216,6 +216,11 @@
   gtk = {
     enable = true;
 
+    cursorTheme = {
+      name = "capitaine-cursors-white";
+      package = pkgs.capitaine-cursors;
+    };
+
     theme = {
       package = pkgs.flat-remix-gtk;
       name = "Flat-Remix-GTK-Grey-Darkest";
@@ -230,6 +235,11 @@
       name = "Sans";
       size = 11;
     };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme.name = "gtk";
   };
 
   # Nicely reload system units when changing configs
