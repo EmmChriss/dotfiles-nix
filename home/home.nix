@@ -91,7 +91,7 @@
       nerd-fonts.iosevka-term
       teams-for-linux file-roller
       popcorntime typora vlc
-      gimp inkscape
+      gimp inkscape evince
 
       # gamedev
       godot_4
@@ -147,6 +147,29 @@
         '';
       })
     ];
+  };
+
+  # default packages
+  xdg.mimeApps = {
+    enable = true;
+    associations.added = {
+      "x-scheme-handler/msteams" = [ "teams-for-linux.desktop" ];
+    };
+    associations.removed = {};
+    defaultApplications = {
+      "x-scheme-handler/msteams" = [ "teams-for-linux.desktop" ];
+      "x-scheme-handler/http" = [ "firefox.desktop" ];
+      "x-scheme-handler/https" = [ "firefox.desktop" ];
+      "x-scheme-handler/mailto" = [ "firefox.desktop" ];
+      "text/html" = [ "firefox.desktop" ];
+      "application/pdf" = [ "evince.desktop" "firefox.desktop" ];
+      "video/*" = [ "vlc.desktop" ];
+
+      "inode/directory" = [ "thunar.desktop" ];
+      "image/*" = [ "pqiv.desktop" ];
+
+      "application/zip" = [ "thunar.desktop" ];
+    };
   };
 
   # GNOME config

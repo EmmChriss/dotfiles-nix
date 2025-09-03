@@ -55,7 +55,7 @@ in
       export _JAVA_AWT_WM_NONREPARENTING=1
       export _JAVA_OPTIONS='-Dsun.java2d.opengl=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
       export CRYPTOGRAPHY_OPENSSL_NO_LEGACY='1'
-      export NODE_OPTIONS='--max-old-space-size=1024'
+      # export NODE_OPTIONS='--max-old-space-size=1024'
       export OGL_DEDICATED_HW_STATE_PER_CONTEXT='ENABLE_ROBUST'
     ''; };
 

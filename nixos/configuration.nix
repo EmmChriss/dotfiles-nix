@@ -284,18 +284,16 @@
     };
   };
 
-  # enable Thunar file manager
-  # needed to open archive files without extracting
+  # enable Thunar file manager with plugins
   programs.thunar = with pkgs.xfce; {
     enable = true;
     plugins = [
       thunar-archive-plugin
       thunar-volman
+      thunar-vcs-plugin
+      thunar-media-tags-plugin
     ];
   };
-
-  # stuff for thunar?
-  programs.xfconf.enable = true;
 
   # also file manager stuff
   services.gvfs.enable = true;
