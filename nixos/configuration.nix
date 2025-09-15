@@ -321,13 +321,18 @@
     memoryPercent = 100;
   };
 
-  # according to Arch Wiki, Pop OS uses these settings with zram
-  # https://wiki.archlinux.org/title/Zram
   boot.kernel.sysctl = {
+    # according to Arch Wiki, Pop OS uses these settings with zram
+    # https://wiki.archlinux.org/title/Zram
     "vm.swappiness" = 180;
     "vm.watermark_boost_factor" = 0;
     "vm.watermark_scale_factor" = 125;
     "vm.page-cluster" = 0;
+
+    # increase various system limits
+    "fs.inotify.max_user_watches" = 10485760;
+    "fs.aio-max-nr" = 10485760;
+    "fs.file-max" = 10485760;
   };
 
   # enable automatic swap file creation and management on disk

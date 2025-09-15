@@ -87,7 +87,7 @@
       
       # gui
       alacritty librewolf ungoogled-chromium
-      libnotify dunst tofi reaper
+      libnotify dunst tofi reaper qbittorrent
       nerd-fonts.iosevka-term
       teams-for-linux file-roller
       popcorntime typora vlc

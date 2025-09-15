@@ -41,6 +41,7 @@ in
 
       snapshot = {
         auto-update-stale = true;
+        max-new-file-size = "10MiB";
       };
 
       colors = {
@@ -76,9 +77,6 @@ in
         diff-formatter = ":git";
         diff-editor = ":builtin";
         
-        # edit by default, override with --no-edit
-        movement.edit = true;
-
         # verify signatures only when `show`-ing change
         show-cryptographic-signatures = true;
       };
@@ -102,21 +100,20 @@ in
           if(root,
             format_root_commit(self),
             label(if(current_working_copy, "working_copy"),
-              concat(
-                separate(" ",
-                  format_short_change_id_with_hidden_and_divergent_info(self),
-                  if(empty, label("empty", "(empty)")),
-                  bookmarks,
-                  if(description,
-                    description.first_line(),
-                    label(if(empty, "empty"), description_placeholder),
-                  ),
-                  tags,
-                  working_copies,
-                  if(git_head, label("git_head", "HEAD")),
-                  if(conflict, label("conflict", "conflict")),
-                ) ++ "\n",
-              ),
+              separate(" ",
+                format_short_change_id_with_hidden_and_divergent_info(self),
+                if(empty, label("empty", "(empty)")),
+                if(description,
+                  description.first_line(),
+                  label(if(empty, "empty"), description_placeholder),
+                ),
+                bookmarks,
+                tags,
+                working_copies,
+                if(git_head, label("git_head", "HEAD")),
+                if(conflict, label("conflict", "conflict")),
+                if(!mine, author.name()),
+              ) ++ "\n",
             )
           )
         '';
