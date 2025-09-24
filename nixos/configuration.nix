@@ -250,7 +250,7 @@
   # GPU Acceleration
   hardware.graphics.extraPackages = [
     # pkgs.rocmPackages.clr.icd # AMD OpenCL
-    pkgs.amdvlk # AMD Vulkan
+    # pkgs.amdvlk # AMD Vulkan
   ];
 
   # verify setup with `vulkaninfo`, `glxinfo`, `clinfo`, `vainfo`, `vdpauinfo`
