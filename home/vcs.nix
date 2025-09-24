@@ -167,6 +167,7 @@ in
         sign-on-push = true;
         auto-local-bookmark = true;
         push-new-bookmarks = true;
+        private-commits = "description(glob:'wip:*')";
       };
     };
   };
