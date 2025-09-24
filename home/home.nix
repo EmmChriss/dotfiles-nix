@@ -94,8 +94,7 @@
       gimp inkscape evince
 
       # gamedev
-      godot_4
-      libresprite aseprite
+      godot_4 libresprite aseprite
 
       # wayland
       wl-clipboard grim
