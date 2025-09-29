@@ -44,7 +44,7 @@
       BAT_THEME = "TwoDark";
 
       # save all rust builds to same place
-      CARGO_TARGET_DIR = "/home/morga/.cache/target";
+      CARGO_TARGET_DIR = "~/.cache/target";
     };
 
     sessionPath = [
@@ -84,7 +84,7 @@
       # uni
 
       prelockd
-      
+
       # gui
       alacritty librewolf ungoogled-chromium
       libnotify dunst tofi reaper qbittorrent
@@ -101,7 +101,7 @@
       slurp libnotify
       wf-recorder # screen recorder on wayland
       playerctl swappy
-    
+
       # cloud
       heroku flyctl megacmd
 
@@ -111,16 +111,15 @@
       # tui
       htop xh gitui ncdu
       pulsemixer bluetuith
-      
+
       # cli
       ripgrep tealdeer fzf
-      bat grc ffmpeg eza
-      ouch imagemagick
-      
+      bat grc eza ouch
+      imagemagick ffmpeg
+
       # nix
-      nh manix nix-du
-      nix-tree comma
-      steam-run-free # just run some ld-loading program 
+      nh manix nix-tree comma
+      steam-run-free # for a relatively standard linux FHS
 
       # dev tools
       bun nodejs docker-compose
