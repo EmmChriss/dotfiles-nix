@@ -53,7 +53,7 @@ let
 EOF
 
         # upload secret archive to cloud storage
-        rclone rcat --size-only mega:Secrets/secrets.tar.gz.age <"$encrypted"
+        rclone rcat mega:Secrets/secrets.tar.gz.age <"$encrypted"
       } || notify-send "Secrets backup failed"
 
       # do full backup

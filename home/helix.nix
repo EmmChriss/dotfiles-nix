@@ -38,7 +38,6 @@
         trim-trailing-whitespace = true;
         file-picker.hidden = false;
         lsp.display-progress-messages = true;
-        auto-pairs = false;
         whitespace.render = "none";
         indent-guides = {
           render = true;

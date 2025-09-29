@@ -270,7 +270,7 @@
   specialisation.battery.configuration = { ... }: {
     # nixos-hardware: disable nvidia module
     imports = [ inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable ];
-  
+
     system.nixos.tags = [ "battery" ];
     services.xserver.videoDrivers = lib.mkForce [ ];
     hardware.nvidia = {
@@ -322,7 +322,7 @@
   # enable zram memory compression instead of swapping
   zramSwap = {
     enable = true;
-    memoryPercent = 100;
+    memoryPercent = 150;
   };
 
   boot.kernel.sysctl = {

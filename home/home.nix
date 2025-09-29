@@ -44,7 +44,7 @@
       BAT_THEME = "TwoDark";
 
       # save all rust builds to same place
-      CARGO_TARGET_DIR = "~/.cache/target";
+      CARGO_TARGET_DIR = "/home/morga/.cache/target";
     };
 
     sessionPath = [

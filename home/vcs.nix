@@ -28,7 +28,7 @@ in
       signByDefault = true;
       key = signature;
     };
-    
+
     userName = name;
     userEmail = email;
   };
@@ -76,7 +76,7 @@ in
         pager = "${pkgs.delta}/bin/delta";
         diff-formatter = ":git";
         diff-editor = ":builtin";
-        
+
         # verify signatures only when `show`-ing change
         show-cryptographic-signatures = true;
       };
@@ -153,7 +153,7 @@ in
         # use with `jj lb` to see which bookmark/bookmarks will be pulled
         tug = ["bookmark" "move" "--from" "heads(::@- & bookmarks())" "--to" "@-"];
       };
-      
+
       signing = {
         behaviour = "drop";
         backend = "ssh";
