@@ -1,11 +1,9 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   home.packages = with pkgs; [
     # Volume control
     (writeShellApplication {
       name = "vol";
-      runtimeInputs = [ wireplumber ];
+      runtimeInputs = [wireplumber];
       text = ''
         if test $# = 0; then
           # print usage
@@ -41,7 +39,7 @@
     # Backlight control
     (writeShellApplication {
       name = "bl";
-      runtimeInputs = [ brightnessctl bc ];
+      runtimeInputs = [brightnessctl bc];
       text = ''
         device="$(echo /sys/class/backlight/amd* | cut -d/ -f5)"
         cmd="brightnessctl -m -e -d $device"
@@ -98,7 +96,7 @@
         $cmd s "$set%" && echo "$new" > "$XDG_RUNTIME_DIR/bl" && echo "$new"
       '';
     })
-  
+
     # Preview files in terminal
     (writeShellScriptBin "preview" (builtins.readFile ./scripts/preview))
     # Rapid-charge mode for Lenovo laptops

@@ -1,14 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib.lists) optional;
   inherit (lib.modules) mkIf;
   inherit (lib.options) literalExpression mkOption mkEnableOption;
   inherit (lib.types) package str nullOr listOf;
 
   cfg = config.services.duperemove;
-in
-{
+in {
   options.services.duperemove = {
     enable = mkEnableOption "Enable periodic deduplication";
 
@@ -52,32 +54,32 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      [ { assertion = builtins.length cfg.paths > 0;
-          message = "duperemove: at least one path must be specified";
-        }
-      ];
-  
-    environment.systemPackages = [ cfg.package ];
-    systemd.packages = [ cfg.package ];
+    assertions = [
+      {
+        assertion = builtins.length cfg.paths > 0;
+        message = "duperemove: at least one path must be specified";
+      }
+    ];
+
+    environment.systemPackages = [cfg.package];
+    systemd.packages = [cfg.package];
 
     systemd.services.duperemove = {
       description = "Deduplicate files";
       serviceConfig = {
-          Type = "oneshot";
-          User = "root";
-          ExecStart =
-            builtins.concatStringsSep " " (
-              [ "${lib.getExe cfg.package} ${cfg.extraArgs}" ]
-              ++ optional (!isNull cfg.hashfile) "--hashfile=${cfg.hashfile}"
-              ++ cfg.paths
-            );
+        Type = "oneshot";
+        User = "root";
+        ExecStart = builtins.concatStringsSep " " (
+          ["${lib.getExe cfg.package} ${cfg.extraArgs}"]
+          ++ optional (!isNull cfg.hashfile) "--hashfile=${cfg.hashfile}"
+          ++ cfg.paths
+        );
       };
     };
 
     systemd.timers.duperemove = {
       description = "Deduplicate files on a schedule";
-      wantedBy = [ "timers.target" ];
+      wantedBy = ["timers.target"];
       timerConfig = {
         Persistent = true;
         OnCalendar = cfg.systemdInterval;
@@ -85,4 +87,3 @@ in
     };
   };
 }
-

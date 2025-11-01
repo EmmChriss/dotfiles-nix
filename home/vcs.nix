@@ -1,11 +1,8 @@
-{ pkgs, ... }:
-
-let
+{pkgs, ...}: let
   signature = "~/.ssh/id_2025_sign.pub";
   name = "EmmChriss";
   email = "emmchris@protonmail.com";
-in
-{
+in {
   # enable git
   programs.git = {
     enable = true;
@@ -37,7 +34,7 @@ in
   programs.jujutsu = {
     enable = true;
     settings = {
-      user = { inherit name email; };
+      user = {inherit name email;};
 
       snapshot = {
         auto-update-stale = true;
@@ -63,8 +60,8 @@ in
         "node working_copy" = "green";
         "node conflict" = "red";
         "node immutable" = "red";
-        "node normal" = { bold = false; };
-        "node" = { bold = false; };
+        "node normal" = {bold = false;};
+        "node" = {bold = false;};
       };
 
       revset-aliases = {
@@ -119,27 +116,27 @@ in
         '';
 
         # include changes in draft commit file
-        draft_commit_description =''
-            concat(
-              coalesce(description, default_commit_description, "\n"),
-              surround(
-                "\nJJ: This commit contains the following changes:\n", "",
-                indent("JJ:     ", diff.stat(72)),
-              ),
-              "\nJJ: ignore-rest\n",
-              diff.git(),
-            )
+        draft_commit_description = ''
+          concat(
+            coalesce(description, default_commit_description, "\n"),
+            surround(
+              "\nJJ: This commit contains the following changes:\n", "",
+              indent("JJ:     ", diff.stat(72)),
+            ),
+            "\nJJ: ignore-rest\n",
+            diff.git(),
+          )
         '';
       };
 
       aliases = {
-        combo =
-          let cmd = ''
-              set -euo pipefail
-              jj s --no-pager
-              jj l --no-pager
-            '';
-          in ["util" "exec" "--" "bash" "-c" cmd ""];
+        combo = let
+          cmd = ''
+            set -euo pipefail
+            jj s --no-pager
+            jj l --no-pager
+          '';
+        in ["util" "exec" "--" "bash" "-c" cmd ""];
         d = ["diff"];
         l = ["log" "-r" "@ | latest(heads(::@- & bookmarks())::@-, 3) | heads(::@- & bookmarks())"];
         ll = ["log" "-r" ".."];

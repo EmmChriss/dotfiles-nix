@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   # You can import other home-manager modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/home-manager):
@@ -81,59 +79,98 @@
     };
 
     packages = with pkgs; [
-      # uni
-
-      prelockd
-
       # gui
-      alacritty librewolf ungoogled-chromium
-      libnotify dunst tofi reaper qbittorrent
+      alacritty
+      librewolf
+      ungoogled-chromium
+      libnotify
+      dunst
+      tofi
+      reaper
+      qbittorrent
       nerd-fonts.iosevka-term
-      teams-for-linux file-roller
-      popcorntime typora vlc
-      gimp inkscape evince
+      teams-for-linux
+      file-roller
+      popcorntime
+      typora
+      vlc
+      gimp
+      inkscape
+      evince
 
       # gamedev
-      godot_4 libresprite aseprite
+      godot_4
+      libresprite
+      aseprite
 
       # wayland
-      wl-clipboard grim
-      slurp libnotify
+      wl-clipboard
+      grim
+      slurp
+      libnotify
       wf-recorder # screen recorder on wayland
-      playerctl swappy
+      playerctl
+      swappy
 
       # cloud
-      heroku flyctl megacmd
+      heroku
+      flyctl
+      megacmd
 
       # security
-      gnupg age pinentry
+      gnupg
+      age
+      pinentry
 
       # tui
-      htop xh gitui ncdu
-      pulsemixer bluetuith
+      htop
+      xh
+      gitui
+      ncdu
+      pulsemixer
+      bluetuith
 
       # cli
-      ripgrep tealdeer fzf
-      bat grc eza ouch
-      imagemagick ffmpeg
+      ripgrep
+      tealdeer
+      fzf
+      bat
+      grc
+      eza
+      ouch
+      imagemagick
+      ffmpeg
 
       # nix
-      nh manix nix-tree comma
-      steam-run-free # for a relatively standard linux FHS
+      nh
+      manix
+      nix-tree
+      comma
+      steam-run-free
 
       # dev tools
-      bun nodejs docker-compose
-      psmisc postgresql pgcli
-      git python3 lua zig uv
-      rustup clang pkg-config
+      bun
+      nodejs
+      docker-compose
+      psmisc
+      postgresql
+      pgcli
+      git
+      python3
+      lua
+      zig
+      uv
+      rustup
+      clang
+      pkg-config
       openssl
 
       # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
       # TODO: maybe make this an overlay
       (symlinkJoin {
         name = "dbeaver";
-        paths = [ dbeaver-bin ];
-        buildInputs = [ makeWrapper ];
+        paths = [dbeaver-bin];
+        buildInputs = [makeWrapper];
         postBuild = ''
           rm $out/bin/dbeaver
           makeWrapper ${dbeaver-bin}/bin/dbeaver $out/bin/dbeaver \
@@ -151,22 +188,22 @@
   xdg.mimeApps = {
     enable = true;
     associations.added = {
-      "x-scheme-handler/msteams" = [ "teams-for-linux.desktop" ];
+      "x-scheme-handler/msteams" = ["teams-for-linux.desktop"];
     };
     associations.removed = {};
     defaultApplications = {
-      "x-scheme-handler/msteams" = [ "teams-for-linux.desktop" ];
-      "x-scheme-handler/http" = [ "firefox.desktop" ];
-      "x-scheme-handler/https" = [ "firefox.desktop" ];
-      "x-scheme-handler/mailto" = [ "firefox.desktop" ];
-      "text/html" = [ "firefox.desktop" ];
-      "application/pdf" = [ "evince.desktop" "firefox.desktop" ];
-      "video/*" = [ "vlc.desktop" ];
+      "x-scheme-handler/msteams" = ["teams-for-linux.desktop"];
+      "x-scheme-handler/http" = ["firefox.desktop"];
+      "x-scheme-handler/https" = ["firefox.desktop"];
+      "x-scheme-handler/mailto" = ["firefox.desktop"];
+      "text/html" = ["firefox.desktop"];
+      "application/pdf" = ["evince.desktop" "firefox.desktop"];
+      "video/*" = ["vlc.desktop"];
 
-      "inode/directory" = [ "thunar.desktop" ];
-      "image/*" = [ "pqiv.desktop" ];
+      "inode/directory" = ["thunar.desktop"];
+      "image/*" = ["pqiv.desktop"];
 
-      "application/zip" = [ "thunar.desktop" ];
+      "application/zip" = ["thunar.desktop"];
     };
   };
 
@@ -190,7 +227,7 @@
       enable = true;
       nix-direnv.enable = true;
       config = {
-        whitelist.prefix = [ "~/Project" ];
+        whitelist.prefix = ["~/Project"];
         global = {
           hide_env_diff = true;
           load_dotenv = true;
@@ -201,7 +238,7 @@
   };
 
   systemd.user.services.megacmd = {
-    Unit = { Description = "Sync user directories to MEGA"; };
+    Unit = {Description = "Sync user directories to MEGA";};
     Service = {
       ExecStart = "${pkgs.megacmd}/bin/mega-cmd-server";
       Restart = "always";

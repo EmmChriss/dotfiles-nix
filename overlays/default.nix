@@ -1,5 +1,5 @@
 # This file defines overlays
-{ inputs, ... }: {
+{inputs, ...}: {
   # This one brings our custom packages from the 'pkgs' directory
   additions = self: super: import ../pkgs self.pkgs;
 
@@ -13,7 +13,7 @@
 
     # tofi: patch in support for printing selected .desktop file in drun mode
     tofi = super.tofi.overrideAttrs (old: {
-      patches = (old.patches or []) ++ [ ./tofi-drun-print-desktop.patch ];
+      patches = (old.patches or []) ++ [./tofi-drun-print-desktop.patch];
     });
   };
 

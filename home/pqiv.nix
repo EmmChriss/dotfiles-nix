@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   programs.pqiv = {
     enable = true;
     settings.options = {
@@ -13,8 +11,8 @@
       browse = 1;
     };
     extraConfig = ''
-    [keybindings]
-    <Return> { montage_mode_enter() }
+      [keybindings]
+      <Return> { montage_mode_enter() }
     '';
   };
 }

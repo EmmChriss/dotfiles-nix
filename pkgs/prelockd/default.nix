@@ -3,9 +3,7 @@
   fetchFromGitHub,
   python3,
   stdenv,
-  nixosTests,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "prelockd";
   version = "0.9";
@@ -17,9 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OhKejs/G+c2c+aVuJ5yqHrPy5H9LxBERP3A7KBRkOg8=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = ["out" "man"];
 
-  buildInputs = [ python3 ];
+  buildInputs = [python3];
 
   patchPhase = ''
     patchShebangs .
@@ -37,15 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{sbin,etc,share/{,doc/}prelockd,lib/systemd/system} $man/share/man/man8
 
     install -m0755 prelockd $out/sbin/prelockd
-  	install -m0644 prelockd.conf $out/etc/prelockd.conf
-  	install -m0644 prelockd.conf $out/share/prelockd/prelockd.conf
-  	install -m0644 README.md $out/share/doc/prelockd/README.md
-  	install -m0644 MANPAGE.md $out/share/doc/prelockd/MANPAGE.md
+    install -m0644 prelockd.conf $out/etc/prelockd.conf
+    install -m0644 prelockd.conf $out/share/prelockd/prelockd.conf
+    install -m0644 README.md $out/share/doc/prelockd/README.md
+    install -m0644 MANPAGE.md $out/share/doc/prelockd/MANPAGE.md
 
-  	install -m0644 prelockd.service.in $out/lib/systemd/system/prelock.service
-  	chcon -t systemd_unit_file_t $out/lib/systemd/system/prelock.service || :
+    install -m0644 prelockd.service.in $out/lib/systemd/system/prelock.service
+    chcon -t systemd_unit_file_t $out/lib/systemd/system/prelock.service || :
 
-  	gzip -9cn prelockd.8 > $man/share/man/man8/prelockd.8.gz
+    gzip -9cn prelockd.8 > $man/share/man/man8/prelockd.8.gz
   '';
 
   # makeFlags = [
@@ -70,8 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     licence = lib.licences.mit;
     mainProgram = "prelockd";
     maintainers = with lib.maintainers; [
-      
     ];
     platforms = lib.platforms.linux;
-  };  
+  };
 })

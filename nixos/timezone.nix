@@ -1,6 +1,4 @@
-{ lib, ... }:
-
-{
+{lib, ...}: {
   #
   # Automatically set timezone
   #
@@ -13,7 +11,7 @@
   # services.tzupdate.enable = true;
 
   # SOLUTION 1: https://github.com/NixOS/nixpkgs/issues/68489#issuecomment-2435134486
-  # Enable automatic timezone updates 
+  # Enable automatic timezone updates
   services.automatic-timezoned.enable = true;
   # Force enable required geoclue2 DemoAgent, since GNOME disables it: https://github.com/NixOS/nixpkgs/issues/68489#issuecomment-1484030107
   services.geoclue2.enableDemoAgent = lib.mkForce true;

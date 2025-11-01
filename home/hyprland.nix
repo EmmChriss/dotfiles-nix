@@ -1,10 +1,12 @@
-{ pkgs, lib, ... }:
-
-let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   inherit (lib) getExe;
-  hypr-slurp= pkgs.writeShellApplication {
+  hypr-slurp = pkgs.writeShellApplication {
     name = "hypr-slurp";
-    runtimeInputs = with pkgs; [ hyprland jq slurp ];
+    runtimeInputs = with pkgs; [hyprland jq slurp];
     text = ''
       hyprctl clients -j |\
       jq -r ".[] | select(.workspace.id | IN($(hyprctl -j monitors | jq 'map(.activeWorkspace.id) | join(",")' | tr -d \")))" |\
@@ -17,7 +19,7 @@ let
   };
   start-alacritty = pkgs.writeShellApplication {
     name = "start-alacritty";
-    runtimeInputs = with pkgs; [ alacritty ];
+    runtimeInputs = with pkgs; [alacritty];
     text = ''
       export ALACRITTY_SOCKET="$XDG_RUNTIME_DIR/alacritty.sock"
       if test -e "$ALACRITTY_SOCKET"; then
@@ -30,15 +32,15 @@ let
   printscrOutput = ''"$HOME/Media/Pictures/Screenshots/$(date +'%Y-%m-%d-%T').png"'';
   sattyArgs = ''--early-exit --copy-command wl-copy --save-after-copy'';
   grimArgs = ''-c -l9 -t ppm'';
-in
-{
-  xdg.configFile."uwsm/env-hyprland" = { text =
-    ''
+in {
+  xdg.configFile."uwsm/env-hyprland" = {
+    text = ''
       export AQ_DRM_DEVICES=$(readlink -f /dev/dri/by-path/pci-0000:05:00.0-card):$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card)
-    ''; };
+    '';
+  };
 
-  xdg.configFile."uwsm/env" = { text =
-    ''
+  xdg.configFile."uwsm/env" = {
+    text = ''
       export XCURSOR_SIZE=24
 
       export QT_QPA_PLATFORM='wayland;xcb'
@@ -57,7 +59,8 @@ in
       export CRYPTOGRAPHY_OPENSSL_NO_LEGACY='1'
       # export NODE_OPTIONS='--max-old-space-size=1024'
       export OGL_DEDICATED_HW_STATE_PER_CONTEXT='ENABLE_ROBUST'
-    ''; };
+    '';
+  };
 
   # enable hyprland
   # WARN: do not set any additional options, use the Hyprland that is installed system-wide
@@ -136,112 +139,112 @@ in
 
       # See https://wiki.hyprland.org/Configuring/Variables/ for more
       input = {
-          # layout
-          kb_layout = "us,hu,ro";
-          kb_variant = ",qwerty";
-          kb_model = "pc105";
-          kb_options = "grp:shifts_toggle";
-          kb_rules = "";
+        # layout
+        kb_layout = "us,hu,ro";
+        kb_variant = ",qwerty";
+        kb_model = "pc105";
+        kb_options = "grp:shifts_toggle";
+        kb_rules = "";
 
-          # keyboard
-          repeat_rate = 50;
-          repeat_delay = 300;
-          numlock_by_default = true;
+        # keyboard
+        repeat_rate = 50;
+        repeat_delay = 300;
+        numlock_by_default = true;
 
-          # touchpad
-          scroll_method = "2fg";
-          follow_mouse = 2;
-          float_switch_override_focus = 2;
+        # touchpad
+        scroll_method = "2fg";
+        follow_mouse = 2;
+        float_switch_override_focus = 2;
 
-          touchpad =  {
-              tap-to-click = true;
-              drag_lock = true;
-              middle_button_emulation = true;
-              natural_scroll = false;
-          };
+        touchpad = {
+          tap-to-click = true;
+          drag_lock = true;
+          middle_button_emulation = true;
+          natural_scroll = false;
+        };
       };
 
       general = {
-          gaps_in = "3";
-          gaps_out = "5";
-          border_size = "1";
-          "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
-          "col.inactive_border" = "rgba(595959aa)";
+        gaps_in = "3";
+        gaps_out = "5";
+        border_size = "1";
+        "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
+        "col.inactive_border" = "rgba(595959aa)";
 
-          layout = "dwindle";
-          no_focus_fallback = "true";
-          no_border_on_floating = "true";
+        layout = "dwindle";
+        no_focus_fallback = "true";
+        no_border_on_floating = "true";
       };
 
       decoration = {
-          rounding = "3";
+        rounding = "3";
 
-          blur = {
-              enabled = "true";
-              size = "3";
-              passes = "1";
-              xray = "false";
-          };
+        blur = {
+          enabled = "true";
+          size = "3";
+          passes = "1";
+          xray = "false";
+        };
 
-          shadow = {
-              enabled = "true";
-              range = "4";
-              render_power = "3";
-              color = "rgba(1a1a1aee)";
-          };
+        shadow = {
+          enabled = "true";
+          range = "4";
+          render_power = "3";
+          color = "rgba(1a1a1aee)";
+        };
       };
 
       animations = {
-          enabled = "true";
+        enabled = "true";
 
-          # Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
+        # Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
 
-          animation = [
-            "windows, 1, 7, default"
-            "windowsOut, 1, 7, default, popin 80%"
-            "border, 1, 10, default"
-            "borderangle, 1, 8, default"
-            "fade, 1, 7, default"
-            "workspaces, 1, 6, default"
-          ];
+        animation = [
+          "windows, 1, 7, default"
+          "windowsOut, 1, 7, default, popin 80%"
+          "border, 1, 10, default"
+          "borderangle, 1, 8, default"
+          "fade, 1, 7, default"
+          "workspaces, 1, 6, default"
+        ];
       };
 
       dwindle = {
-          # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
-          pseudotile = "true # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below";
-          preserve_split = "true # you probably want this";
-          # smart_split = "true";
+        # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
+        pseudotile = "true # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below";
+        preserve_split = "true # you probably want this";
+        # smart_split = "true";
       };
 
       master = {
-          # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
-          # new_is_master = "true";
+        # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
+        # new_is_master = "true";
       };
 
       gestures = {
-          workspace_swipe = "true";
-          workspace_swipe_forever = "true";
-          workspace_swipe_use_r = "true";
-          workspace_swipe_direction_lock = "false";
+        workspace_swipe = "true";
+        workspace_swipe_forever = "true";
+        workspace_swipe_use_r = "true";
+        workspace_swipe_direction_lock = "false";
       };
 
       binds = {
-          movefocus_cycles_fullscreen = "false";
+        movefocus_cycles_fullscreen = "false";
       };
 
       misc = {
-          disable_hyprland_logo = "true";
-          disable_splash_rendering = "true";
-          force_default_wallpaper = "0";
-          vrr = "1";
+        disable_hyprland_logo = "true";
+        disable_splash_rendering = "true";
+        force_default_wallpaper = "0";
+        vrr = "1";
 
-          mouse_move_enables_dpms = "true";
-          key_press_enables_dpms = "true";
+        mouse_move_enables_dpms = "true";
+        key_press_enables_dpms = "true";
 
-          animate_manual_resizes = "true";
-          animate_mouse_windowdragging = "true";
+        animate_manual_resizes = "true";
+        animate_mouse_windowdragging = "true";
       };
-      
+
       # KEYBINDS
       # See bind modifiers: https://wiki.hyprland.org/Configuring/Binds/#bind-flags
       "$mainMod" = "SUPER";
@@ -250,8 +253,8 @@ in
       # PROGRAMS
       "$exitcmd" = "hyprctl dispatch exit";
       "$terminal" = "xargs uwsm app -- ${getExe start-alacritty}";
-      "$browser"  = "xargs uwsm app -- librewolf";
-      "$editor"   = "helix";
+      "$browser" = "xargs uwsm app -- librewolf";
+      "$editor" = "helix";
       "$clipman" = "cliphist list | tofi --prompt-text= --placeholder-text='Copy' | cliphist decode | wl-copy";
       "$launcher" = "tofi-run --prompt-text= --placeholder-text='Run application' | xargs uwsm app --";
       "$dlauncher" = "tofi-drun --prompt-text= --placeholder-text='Run application' --drun-print-desktop=true | xargs uwsm app --";
@@ -369,7 +372,7 @@ in
         ", XF86AudioPrev, exec, $playerctl previous"
         ", XF86AudioStop, exec, $playerctl stop"
         '', XF86AudioPlay, exec, test "$(playerctl status)" = 'Playing' && playerctl pause || playerctl play''
-      
+
         # screenshot
         ", Print, exec, $printscr"
         "$mainMod, Print, exec, $printscrSelect"
@@ -390,7 +393,7 @@ in
         # audio: volume control
         ", XF86AudioRaiseVolume, exec, vol 5%+"
         ", XF86AudioLowerVolume, exec, vol 5%-"
-        
+
         # brightness
         ", XF86MonBrightnessUp, exec, bl +5"
         ", XF86MonBrightnessDown, exec, bl -5"

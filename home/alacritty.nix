@@ -1,5 +1,4 @@
-{ ... }:
-
+{...}:
 # TODO: add central colorscheme
 # TODO: add autostarting daemon
 {
@@ -13,7 +12,7 @@
           style = "Regular";
         };
       };
-    
+
       colors = {
         draw_bold_text_with_bright_colors = true;
         bright = {

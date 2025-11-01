@@ -1,5 +1,10 @@
-{ pkgs, inputs, outputs, lib, ... }:
-
+{
+  pkgs,
+  inputs,
+  outputs,
+  lib,
+  ...
+}:
 # Template: https://github.com/Misterio77/nix-starter-configs; standard variant
 {
   # You can import other nixos modules here
@@ -28,7 +33,7 @@
   ];
 
   # remove unnecessary preinstalled packages
-  environment.defaultPackages = [ ];
+  environment.defaultPackages = [];
 
   # Nixpkgs settings
   nixpkgs = {
@@ -60,8 +65,8 @@
   nix = {
     settings = {
       auto-optimise-store = true;
-      trusted-users = [ "morga" ];
-      experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = ["morga"];
+      experimental-features = ["nix-command" "flakes"];
     };
     gc = {
       automatic = true;
@@ -89,7 +94,6 @@
   # Networking
   networking.hostName = "morga";
   networking = {
-
     # enable NetworkManager
     networkmanager = {
       enable = true;
@@ -171,8 +175,8 @@
       "monitor.bluez.properties" = {
         # enable hardware volume
         "bluez5.enable-hw-volume" = true;
-        "bluez5.roles" = [ "a2dp_sink" "a2dp_source" "bap_sink" "bap_source" "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" ];
-        "bluez5.codecs" = [ "sbc" "sbc_xq" "aac" ];
+        "bluez5.roles" = ["a2dp_sink" "a2dp_source" "bap_sink" "bap_source" "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag"];
+        "bluez5.codecs" = ["sbc" "sbc_xq" "aac"];
         "bluez5.enable-sbc-xq" = true;
         "bluez5.hfphsp-backend" = "native";
       };
@@ -197,20 +201,19 @@
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;
-    extraConfig =
-      ''
-        Defaults env_keep += "http_proxy https_proxy"
-        Defaults env_keep += "HTTP_PROXY HTTPS_PROXY"
-        Defaults env_keep += "ftp_proxy FTP_PROXY"
-        Defaults env_keep += "EDITOR VISUAL"
-      '';
+    extraConfig = ''
+      Defaults env_keep += "http_proxy https_proxy"
+      Defaults env_keep += "HTTP_PROXY HTTPS_PROXY"
+      Defaults env_keep += "ftp_proxy FTP_PROXY"
+      Defaults env_keep += "EDITOR VISUAL"
+    '';
   };
   security.protectKernelImage = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.morga = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "video" "docker" "adbusers" ];
+    extraGroups = ["wheel" "networkmanager" "video" "docker" "adbusers"];
   };
 
   # Instead of setting as login shell, run fish immediately when bash starts
@@ -231,7 +234,7 @@
     enable = true;
 
     # DEFAULT: use nvidia drivers for gui
-    videoDrivers = [ "nvidia" ];
+    videoDrivers = ["nvidia"];
     desktopManager.xterm.enable = false;
 
     # Use GDM as DM
@@ -267,12 +270,12 @@
   };
 
   # BATTERY: secondary boot config that switches off NVIDIA card
-  specialisation.battery.configuration = { ... }: {
+  specialisation.battery.configuration = {...}: {
     # nixos-hardware: disable nvidia module
-    imports = [ inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable ];
+    imports = [inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable];
 
-    system.nixos.tags = [ "battery" ];
-    services.xserver.videoDrivers = lib.mkForce [ ];
+    system.nixos.tags = ["battery"];
+    services.xserver.videoDrivers = lib.mkForce [];
     hardware.nvidia = {
       modesetting.enable = lib.mkForce false;
       nvidiaPersistenced = lib.mkForce false;
@@ -309,12 +312,12 @@
     enable = true;
     settings = {
       battery = {
-         governor = "powersave";
-         turbo = "never";
+        governor = "powersave";
+        turbo = "never";
       };
       charger = {
-         governor = "performance";
-         turbo = "auto";
+        governor = "performance";
+        turbo = "auto";
       };
     };
   };
@@ -359,7 +362,7 @@
   services.duperemove = {
     enable = true;
     hashfile = "/var/lib/duperemove.db";
-    paths = [ "/home" ];
+    paths = ["/home"];
     extraArgs = "-dr";
     systemdInterval = "weekly";
   };
@@ -389,4 +392,3 @@
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "24.11";
 }
-

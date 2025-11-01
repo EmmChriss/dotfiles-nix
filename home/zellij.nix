@@ -1,6 +1,4 @@
-{ config, ... }:
-
-{
+{config, ...}: {
   programs.zellij.enable = true;
 
   # NOTE(2025-01): home-manager KDL support is generic and not up to standard;

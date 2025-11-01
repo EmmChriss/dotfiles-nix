@@ -1,12 +1,10 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   home.packages = with pkgs; [
     # get backlight when it changes by any means
     # uses generic backlight script defined in ./scripts.nix
     (writeShellApplication {
       name = "bar-backlight";
-      runtimeInputs = [ entr ];
+      runtimeInputs = [entr];
       text = ''
         echo /sys/class/backlight/amd*/brightness |\
         entr -ns bl
@@ -29,9 +27,9 @@
       modules-left = ["hyprland/workspaces" "hyprland/window"];
       modules-right = ["custom/backlight" "pulseaudio" "network" "cpu" "memory" "battery" "tray" "clock"];
 
-      "hyprland/workspaces"= {
-        persistent-workspaces= {
-            "*" = 10;
+      "hyprland/workspaces" = {
+        persistent-workspaces = {
+          "*" = 10;
         };
         disable-scroll = false;
         all-outputs = false;
@@ -92,13 +90,13 @@
         format-bluetooth = "{volume}% {icon}";
         format-muted = "";
         format-icons = {
-            headphone = "";
-            hands-free = "";
-            headset = "";
-            phone = "";
-            portable = "";
-            car = "";
-            default = ["" ""];
+          headphone = "";
+          hands-free = "";
+          headset = "";
+          phone = "";
+          portable = "";
+          car = "";
+          default = ["" ""];
         };
       };
     };

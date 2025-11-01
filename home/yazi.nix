@@ -1,12 +1,10 @@
-{ pkgs, ... }:
-
-let
+{pkgs, ...}: let
   yazi-plugins = pkgs.fetchFromGitHub {
-		owner = "yazi-rs";
-		repo = "plugins";
-		rev = "7afba3a73cdd69f346408b77ea5aac26fe09e551";
+    owner = "yazi-rs";
+    repo = "plugins";
+    rev = "7afba3a73cdd69f346408b77ea5aac26fe09e551";
     hash = "sha256-w9dSXW0NpgMOTnBlL/tzlNSCyRpZNT4XIcWZW5NlIUQ=";
-	};
+  };
   yazi-fuse-archive = pkgs.fetchFromGitHub {
     owner = "dawsers";
     repo = "fuse-archive.yazi";
@@ -19,8 +17,7 @@ let
     rev = "b8698865a0b1c7c1b65b91bcadf18441498768e6";
     hash = "sha256-eRjdcBJY5RHbbggnMHkcIXUF8Sj2nhD/o7+K3vD3hHY=";
   };
-in
-{
+in {
   # Generated theme
   # To customize, see: https://github.com/lpnh/icons-brew.yazi
   xdg.configFile."yazi/theme.toml".source = ./config/yazi-theme-catppuccin.toml;
@@ -28,7 +25,7 @@ in
   home.packages = with pkgs; [
     # file type detection
     file
-  
+
     # json preview
     jq
 
@@ -102,7 +99,7 @@ in
       		" ",
       	}
       end, 500, Status.RIGHT)
-      
+
     '';
 
     settings = {
@@ -113,90 +110,217 @@ in
       opener = {
         # use vlc to open video files
         play = [
-          { run = ''vlc "$@"''; orphan = true; desc = "VLC"; }
+          {
+            run = ''vlc "$@"'';
+            orphan = true;
+            desc = "VLC";
+          }
         ];
         # use pqiv to open image files
         view = [
-          { run = ''pqiv "$@"''; orphan = true; desc = "Image viewer"; }
+          {
+            run = ''pqiv "$@"'';
+            orphan = true;
+            desc = "Image viewer";
+          }
         ];
         # decompress using ouch
         extract = [
-          { run = ''ouch decompress $@''; desc = "Extract archive";  }
+          {
+            run = ''ouch decompress $@'';
+            desc = "Extract archive";
+          }
         ];
       };
       open = {
         prepend_rules = [
           # option to open text files
-          { name = "*.html"; use = ["edit" "open" "reveal"]; }
-          { mime = "text/*"; use = ["edit" "open" "reveal"]; }
-          { mime = "application/json"; use = ["edit" "open" "reveal"]; }
-          { name = "*.json"; use = ["edit" "open" "reveal"]; }
-          { mime = "inode/empty"; use = ["edit" "open" "reveal"]; }
+          {
+            name = "*.html";
+            use = ["edit" "open" "reveal"];
+          }
+          {
+            mime = "text/*";
+            use = ["edit" "open" "reveal"];
+          }
+          {
+            mime = "application/json";
+            use = ["edit" "open" "reveal"];
+          }
+          {
+            name = "*.json";
+            use = ["edit" "open" "reveal"];
+          }
+          {
+            mime = "inode/empty";
+            use = ["edit" "open" "reveal"];
+          }
 
           # open video files in vlc
-          { mime = "{audio,video}/*"; use = ["play" "open" "reveal"]; }
+          {
+            mime = "{audio,video}/*";
+            use = ["play" "open" "reveal"];
+          }
 
           # open images in pqiv
-          { mime = "image/*"; use = ["view" "open" "reveal"]; }
+          {
+            mime = "image/*";
+            use = ["view" "open" "reveal"];
+          }
 
           # fallback: choose your weapon
-          { name = "*"; use = ["open" "reveal" "edit" "view" "play"]; }
+          {
+            name = "*";
+            use = ["open" "reveal" "edit" "view" "play"];
+          }
         ];
       };
       plugin.prepend_fetchers = [
         # Fetch git status of files and folders using git plugin
-        { id = "git"; name = "*"; run = "git"; }
-        { id = "git"; name = "*/"; run = "git"; }
+        {
+          id = "git";
+          name = "*";
+          run = "git";
+        }
+        {
+          id = "git";
+          name = "*/";
+          run = "git";
+        }
       ];
     };
 
     keymap = {
       manager.prepend_keymap = [
         # drop to shell
-        { on = "!"; run = ''shell "$SHELL" --block''; desc = "Open shell here"; }
+        {
+          on = "!";
+          run = ''shell "$SHELL" --block'';
+          desc = "Open shell here";
+        }
 
         # follow symlink
-        { on = ["g" "l"]; run = ''shell 'ya emit cd "$(readlink -f "$1")"' ''; desc = "Follow hovered symlink"; }
+        {
+          on = ["g" "l"];
+          run = ''shell 'ya emit cd "$(readlink -f "$1")"' '';
+          desc = "Follow hovered symlink";
+        }
 
         # drag and drop files
-        { on = "<C-n>"; run = ''shell 'dragon -x -i -T "$@"' ''; desc = "Drag and drop selection"; }
-      
+        {
+          on = "<C-n>";
+          run = ''shell 'dragon -x -i -T "$@"' '';
+          desc = "Drag and drop selection";
+        }
+
         # transparently enter/leave archive files
-        { on = "<Right>"; run = "plugin fuse-archive --args=mount"; desc = "Enter or Mount selected archive"; }
-        { on = "<Left>"; run = "plugin fuse-archive --args=unmount"; desc = "Leave or Unmount selected archive"; }
+        {
+          on = "<Right>";
+          run = "plugin fuse-archive --args=mount";
+          desc = "Enter or Mount selected archive";
+        }
+        {
+          on = "<Left>";
+          run = "plugin fuse-archive --args=unmount";
+          desc = "Leave or Unmount selected archive";
+        }
 
         # compress files
-        { on = ["C" "z"]; run = "plugin ouch --args=zip"; desc = "Compress files to ZIP"; }
-        { on = ["C" "t"]; run = "plugin ouch --args=tar.gz"; desc = "Compress files to ZIP"; }
-      
+        {
+          on = ["C" "z"];
+          run = "plugin ouch --args=zip";
+          desc = "Compress files to ZIP";
+        }
+        {
+          on = ["C" "t"];
+          run = "plugin ouch --args=tar.gz";
+          desc = "Compress files to ZIP";
+        }
+
         # maximize preview
-        { on = "i"; run = "plugin max-preview"; desc = "Maximize or restore preview"; }
+        {
+          on = "i";
+          run = "plugin max-preview";
+          desc = "Maximize or restore preview";
+        }
 
         # seek only one line in preview
-        { on = "K"; run = "seek -1"; desc = "Seek up 1 units in the preview"; }
-        { on = "J"; run = "seek +1"; desc = "Seek down 1 units in the preview"; }
-      
+        {
+          on = "K";
+          run = "seek -1";
+          desc = "Seek up 1 units in the preview";
+        }
+        {
+          on = "J";
+          run = "seek +1";
+          desc = "Seek down 1 units in the preview";
+        }
+
         # interactively run shell command on '$'
-        { on = "$"; run = "shell --block --interactive"; desc = "Interactively run shell command; alias to ':'"; }
+        {
+          on = "$";
+          run = "shell --block --interactive";
+          desc = "Interactively run shell command; alias to ':'";
+        }
 
         # open to (e)dit
-        { on = "e"; run = "open --hovered"; desc = "Open selected file"; }
-        { on = "E"; run = "open --hovered --interactive"; desc = "Open selected file with.."; }
+        {
+          on = "e";
+          run = "open --hovered";
+          desc = "Open selected file";
+        }
+        {
+          on = "E";
+          run = "open --hovered --interactive";
+          desc = "Open selected file with..";
+        }
 
         # instead of opening, at least confirm
-        { on = "<Enter>"; run = "open --interactive"; desc = "Open with .."; }
-      
+        {
+          on = "<Enter>";
+          run = "open --interactive";
+          desc = "Open with ..";
+        }
+
         # boomarks
-        { on = ["g" "d"]; run = "cd /mnt/data"; desc = "Bookmark: Data partition"; }
-        { on = ["g" "w"]; run = "cd /mnt/win"; desc = "Bookmark: Win partition"; }
-        { on = ["g" "m"]; run = "cd ~/Media"; desc = "Bookmark: Media"; }
-        { on = ["g" "s"]; run = "cd ~/Media/Pictures/Screenshots/"; desc = "Bookmark: Screenshots"; }
-        { on = ["g" "c"]; run = "cd ~/.config"; desc = "Bookmark: Config"; }
-        { on = ["g" "n"]; run = "cd ~/nix"; desc = "Bookmark: Nix Config"; }
+        {
+          on = ["g" "d"];
+          run = "cd /mnt/data";
+          desc = "Bookmark: Data partition";
+        }
+        {
+          on = ["g" "w"];
+          run = "cd /mnt/win";
+          desc = "Bookmark: Win partition";
+        }
+        {
+          on = ["g" "m"];
+          run = "cd ~/Media";
+          desc = "Bookmark: Media";
+        }
+        {
+          on = ["g" "s"];
+          run = "cd ~/Media/Pictures/Screenshots/";
+          desc = "Bookmark: Screenshots";
+        }
+        {
+          on = ["g" "c"];
+          run = "cd ~/.config";
+          desc = "Bookmark: Config";
+        }
+        {
+          on = ["g" "n"];
+          run = "cd ~/nix";
+          desc = "Bookmark: Nix Config";
+        }
       ];
 
       input.prepend_keymap = [
-        { on = "<Esc>"; run = "close"; desc = "Cancel input"; }
+        {
+          on = "<Esc>";
+          run = "close";
+          desc = "Cancel input";
+        }
       ];
     };
   };
