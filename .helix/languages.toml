@@ -1,0 +1,4 @@
+[[language]]
+name = "nix"
+formatter = { command = "nix", args = ["fmt", "-"] }
+auto-format = true

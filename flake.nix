@@ -19,19 +19,23 @@
 
     # Flake Utils: couple of utility functions
     flake-utils.url = "github:numtide/flake-utils";
-    
+
     # Yazi: terminal file manager upstream releases
     # NOTE: pinned version for potential backward-incompatible changes
     yazi.url = "https://github.com/sxyazi/yazi/archive/refs/tags/v0.4.2.tar.gz";
   };
 
-  outputs = { self, systems, flake-utils, nixpkgs, ... }@inputs:
-  let
+  outputs = {
+    self,
+    systems,
+    flake-utils,
+    nixpkgs,
+    ...
+  } @ inputs: let
     inherit (self) outputs;
     pkgs = system: nixpkgs.legacyPackages.${system};
     system = "x86_64-linux";
-  in
-  {
+  in {
     # Your custom packages
     # Accessible through 'nix build', 'nix shell', etc
     packages = flake-utils.lib.eachDefaultSystem (system: import ./pkgs (pkgs system));
@@ -43,9 +47,10 @@
     # formatter = eachSystem (pkgs: pkgs.alejandra);
     # formatter = eachSystem (pkgs: pkgs.nixpkgs-fmt);
     # formatter = eachSystem (pkgs: pkgs.nixfmt-rfc-style);
+    formatter.${system} = nixpkgs.legacyPackages.${system}.alejandra;
 
     # Your custom packages and modifications, exported as overlays
-    overlays = import ./overlays { inherit inputs; };
+    overlays = import ./overlays {inherit inputs;};
 
     # Reusable nixos modules you might want to export
     # These are usually stuff you would upstream into nixpkgs
@@ -57,16 +62,18 @@
 
     # merged system config and home-manager config
     # they build together but are in separate namespaces
-    nixosConfigurations =
-    let _inputs = inputs // {
-      pkgs = import nixpkgs {
-        inherit system;
-        config = {
-          allowUnfree = true;
-          allowUnfreePredicate = _: true;
+    nixosConfigurations = let
+      _inputs =
+        inputs
+        // {
+          pkgs = import nixpkgs {
+            inherit system;
+            config = {
+              allowUnfree = true;
+              allowUnfreePredicate = _: true;
+            };
+          };
         };
-      };
-    };
     in {
       morga = nixpkgs.lib.nixosSystem {
         inherit system;
@@ -83,7 +90,7 @@
                 satty = super.unstable.satty;
                 jujutsu = super.unstable.jujutsu;
               })
-            
+
               # import some of our own overlays
               self.overlays.modifications
               self.overlays.additions
@@ -92,7 +99,7 @@
               _inputs.yazi.overlays.default
             ];
           }
-        
+
           # Enable Cachix substituters
           {
             nix.settings = {
@@ -108,7 +115,7 @@
               ];
             };
           }
-        
+
           # NixOS system configuration; all rooted in configuration.nix
           ./nixos/configuration.nix
 
@@ -119,12 +126,15 @@
               backupFileExtension = "homenew";
               useUserPackages = true;
               useGlobalPkgs = true;
-              extraSpecialArgs = { inputs = _inputs; };
+              extraSpecialArgs = {inputs = _inputs;};
               users.morga = ./home/home.nix;
             };
           }
         ];
-        specialArgs = { inputs = _inputs; inherit outputs; };
+        specialArgs = {
+          inputs = _inputs;
+          inherit outputs;
+        };
       };
     };
   };
