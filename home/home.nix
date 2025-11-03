@@ -122,6 +122,11 @@
       age
       pinentry
 
+      # bitwarden clients
+      bitwarden-cli
+      bitwarden-desktop
+      rbw
+
       # tui
       htop
       xh
