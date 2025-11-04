@@ -13,11 +13,6 @@
             # ask user about starting backup
             zenity --question --text "Start backup now?" || exit 1
 
-            # set password command explicitly
-            export RCLONE_PASSWORD_COMMAND="pass rclone/config";
-            # set bandwidth limit
-            export RCLONE_BWLIMIT=1M
-
             # make sure we are concerned with current user
             cd ~
 
@@ -26,7 +21,7 @@
               notify-send "Starting secrets backup.."
 
               # fetch passphrase to encrypt with
-              passphrase="$(pass secrets)"
+              passphrase="$(rbw get secrets)"
 
               # create tempfiles for intermediaries
               archive="$(mktemp)"
@@ -56,6 +51,7 @@
 
               # upload secret archive to cloud storage
               rclone rcat mega:Secrets/secrets.tar.gz.age <"$encrypted"
+              rclone rcat backups-home:secrets.tar.gz.age <"$encrypted"
             } || notify-send "Secrets backup failed"
 
             # do full backup
@@ -78,15 +74,10 @@
 in {
   home.packages = with pkgs; [backupScript rclone rustic];
 
-  # for general rclone usage, set as user global
-  home.sessionVariables = {
-    RCLONE_PASSWORD_COMMAND = "pass rclone/config";
-  };
-
   xdg.configFile."rustic/rustic.toml".source = tomlFormat.generate "rustic.toml" {
     repository = {
-      repository = "rclone:mega:Backups";
-      password-command = "pass rustic";
+      repository = "rclone:backups-home:";
+      password-command = "rbw get rustic";
     };
 
     forget = {

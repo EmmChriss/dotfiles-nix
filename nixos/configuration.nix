@@ -367,14 +367,6 @@
     systemdInterval = "weekly";
   };
 
-  # enable gpg agent system-wide with ssh-agent emulation
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-    enableBrowserSocket = true;
-    pinentryPackage = pkgs.pinentry-all;
-  };
-
   # enable docker for dev
   virtualisation.docker = {
     enable = true;

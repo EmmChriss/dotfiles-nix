@@ -89,6 +89,7 @@
                 helix = super.unstable.helix;
                 satty = super.unstable.satty;
                 jujutsu = super.unstable.jujutsu;
+                rbw = super.unstable.rbw;
               })
 
               # import some of our own overlays

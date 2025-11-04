@@ -1,5 +1,5 @@
 {pkgs, ...}: let
-  signature = "8CA0C938058C0651";
+  signature = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICgiFg4/zoFPYSmEqucqf/JDrniGYCLnvJl4QKgnWuzA";
   name = "EmmChriss";
   email = "emmchris@protonmail.com";
 in {
@@ -21,7 +21,7 @@ in {
 
     # automatic git signing
     signing = {
-      format = "openpgp";
+      format = "ssh";
       signByDefault = true;
       key = signature;
     };
@@ -152,11 +152,12 @@ in {
       };
 
       signing = {
-        behaviour = "drop";
-        backend = "gpg";
+        behaviour = "own";
+        backend = "ssh";
         key = signature;
 
-        backends.gpg.allow-expired-keys = false;
+        backends.ssh.allowed-signers = "~/.ssh/allowed-signers";
+        backends.ssh.revocation-list = "~/.ssh/revocation-list";
       };
 
       git = {

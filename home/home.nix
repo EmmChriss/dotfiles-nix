@@ -20,7 +20,6 @@
     ./fish.nix
     ./zellij.nix
     ./nix-index.nix
-    ./pass.nix
     ./hyprland.nix
     ./rustic.nix
     ./vcs.nix
@@ -43,6 +42,9 @@
 
       # save all rust builds to same place
       CARGO_TARGET_DIR = "/home/morga/.cache/target";
+
+      # use rbw as ssh agent
+      SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/rbw/ssh-agent-socket";
     };
 
     sessionPath = [
@@ -121,10 +123,6 @@
       gnupg
       age
       pinentry
-
-      # bitwarden clients
-      bitwarden-cli
-      bitwarden-desktop
       rbw
 
       # tui
@@ -303,6 +301,50 @@
   qt = {
     enable = true;
     platformTheme.name = "gtk";
+  };
+
+  systemd.user.sessionVariables = {
+    RCLONE_PASSWORD_COMMAND = "rbw get --folder rclone config";
+  };
+
+  home.sessionVariables = {
+    RCLONE_PASSWORD_COMMAND = "rbw get --folder rclone config";
+  };
+
+  systemd.user.services.mnt-storage = {
+    Unit = {
+      Description = "Programmatic mount configuration with rsync";
+      After = ["network-online.target"];
+    };
+    Service = {
+      Type = "notify";
+      ExecStart = "${pkgs.rclone}/bin/rclone --vfs-cache-mode full --vfs-cache-max-size 5G --no-modtime --ignore-checksum mount storage: /mnt/storage";
+      ExecStop = "/run/wrappers/bin/fusermount -u /mnt/storage";
+    };
+    Install.WantedBy = ["default.target"];
+  };
+
+  systemd.user.services.mnt-encrypted = {
+    Unit = {
+      Description = "Programmatic mount configuration with rsync";
+      After = ["network-online.target"];
+    };
+    Service = {
+      Type = "notify";
+      ExecStart = "${pkgs.rclone}/bin/rclone --vfs-cache-mode full --vfs-cache-max-size 5G --no-modtime --ignore-checksum mount encrypted: /mnt/encrypted";
+      ExecStop = "/run/wrappers/bin/fusermount -u /mnt/encrypted";
+    };
+    Install.WantedBy = ["default.target"];
+  };
+
+  systemd.user.services.rbw-agent = {
+    Unit.Description = "Background process for rbw - a terminal client for Bitwarden";
+    Service = {
+      Type = "exec";
+      ExecStart = "${pkgs.rbw}/bin/rbw-agent --no-daemonize";
+      Restart = "on-failure";
+    };
+    Install.WantedBy = ["default.target"];
   };
 
   # Nicely reload system units when changing configs
