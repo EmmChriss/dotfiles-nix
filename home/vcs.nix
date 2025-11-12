@@ -99,6 +99,7 @@ in {
             label(if(current_working_copy, "working_copy"),
               separate(" ",
                 format_short_change_id_with_hidden_and_divergent_info(self),
+                if(divergent, commit_id.shortest()),
                 if(empty, label("empty", "(empty)")),
                 if(description,
                   description.first_line(),

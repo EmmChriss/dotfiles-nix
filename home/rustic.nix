@@ -50,7 +50,6 @@
       EOF
 
               # upload secret archive to cloud storage
-              rclone rcat mega:Secrets/secrets.tar.gz.age <"$encrypted"
               rclone rcat backups-home:secrets.tar.gz.age <"$encrypted"
             } || notify-send "Secrets backup failed"
 
@@ -62,12 +61,13 @@
 
             {
               notify-send "Cleaning backup.."
-              rustic forget --prune --early-delete-index
+              rustic forget --prune --max-repack 0 --check-index
             } || notify-send "Cleaning backup failed"
 
             {
               notify-send "Repairing backup.."
               rustic repair index
+              rustic repair snapshots
             } || notify-send "Repairing backup failed"
     '';
   };
@@ -92,27 +92,29 @@ in {
       exclude-if-present = [".nobackup" "CACHEDIR.TAG"];
       custom-ignorefiles = [".rusticignore" ".backupignore"];
       iglobs = [
-        "!downloads"
-        "!node_modules"
-        "!target"
-        "!venv"
+        "!.bun"
         "!.cache"
-        "!.local/state"
         "!.cargo"
+        "!.local/share/fnm"
+        "!.local/share/uv"
+        "!.local/state"
         "!.npm"
         "!.pnpm"
-        "!uv"
-        "!Trash"
-        "!teams-for-linux"
         "!.rustup"
-        "!.bun"
+        "!Trash"
+        "!node_modules"
+        "!target"
+        "!teams-for-linux"
+        "!venv"
       ];
       one-file-system = true;
       snapshots = [
         {sources = ["/home/"];}
         {sources = ["/mnt/data/Books"];}
         {sources = ["/mnt/data/Notes"];}
+        {sources = ["/mnt/data/Media"];}
         {sources = ["/mnt/data/Documents"];}
+        {sources = ["/mnt/data/Downloads"];}
       ];
     };
   };

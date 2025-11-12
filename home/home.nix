@@ -10,6 +10,7 @@
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
 
+    ./fnm.nix
     ./yazi.nix
     ./pqiv.nix
     ./tofi.nix
@@ -167,23 +168,7 @@
       clang
       pkg-config
       openssl
-
-      # dbeaver breaks on Hyprland default backend, use GDK_BACKEND=x11
-      # TODO: maybe make this an overlay
-      (symlinkJoin {
-        name = "dbeaver";
-        paths = [dbeaver-bin];
-        buildInputs = [makeWrapper];
-        postBuild = ''
-          rm $out/bin/dbeaver
-          makeWrapper ${dbeaver-bin}/bin/dbeaver $out/bin/dbeaver \
-            --set GDK_BACKEND x11
-
-          rm $out/share/applications/dbeaver.desktop
-          substitute ${dbeaver-bin}/share/applications/dbeaver.desktop $out/share/applications/dbeaver.desktop \
-            --replace-fail ${dbeaver-bin}/bin/dbeaver $out/bin/dbeaver
-        '';
-      })
+      dbeaver-bin
     ];
   };
 
@@ -341,10 +326,14 @@
     Unit.Description = "Background process for rbw - a terminal client for Bitwarden";
     Service = {
       Type = "exec";
-      ExecStart = "${pkgs.rbw}/bin/rbw-agent --no-daemonize";
+      ExecStart = "${pkgs.writeShellScript "rbw-agent-wrapper" ''
+        #!/run/current-system/sw/bin/bash
+        export PATH="${pkgs.pinentry-all}/bin:$PATH"
+        ${pkgs.rbw}/bin/rbw-agent --no-daemonize
+      ''}";
       Restart = "on-failure";
     };
-    Install.WantedBy = ["default.target"];
+    Install.WantedBy = ["wayland-session@Hyprland.target"];
   };
 
   # Nicely reload system units when changing configs

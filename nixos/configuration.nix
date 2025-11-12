@@ -2,7 +2,6 @@
   pkgs,
   inputs,
   outputs,
-  lib,
   ...
 }:
 # Template: https://github.com/Misterio77/nix-starter-configs; standard variant
@@ -25,9 +24,6 @@
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
 
-    # Handles setting timezone manually and automatically
-    ./timezone.nix
-
     # Deduplicate files system-wide
     outputs.nixosModules.duperemove
   ];
@@ -35,31 +31,7 @@
   # remove unnecessary preinstalled packages
   environment.defaultPackages = [];
 
-  # Nixpkgs settings
-  nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
-      # outputs.overlays.additions
-      # outputs.overlays.modifications
-      # outputs.overlays.unstable-packages
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-
-    # Configure your nixpkgs instance
-    config = {
-      allowUnfree = true;
-    };
-  };
+  nixpkgs.config.allowUnfree = true;
 
   # Nix settings
   nix = {
@@ -124,33 +96,15 @@
 
   # Hardware
   hardware = {
+    enableRedistributableFirmware = true;
+
     bluetooth = {
       enable = true;
 
       # enables fetchin bluetooth headset battery status
-      settings.General.Experimental = true;
-    };
-
-    graphics.enable = true;
-
-    nvidia = {
-      # modesetting is usually needed
-      modesetting.enable = true;
-      nvidiaPersistenced = true;
-      powerManagement = {
-        enable = true;
-        finegrained = true;
-      };
-
-      open = true;
-      nvidiaSettings = false;
-
-      # Configure PRIME offloading
-      prime = {
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;
-        };
+      settings.General = {
+        FastConnectable = true;
+        Experimental = true;
       };
     };
   };
@@ -171,30 +125,17 @@
     alsa.enable = true;
     pulse.enable = true;
 
-    wireplumber.extraConfig."10-bluetooth-enhancements" = {
+    wireplumber.extraConfig.bluetooth-enhancements = {
       "monitor.bluez.properties" = {
-        # enable hardware volume
         "bluez5.enable-hw-volume" = true;
-        "bluez5.roles" = ["a2dp_sink" "a2dp_source" "bap_sink" "bap_source" "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag"];
-        "bluez5.codecs" = ["sbc" "sbc_xq" "aac"];
         "bluez5.enable-sbc-xq" = true;
-        "bluez5.hfphsp-backend" = "native";
+        "bluez5.enable-msbc" = true;
       };
       "wireplumber-settings" = {
         # do not switch to headset profile ever
         "bluetooth.autoswitch-to-headset-profile" = false;
       };
     };
-  };
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # local network device discovery (printers)
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
   };
 
   # Sudo
@@ -229,29 +170,41 @@
     '';
   };
 
-  # Graphics settings
-  services.xserver = {
+  # Display manager
+  services.xserver.displayManager.gdm = {
     enable = true;
-
-    # DEFAULT: use nvidia drivers for gui
-    videoDrivers = ["nvidia"];
-    desktopManager.xterm.enable = false;
-
-    # Use GDM as DM
-    displayManager.gdm = {
-      enable = true;
-      wayland = true;
-    };
-
-    # X11 keymap
-    xkb.layout = "us";
+    wayland = true;
   };
 
+  # Automatic timezone updates
+  services.tzupdate = {
+    enable = true;
+    timer.enable = true;
+  };
+
+  # Window manager
   # NOTE: hyprland is installed here, but configured in home-manager
   programs.hyprland = {
     enable = true;
     withUWSM = true;
     xwayland.enable = true;
+  };
+
+  hardware.graphics.enable = true;
+
+  # Nvidia
+  hardware.nvidia = {
+    # creates specialization called "battery-saver"
+    primeBatterySaverSpecialisation = true;
+
+    # modesetting is usually needed
+    modesetting.enable = true;
+    nvidiaPersistenced = true;
+    nvidiaSettings = false;
+    powerManagement = {
+      enable = true;
+      finegrained = true;
+    };
   };
 
   # GPU Acceleration
@@ -270,19 +223,7 @@
   };
 
   # BATTERY: secondary boot config that switches off NVIDIA card
-  specialisation.battery.configuration = {...}: {
-    # nixos-hardware: disable nvidia module
-    imports = [inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable];
-
-    system.nixos.tags = ["battery"];
-    services.xserver.videoDrivers = lib.mkForce [];
-    hardware.nvidia = {
-      modesetting.enable = lib.mkForce false;
-      nvidiaPersistenced = lib.mkForce false;
-      prime.offload.enable = lib.mkForce false;
-      prime.offload.enableOffloadCmd = lib.mkForce false;
-    };
-
+  specialisation.battery-saver.configuration = {...}: {
     # Restrict GPU Accel to AMD
     environment.variables = {
       # VK_ICD_FILENAMES = lib.mkForce "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
