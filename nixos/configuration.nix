@@ -154,7 +154,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.morga = {
     isNormalUser = true;
-    extraGroups = ["wheel" "networkmanager" "video" "docker" "adbusers"];
+    extraGroups = ["wheel" "networkmanager" "video" "docker" "podman" "adbusers"];
   };
 
   # Instead of setting as login shell, run fish immediately when bash starts
@@ -204,31 +204,6 @@
     powerManagement = {
       enable = true;
       finegrained = true;
-    };
-  };
-
-  # GPU Acceleration
-  hardware.graphics.extraPackages = [
-    # pkgs.rocmPackages.clr.icd # AMD OpenCL
-    # pkgs.amdvlk # AMD Vulkan
-  ];
-
-  # verify setup with `vulkaninfo`, `glxinfo`, `clinfo`, `vainfo`, `vdpauinfo`
-  # prefer Intel's VA-API over Nvidia's VDPAU, still use the AMD VDPAU driver
-  environment.variables = {
-    # LIBVA_DRIVER_NAME = "radeonsi";
-    # VDPAU_DRIVER = "radeonsi";
-    # LIBVA_DRIVER_NAME = "nvidia";
-    # VDPAU_DRIVER = "nvidia";
-  };
-
-  # BATTERY: secondary boot config that switches off NVIDIA card
-  specialisation.battery-saver.configuration = {...}: {
-    # Restrict GPU Accel to AMD
-    environment.variables = {
-      # VK_ICD_FILENAMES = lib.mkForce "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
-      # LIBVA_DRIVER_NAME = lib.mkForce "radeonsi";
-      # VDPAU_DRIVER = lib.mkForce "radeonsi";
     };
   };
 
@@ -308,11 +283,17 @@
     systemdInterval = "weekly";
   };
 
-  # enable docker for dev
-  virtualisation.docker = {
+  # enable docker (podman) for dev
+  virtualisation.podman = {
     enable = true;
-    enableOnBoot = false;
-    autoPrune.enable = true;
+    defaultNetwork.settings = {dns_enabled = true;};
+    autoPrune = {
+      enable = true;
+      flags = ["--all"];
+    };
+
+    dockerCompat = true;
+    dockerSocket.enable = true;
   };
 
   # enable nix-ld
