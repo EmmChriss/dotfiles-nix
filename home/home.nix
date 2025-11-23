@@ -155,7 +155,6 @@
       # dev tools
       bun
       nodejs
-      docker-compose
       psmisc
       postgresql
       pgcli
@@ -169,6 +168,14 @@
       pkg-config
       openssl
       dbeaver-bin
+
+      podman-compose
+      (writeShellApplication {
+        name = "docker-compose";
+        runtimeInputs = [pkgs.podman-compose];
+        text = ''${lib.getExe pkgs.podman-compose} "$@"'';
+      })
+      podman-tui
     ];
   };
 

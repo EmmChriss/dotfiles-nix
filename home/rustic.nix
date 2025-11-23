@@ -95,6 +95,7 @@ in {
         "!.bun"
         "!.cache"
         "!.cargo"
+        "!.local/share/containers"
         "!.local/share/fnm"
         "!.local/share/uv"
         "!.local/state"
