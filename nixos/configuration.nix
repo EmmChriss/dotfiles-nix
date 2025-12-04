@@ -31,19 +31,20 @@
   # remove unnecessary preinstalled packages
   environment.defaultPackages = [];
 
-  nixpkgs.config.allowUnfree = true;
-
   # Nix settings
   nix = {
     settings = {
       auto-optimise-store = true;
       trusted-users = ["morga"];
-      experimental-features = ["nix-command" "flakes"];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
     };
     gc = {
       automatic = true;
       dates = "daily";
-      options = "--delete-older-than 2d";
+      options = "--delete-older-than 7d";
     };
   };
 
@@ -154,7 +155,14 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.morga = {
     isNormalUser = true;
-    extraGroups = ["wheel" "networkmanager" "video" "docker" "podman" "adbusers"];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "video"
+      "docker"
+      "podman"
+      "adbusers"
+    ];
   };
 
   # Instead of setting as login shell, run fish immediately when bash starts
@@ -171,7 +179,7 @@
   };
 
   # Display manager
-  services.xserver.displayManager.gdm = {
+  services.displayManager.gdm = {
     enable = true;
     wayland = true;
   };
@@ -262,10 +270,10 @@
   services.swapspace.enable = true;
 
   # suspend on lid switch only on battery
-  services.logind = {
-    lidSwitch = "suspend";
-    lidSwitchDocked = "ignore";
-    lidSwitchExternalPower = "ignore";
+  services.logind.settings.Login = {
+    HandleLidSwitch = "suspend";
+    HandleLidSwitchDocked = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
   };
 
   # system76 scheduler for extra performance
@@ -286,7 +294,9 @@
   # enable docker (podman) for dev
   virtualisation.podman = {
     enable = true;
-    defaultNetwork.settings = {dns_enabled = true;};
+    defaultNetwork.settings = {
+      dns_enabled = true;
+    };
     autoPrune = {
       enable = true;
       flags = ["--all"];

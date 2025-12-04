@@ -45,7 +45,7 @@ in {
     ouch
 
     # drag and drop
-    xdragon
+    dragon-drop
   ];
 
   programs.yazi = {
@@ -137,41 +137,75 @@ in {
           # option to open text files
           {
             name = "*.html";
-            use = ["edit" "open" "reveal"];
+            use = [
+              "edit"
+              "open"
+              "reveal"
+            ];
           }
           {
             mime = "text/*";
-            use = ["edit" "open" "reveal"];
+            use = [
+              "edit"
+              "open"
+              "reveal"
+            ];
           }
           {
             mime = "application/json";
-            use = ["edit" "open" "reveal"];
+            use = [
+              "edit"
+              "open"
+              "reveal"
+            ];
           }
           {
             name = "*.json";
-            use = ["edit" "open" "reveal"];
+            use = [
+              "edit"
+              "open"
+              "reveal"
+            ];
           }
           {
             mime = "inode/empty";
-            use = ["edit" "open" "reveal"];
+            use = [
+              "edit"
+              "open"
+              "reveal"
+            ];
           }
 
           # open video files in vlc
           {
             mime = "{audio,video}/*";
-            use = ["play" "open" "reveal"];
+            use = [
+              "play"
+              "open"
+              "reveal"
+            ];
           }
 
           # open images in pqiv
           {
             mime = "image/*";
-            use = ["view" "open" "reveal"];
+            use = [
+              "view"
+              "open"
+              "reveal"
+            ];
           }
 
           # fallback: choose your weapon
           {
             name = "*";
-            use = ["open" "reveal" "edit" "view" "play"];
+            use = [
+              "open"
+              "reveal"
+              "edit"
+              "view"
+              "play"
+            ];
           }
         ];
       };
@@ -201,7 +235,10 @@ in {
 
         # follow symlink
         {
-          on = ["g" "l"];
+          on = [
+            "g"
+            "l"
+          ];
           run = ''shell 'ya emit cd "$(readlink -f "$1")"' '';
           desc = "Follow hovered symlink";
         }
@@ -227,12 +264,18 @@ in {
 
         # compress files
         {
-          on = ["C" "z"];
+          on = [
+            "C"
+            "z"
+          ];
           run = "plugin ouch --args=zip";
           desc = "Compress files to ZIP";
         }
         {
-          on = ["C" "t"];
+          on = [
+            "C"
+            "t"
+          ];
           run = "plugin ouch --args=tar.gz";
           desc = "Compress files to ZIP";
         }
@@ -284,32 +327,50 @@ in {
 
         # boomarks
         {
-          on = ["g" "d"];
+          on = [
+            "g"
+            "d"
+          ];
           run = "cd /mnt/data";
           desc = "Bookmark: Data partition";
         }
         {
-          on = ["g" "w"];
+          on = [
+            "g"
+            "w"
+          ];
           run = "cd /mnt/win";
           desc = "Bookmark: Win partition";
         }
         {
-          on = ["g" "m"];
+          on = [
+            "g"
+            "m"
+          ];
           run = "cd ~/Media";
           desc = "Bookmark: Media";
         }
         {
-          on = ["g" "s"];
+          on = [
+            "g"
+            "s"
+          ];
           run = "cd ~/Media/Pictures/Screenshots/";
           desc = "Bookmark: Screenshots";
         }
         {
-          on = ["g" "c"];
+          on = [
+            "g"
+            "c"
+          ];
           run = "cd ~/.config";
           desc = "Bookmark: Config";
         }
         {
-          on = ["g" "n"];
+          on = [
+            "g"
+            "n"
+          ];
           run = "cd ~/nix";
           desc = "Bookmark: Nix Config";
         }

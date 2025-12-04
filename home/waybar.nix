@@ -24,8 +24,20 @@
       position = "top";
       height = 24;
       spacing = 12;
-      modules-left = ["hyprland/workspaces" "hyprland/window"];
-      modules-right = ["custom/backlight" "pulseaudio" "network" "cpu" "memory" "battery" "tray" "clock"];
+      modules-left = [
+        "hyprland/workspaces"
+        "hyprland/window"
+      ];
+      modules-right = [
+        "custom/backlight"
+        "pulseaudio"
+        "network"
+        "cpu"
+        "memory"
+        "battery"
+        "tray"
+        "clock"
+      ];
 
       "hyprland/workspaces" = {
         persistent-workspaces = {
@@ -76,7 +88,13 @@
         format = "{capacity}% {icon}";
         format-discharging = "{time} {capacity}% {icon}";
         tooltip-format = "{time} {power}W";
-        format-icons = ["" "" "" "" ""];
+        format-icons = [
+          ""
+          ""
+          ""
+          ""
+          ""
+        ];
       };
 
       network = {
@@ -96,7 +114,10 @@
           phone = "";
           portable = "";
           car = "";
-          default = ["" ""];
+          default = [
+            ""
+            ""
+          ];
         };
       };
     };

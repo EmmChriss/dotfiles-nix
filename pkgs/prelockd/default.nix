@@ -15,7 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OhKejs/G+c2c+aVuJ5yqHrPy5H9LxBERP3A7KBRkOg8=";
   };
 
-  outputs = ["out" "man"];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   buildInputs = [python3];
 
@@ -67,8 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     licence = lib.licences.mit;
     mainProgram = "prelockd";
-    maintainers = with lib.maintainers; [
-    ];
+    maintainers = with lib.maintainers; [];
     platforms = lib.platforms.linux;
   };
 })

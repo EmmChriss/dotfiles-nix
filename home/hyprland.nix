@@ -6,7 +6,11 @@
   inherit (lib) getExe;
   hypr-slurp = pkgs.writeShellApplication {
     name = "hypr-slurp";
-    runtimeInputs = with pkgs; [hyprland jq slurp];
+    runtimeInputs = with pkgs; [
+      hyprland
+      jq
+      slurp
+    ];
     text = ''
       hyprctl clients -j |\
       jq -r ".[] | select(.workspace.id | IN($(hyprctl -j monitors | jq 'map(.activeWorkspace.id) | join(",")' | tr -d \")))" |\
@@ -219,13 +223,6 @@ in {
       master = {
         # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
         # new_is_master = "true";
-      };
-
-      gestures = {
-        workspace_swipe = "true";
-        workspace_swipe_forever = "true";
-        workspace_swipe_use_r = "true";
-        workspace_swipe_direction_lock = "false";
       };
 
       binds = {

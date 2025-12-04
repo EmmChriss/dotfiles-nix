@@ -7,7 +7,13 @@
   inherit (lib.lists) optional;
   inherit (lib.modules) mkIf;
   inherit (lib.options) literalExpression mkOption mkEnableOption;
-  inherit (lib.types) package str nullOr listOf;
+  inherit
+    (lib.types)
+    package
+    str
+    nullOr
+    listOf
+    ;
 
   cfg = config.services.duperemove;
 in {

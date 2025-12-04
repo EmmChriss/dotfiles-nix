@@ -35,7 +35,11 @@
       editor = {
         mouse = false;
         color-modes = true;
-        rulers = [80 120 160];
+        rulers = [
+          80
+          120
+          160
+        ];
         bufferline = "multiple";
         trim-trailing-whitespace = true;
         file-picker.hidden = false;
@@ -77,7 +81,11 @@
     languages.language-server = {
       typescript-language-server = {
         command = "${lib.getExe pkgs.bun}";
-        args = ["--smol" "${pkgs.typescript-language-server}/lib/node_modules/typescript-language-server/lib/cli.mjs" "--stdio"];
+        args = [
+          "--smol"
+          "${pkgs.typescript-language-server}/lib/node_modules/typescript-language-server/lib/cli.mjs"
+          "--stdio"
+        ];
       };
     };
   };

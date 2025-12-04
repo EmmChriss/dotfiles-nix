@@ -13,7 +13,10 @@
   });
   greetings = pkgs.writeShellApplication {
     name = "greetings";
-    runtimeInputs = with pkgs; [neo-cowsay fortune];
+    runtimeInputs = with pkgs; [
+      neo-cowsay
+      fortune
+    ];
     text = ''
       fortune | cowthink --rainbow --bold -n
       cat <<- EOF

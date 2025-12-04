@@ -6,7 +6,14 @@
   tomlFormat = pkgs.formats.toml {};
   backupScript = pkgs.writeShellApplication {
     name = "backup-rustic";
-    runtimeInputs = with pkgs; [expect age rclone rustic libnotify zenity];
+    runtimeInputs = with pkgs; [
+      expect
+      age
+      rclone
+      rustic
+      libnotify
+      zenity
+    ];
     text = ''
             # make sure we even have internet connectivity
             ping -c3 linux.org >/dev/null 2>&1 || exit 1
@@ -72,7 +79,11 @@
     '';
   };
 in {
-  home.packages = with pkgs; [backupScript rclone rustic];
+  home.packages = with pkgs; [
+    backupScript
+    rclone
+    rustic
+  ];
 
   xdg.configFile."rustic/rustic.toml".source = tomlFormat.generate "rustic.toml" {
     repository = {
@@ -89,8 +100,14 @@ in {
     };
 
     backup = {
-      exclude-if-present = [".nobackup" "CACHEDIR.TAG"];
-      custom-ignorefiles = [".rusticignore" ".backupignore"];
+      exclude-if-present = [
+        ".nobackup"
+        "CACHEDIR.TAG"
+      ];
+      custom-ignorefiles = [
+        ".rusticignore"
+        ".backupignore"
+      ];
       iglobs = [
         "!.bun"
         "!.cache"
@@ -137,6 +154,8 @@ in {
       OnCalendar = "daily";
       RandomizedDelaySec = "10m";
     };
-    Install = {WantedBy = ["timers.target"];};
+    Install = {
+      WantedBy = ["timers.target"];
+    };
   };
 }

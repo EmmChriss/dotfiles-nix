@@ -48,9 +48,7 @@
       SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/rbw/ssh-agent-socket";
     };
 
-    sessionPath = [
-      "$HOME/.cargo/bin"
-    ];
+    sessionPath = ["$HOME/.cargo/bin"];
 
     shellAliases = {
       # EDITOR
@@ -123,7 +121,8 @@
       # security
       gnupg
       age
-      pinentry
+      agebox
+      pinentry-all
       rbw
 
       # tui
@@ -192,7 +191,10 @@
       "x-scheme-handler/https" = ["firefox.desktop"];
       "x-scheme-handler/mailto" = ["firefox.desktop"];
       "text/html" = ["firefox.desktop"];
-      "application/pdf" = ["evince.desktop" "firefox.desktop"];
+      "application/pdf" = [
+        "evince.desktop"
+        "firefox.desktop"
+      ];
       "video/*" = ["vlc.desktop"];
 
       "inode/directory" = ["thunar.desktop"];
@@ -233,7 +235,9 @@
   };
 
   systemd.user.services.megacmd = {
-    Unit = {Description = "Sync user directories to MEGA";};
+    Unit = {
+      Description = "Sync user directories to MEGA";
+    };
     Service = {
       ExecStart = "${pkgs.megacmd}/bin/mega-cmd-server";
       Restart = "always";

@@ -1,7 +1,0 @@
-#!/bin/sh
-nix fmt -- .
-nix flake update
-nix flake archive
-nh os switch .
-sudo nix store optimise
-nix-store --verify --repair --check-contents

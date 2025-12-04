@@ -10,15 +10,6 @@ in {
     # git large file support
     lfs.enable = true;
 
-    # git diff highlighter
-    delta = {
-      enable = true;
-      options = {
-        navigate = true;
-        side-by-side = true;
-      };
-    };
-
     # automatic git signing
     signing = {
       format = "ssh";
@@ -26,8 +17,17 @@ in {
       key = signature;
     };
 
-    userName = name;
-    userEmail = email;
+    settings.user = {inherit name email;};
+  };
+
+  # git diff highlighter
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      navigate = true;
+      side-by-side = true;
+    };
   };
 
   # jujutsu: enhanced git
@@ -60,8 +60,12 @@ in {
         "node working_copy" = "green";
         "node conflict" = "red";
         "node immutable" = "red";
-        "node normal" = {bold = false;};
-        "node" = {bold = false;};
+        "node normal" = {
+          bold = false;
+        };
+        "node" = {
+          bold = false;
+        };
       };
 
       revset-aliases = {
@@ -137,19 +141,50 @@ in {
             jj s --no-pager
             jj l --no-pager
           '';
-        in ["util" "exec" "--" "bash" "-c" cmd ""];
+        in [
+          "util"
+          "exec"
+          "--"
+          "bash"
+          "-c"
+          cmd
+          ""
+        ];
         d = ["diff"];
-        l = ["log" "-r" "@ | latest(heads(::@- & bookmarks())::@-, 3) | heads(::@- & bookmarks())"];
-        ll = ["log" "-r" ".."];
-        lb = ["log" "-r" "@ | ::@- & bookmarks()"];
-        lt = ["log" "-r" "(trunk()..@):: | (trunk()..@)-"];
+        l = [
+          "log"
+          "-r"
+          "@ | latest(heads(::@- & bookmarks())::@-, 3) | heads(::@- & bookmarks())"
+        ];
+        ll = [
+          "log"
+          "-r"
+          ".."
+        ];
+        lb = [
+          "log"
+          "-r"
+          "@ | ::@- & bookmarks()"
+        ];
+        lt = [
+          "log"
+          "-r"
+          "(trunk()..@):: | (trunk()..@)-"
+        ];
         s = ["status"];
         e = ["edit"];
         ed = ["edit"];
         # use `jj tug` to bring the last bookmark(s) to the parent change
         # NOTE: multiple bookmarks pointing to the same revision will all be pulled
         # use with `jj lb` to see which bookmark/bookmarks will be pulled
-        tug = ["bookmark" "move" "--from" "heads(::@- & bookmarks())" "--to" "@-"];
+        tug = [
+          "bookmark"
+          "move"
+          "--from"
+          "heads(::@- & bookmarks())"
+          "--to"
+          "@-"
+        ];
       };
 
       signing = {
@@ -161,10 +196,12 @@ in {
         backends.ssh.revocation-list = "~/.ssh/revocation-list";
       };
 
+      remotes.origin = {
+        auto-track-bookmarks = "glob:*";
+      };
+
       git = {
         sign-on-push = true;
-        auto-local-bookmark = true;
-        push-new-bookmarks = true;
         private-commits = "description(glob:'wip:*')";
       };
     };

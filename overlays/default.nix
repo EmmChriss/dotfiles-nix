@@ -1,5 +1,5 @@
 # This file defines overlays
-{inputs, ...}: {
+{...}: {
   # This one brings our custom packages from the 'pkgs' directory
   additions = self: super: import ../pkgs self.pkgs;
 
@@ -15,14 +15,5 @@
     tofi = super.tofi.overrideAttrs (old: {
       patches = (old.patches or []) ++ [./tofi-drun-print-desktop.patch];
     });
-  };
-
-  # When applied, the unstable nixpkgs set (declared in the flake inputs) will
-  # be accessible through 'pkgs.unstable'
-  unstable-packages = final: _prev: {
-    unstable = import inputs.nixpkgs-unstable {
-      system = final.system;
-      config.allowUnfree = true;
-    };
   };
 }

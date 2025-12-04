@@ -39,7 +39,10 @@
     # Backlight control
     (writeShellApplication {
       name = "bl";
-      runtimeInputs = [brightnessctl bc];
+      runtimeInputs = [
+        brightnessctl
+        bc
+      ];
       text = ''
         device="$(echo /sys/class/backlight/amd* | cut -d/ -f5)"
         cmd="brightnessctl -m -e -d $device"
