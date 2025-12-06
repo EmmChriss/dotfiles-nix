@@ -81,7 +81,6 @@
 in {
   home.packages = with pkgs; [
     backupScript
-    rclone
     rustic
   ];
 

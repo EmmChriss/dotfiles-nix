@@ -40,7 +40,6 @@
             packages = [
               nh
               just
-              alejandra
             ];
           }
     );

@@ -166,12 +166,16 @@
   };
 
   # Instead of setting as login shell, run fish immediately when bash starts
+  # Also switch to fish on first nix-shell
   # See: https://nixos.wiki/wiki/Fish
   programs.fish.enable = true;
   programs.bash = {
     interactiveShellInit = ''
-      if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+      if test -z ''${BASH_EXECUTION_STRING} &&\
+        test $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" ||\
+        test -n "$IN_NIX_SHELL" && test -z "$BASH_NIX_SHELL_TOP"
       then
+        test -n "$IN_NIX_SHELL" && export BASH_NIX_SHELL_TOP=1
         shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
         exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
       fi
@@ -311,6 +315,8 @@
 
   # enable android tools and associated udev rules
   programs.adb.enable = true;
+
+  services.dbus.implementation = "broker";
 
   # DO NOT CHANGE
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion

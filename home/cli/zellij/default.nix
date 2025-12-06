@@ -7,6 +7,6 @@
   # while, this seems to be the recommended solution.
   home.file."${config.home.homeDirectory}/.config/zellij/config.kdl" = {
     enable = true;
-    source = ./config/zellij.kdl;
+    source = ./config.kdl;
   };
 }

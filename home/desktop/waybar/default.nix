@@ -16,8 +16,7 @@
     enable = true;
     systemd = {
       enable = true;
-      # only for hyprland
-      target = "wayland-session@Hyprland.target";
+      target = "graphical-session.target";
     };
     settings.mainBar = {
       layer = "top";
@@ -121,6 +120,6 @@
         };
       };
     };
-    style = ./config/waybar.css;
+    style = ./style.css;
   };
 }

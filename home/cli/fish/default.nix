@@ -7,7 +7,7 @@
     src = pkgs.fetchFromGitHub {
       owner = "jorgebucaran";
       repo = "hydro";
-      rev = "9c93b89573bd722f766f2190a862ae55e728f6ba";
+      rev = "75ab7168a35358b3d08eeefad4ff0dd306bd80d4";
       hash = "sha256-QYq4sU41/iKvDUczWLYRGqDQpVASF/+6brJJ8IxypjE=";
     };
   });
@@ -27,6 +27,8 @@
     '';
   };
 in {
+  home.packages = [pkgs.grc];
+
   # enable fish shell
   programs.fish = {
     enable = true;
@@ -62,11 +64,17 @@ in {
     # TODO: check out Hydro documentation
     # See: https://github.com/jorgebucaran/hydro
     interactiveShellInit = ''
+      # hydro: indicate root
+      test "$USER" = root && set -g hydro_symbol_prompt "[ROOT] ❱"
+
+      # hydro: show nix shell
+      test -n "$IN_NIX_SHELL" && set -g hydro_symbol_prompt "[NIX] ❱"
+
       # mark subshells with FISH_TOP=1
       test -z "$FISH_TOP" && ${lib.getExe greetings} && set -x FISH_TOP 1
 
       # ctrl-f to open file manager
-      bind \cf 'lf; commandline -f repaint'
+      bind \cf 'y; commandline -f repaint'
     '';
   };
 }

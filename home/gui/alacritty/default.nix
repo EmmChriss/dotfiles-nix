@@ -1,7 +1,11 @@
-{...}:
+{pkgs, ...}:
 # TODO: add central colorscheme
 # TODO: add autostarting daemon
 {
+  home.packages = with pkgs; [
+    nerd-fonts.iosevka-term
+  ];
+
   programs.alacritty = {
     enable = true;
     settings = {

@@ -20,7 +20,7 @@
 in {
   # Generated theme
   # To customize, see: https://github.com/lpnh/icons-brew.yazi
-  xdg.configFile."yazi/theme.toml".source = ./config/yazi-theme-catppuccin.toml;
+  xdg.configFile."yazi/theme.toml".source = ./catppuccin.toml;
 
   home.packages = with pkgs; [
     # file type detection
