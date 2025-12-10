@@ -29,6 +29,7 @@
     bluetuith
 
     # shell utils
+    fd
     ripgrep
     tealdeer
     fzf

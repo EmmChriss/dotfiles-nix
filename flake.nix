@@ -16,10 +16,6 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # Yazi: terminal file manager upstream releases
-    # NOTE: pinned version for potential backward-incompatible changes
-    yazi.url = "https://github.com/sxyazi/yazi/archive/refs/tags/v0.4.2.tar.gz";
   };
 
   outputs = {
@@ -89,9 +85,6 @@
               # import some of our own overlays
               self.overlays.modifications
               self.overlays.additions
-
-              # import package flake overlays
-              inputs.yazi.overlays.default
             ];
 
             # Enable Cachix substituters
@@ -99,12 +92,10 @@
               substituters = [
                 "https://hyprland.cachix.org"
                 "https://nix-community.cachix.org"
-                "https://yazi.cachix.org"
               ];
               trusted-public-keys = [
                 "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
                 "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-                "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="
               ];
             };
           }

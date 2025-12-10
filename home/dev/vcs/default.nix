@@ -151,6 +151,7 @@ in {
           ""
         ];
         d = ["diff"];
+        dt = ["diff" "--from" "fork_point(trunk() | @)"];
         l = [
           "log"
           "-r"

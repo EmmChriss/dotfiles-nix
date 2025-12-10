@@ -219,21 +219,6 @@
     };
   };
 
-  # enable Thunar file manager with plugins
-  programs.thunar = with pkgs.xfce; {
-    enable = true;
-    plugins = [
-      thunar-archive-plugin
-      thunar-volman
-      thunar-vcs-plugin
-      thunar-media-tags-plugin
-    ];
-  };
-
-  # also file manager stuff
-  services.gvfs.enable = true;
-  services.tumbler.enable = true;
-
   # power saving
   services.power-profiles-daemon.enable = false;
   services.auto-cpufreq = {

@@ -9,5 +9,5 @@
     };
   };
 
-  programs.fish.interactiveShellInit = "fnm env | source";
+  programs.fish.interactiveShellInit = "fnm env --shell fish --use-on-cd | source";
 }
