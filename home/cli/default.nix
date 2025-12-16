@@ -20,7 +20,6 @@
     pinentry-all
     gnupg
     age
-    agebox
 
     # system
     htop

@@ -13,6 +13,7 @@
 
   home.packages = with pkgs; [
     # default apps
+    libreoffice-still
     loupe
     papers
     vlc

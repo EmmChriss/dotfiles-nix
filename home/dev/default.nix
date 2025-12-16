@@ -9,6 +9,8 @@
   home.packages = with pkgs; [
     # databases
     dbeaver-bin
+    # dbeaver requires pg_dump and pg_restore
+    postgresql
     pgcli
 
     # languages
