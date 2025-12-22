@@ -26,6 +26,9 @@
 
     # Deduplicate files system-wide
     outputs.nixosModules.duperemove
+
+    # Configure ProtonVPN
+    ./protonvpn.nix
   ];
 
   # remove unnecessary preinstalled packages
@@ -111,6 +114,8 @@
   };
 
   environment.systemPackages = [
+    pkgs.wireguard-tools
+
     # Power monitor with system access
     # NOTE: powertop can be started as a service, but it messes with my wireless
     # mouse, and I didn't look into how to disable just that
