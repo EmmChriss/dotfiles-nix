@@ -31,6 +31,7 @@ in {
   };
 
   # jujutsu: enhanced git
+  home.packages = [pkgs.jjui];
   programs.jujutsu = {
     enable = true;
     settings = {

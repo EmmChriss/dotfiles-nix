@@ -1,21 +1,39 @@
+hm-news:
+    home-manager news --flake .
+
 update:
     nix flake update && nix flake archive
 
-switch:
-    nh os switch . --fallback --repair
+os:
+    nh os switch . --fallback
+
+home:
+    nh home switch . --fallback
+
+os-rollback:
+    nh os rollback
+
+home-rollback:
+    home-manager switch --rollback --flake .
 
 boot:
-    nh os boot . --fallback --repair
+    nh os boot . --fallback
+
+test:
+    nh os test . --fallback
+
+repair:
+    nix-store --verify --repair --check-contents
 
 clean:
     sudo journalctl --rotate --vacuum-time=48h
     nh clean all --optimise --ask --keep-since 2d
-    nix-store --verify --repair --check-contents
+    just repair
 
 clean-all:
     sudo journalctl --rotate --vacuum-time=1h
     nh clean all --optimise --ask
-    nix-store --verify --repair --check-contents
+    just repair
 
 format:
     nix fmt -- .

@@ -1,16 +1,42 @@
-{pkgs, ...}: {
-  home.packages = with pkgs; [
-    # get backlight when it changes by any means
-    # uses generic backlight script defined in ./scripts.nix
-    (writeShellApplication {
-      name = "bar-backlight";
-      runtimeInputs = [entr];
-      text = ''
-        echo /sys/class/backlight/amd*/brightness |\
-        entr -ns bl
-      '';
-    })
-  ];
+{
+  lib,
+  pkgs,
+  ...
+}: let
+  # get backlight when it changes by any means
+  # uses generic backlight script defined in ./scripts.nix
+  bar-backlight = pkgs.writeShellApplication {
+    name = "bar-backlight";
+    runtimeInputs = [pkgs.entr];
+    text = ''
+      echo /sys/class/backlight/amd*/brightness |\
+      entr -ns bl
+    '';
+  };
+
+  bar-lang = pkgs.writeShellApplication {
+    name = "bar-lang";
+    runtimeInputs = [pkgs.hyprland pkgs.socat];
+    text = ''
+      socat - UNIX-CONNECT:"$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" |\
+      grep -E '^activelayout>>' --line-buffered |\
+      cut -d, -f2
+    '';
+  };
+
+  bar-wg = pkgs.writeShellApplication {
+    name = "bar-wg";
+    runtimeInputs = [pkgs.networkmanager];
+    text = ''
+      export yes=VPN
+      export no="VPN't"
+      # shellcheck disable=SC2016
+      nmcli m |\
+      xargs -I{} -P1 sh -c 'nmcli c | grep -q wireguard && echo "$yes" || echo "$no"'
+    '';
+  };
+in {
+  home.packages = [bar-lang];
 
   programs.waybar = {
     enable = true;
@@ -30,11 +56,14 @@
       modules-right = [
         "custom/backlight"
         "pulseaudio"
+        "custom/vpn"
         "network"
         "cpu"
         "memory"
         "battery"
         "tray"
+        # "custom/language"
+        "hyprland/language"
         "clock"
       ];
 
@@ -56,8 +85,12 @@
         };
       };
 
+      "hyprland/window" = {
+        separate-outputs = true;
+      };
+
       "custom/backlight" = {
-        exec = "bar-backlight";
+        exec = lib.getExe bar-backlight;
         format = "{}% ";
       };
 
@@ -96,6 +129,11 @@
         ];
       };
 
+      "custom/vpn" = {
+        exec = lib.getExe bar-wg;
+        format = "{}";
+      };
+
       network = {
         format-wifi = "{essid} ({signalStrength}%) ";
         format-ethernet = "{ifname} ";
@@ -118,6 +156,17 @@
             ""
           ];
         };
+      };
+
+      "hyprland/language" = {
+        format-en = "US";
+        format-hu = "HU";
+        format-ro = "RO";
+      };
+
+      "custom/language" = {
+        exec = lib.getExe bar-lang;
+        format = "{:.3}";
       };
     };
     style = ./style.css;

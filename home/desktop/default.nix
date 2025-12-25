@@ -5,6 +5,8 @@
     ./waybar
   ];
 
+  services.wl-clip-persist.enable = true;
+
   home.packages = with pkgs; [
     playerctl
 

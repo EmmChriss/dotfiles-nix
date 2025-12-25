@@ -22,11 +22,39 @@
     self,
     nixpkgs,
     nixpkgs-unstable,
+    home-manager,
     ...
   } @ inputs: let
     inherit (self) outputs;
     forAllSystems = fn: nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed fn;
     forAllPackages = fn: forAllSystems (system: fn nixpkgs.legacyPackages.${system});
+    nixpkgsConfig = {
+      # Always allow unfree
+      nixpkgs.config.allowUnfree = true;
+
+      # Enable overlays
+      nixpkgs.overlays = [
+        # use the unstable version of some packages
+        (
+          let
+            pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
+          in
+            self: super: {
+              inherit
+                (pkgs)
+                helix
+                satty
+                jujutsu
+                rbw
+                ;
+            }
+        )
+
+        # import some of our own overlays
+        self.overlays.modifications
+        self.overlays.additions
+      ];
+    };
   in {
     # Devshell
     devShell = forAllPackages (
@@ -36,6 +64,7 @@
             packages = [
               nh
               just
+              pkgs.home-manager
             ];
           }
     );
@@ -53,68 +82,37 @@
     nixosModules = import ./modules/nixos;
 
     # Reusable home-manager modules you might want to export
-    homeManagerModules = import ./modules/home;
+    homeModules = import ./modules/home;
+
+    # Home-manager configurations
+    homeConfigurations.morga = home-manager.lib.homeManagerConfiguration {
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      modules = [
+        # Configure nixpkgs
+        nixpkgsConfig
+
+        {
+          home = {
+            username = "morga";
+            homeDirectory = "/home/morga";
+          };
+        }
+
+        # HM configuration; all rooted in home.nix
+        ./home/home.nix
+      ];
+    };
 
     # NixOS configuration
-    nixosConfigurations = {
-      morga = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-          # Configure nixpkgs
-          {
-            nixpkgs.config.allowUnfree = true;
+    nixosConfigurations.morga = nixpkgs.lib.nixosSystem {
+      specialArgs = {inherit inputs outputs;};
+      modules = [
+        # Configure nixpkgs
+        nixpkgsConfig
 
-            # Enable overlays
-            nixpkgs.overlays = [
-              # use the unstable version of some packages
-              (
-                let
-                  pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
-                in
-                  self: super: {
-                    inherit
-                      (pkgs)
-                      helix
-                      satty
-                      jujutsu
-                      rbw
-                      ;
-                  }
-              )
-
-              # import some of our own overlays
-              self.overlays.modifications
-              self.overlays.additions
-            ];
-
-            # Enable Cachix substituters
-            nix.settings = {
-              substituters = [
-                "https://hyprland.cachix.org"
-                "https://nix-community.cachix.org"
-              ];
-              trusted-public-keys = [
-                "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-                "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-              ];
-            };
-          }
-
-          # NixOS system configuration; all rooted in configuration.nix
-          ./nixos/configuration.nix
-
-          # Home-manager configuration; all rooted in home.nix
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              backupFileExtension = "homenew";
-              useUserPackages = true;
-              useGlobalPkgs = true;
-              users.morga = ./home/home.nix;
-            };
-          }
-        ];
-      };
+        # NixOS system configuration; all rooted in configuration.nix
+        ./nixos/configuration.nix
+      ];
     };
   };
 }

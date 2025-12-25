@@ -3,6 +3,7 @@
 in {
   home.packages = with pkgs; [
     rclone
+    rclone-browser
   ];
 
   home.sessionVariables = {

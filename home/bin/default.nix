@@ -3,7 +3,7 @@
     # Volume control
     (writeShellApplication {
       name = "vol";
-      runtimeInputs = [wireplumber];
+      runtimeInputs = [wireplumber bc];
       text = ''
         if test $# = 0; then
           # print usage
@@ -27,9 +27,8 @@
           op="$2"
         fi
 
-        echo "$op" "$dev"
         case "$op" in
-          get) wpctl get-volume "$dev" | grep Volume | cut -d' ' -f2 | tr -d '.' | bl ;;
+          get) wpctl get-volume "$dev" | grep Volume | cut -d' ' -f2 | tr -d '.' | bc ;;
         	mute) wpctl set-mute "$dev" toggle ;;
         	*) wpctl set-volume "$dev" "$op" ;;
         esac
@@ -95,8 +94,18 @@
         set="$(echo "$set*100" | bc)"         # apply x100
         set="''${set%.*}"                   # round to integer
 
-        # set value && write new value to file
-        $cmd s "$set%" && echo "$new" > "$XDG_RUNTIME_DIR/bl" && echo "$new"
+        # write new value to file
+        echo "$new" > "$XDG_RUNTIME_DIR/bl" && echo "$new"
+
+        # interpolate with x steps, dividing the distance each time
+        # shellcheck disable=SC2034
+        for i in seq 10; do
+          current="$($cmd g)"
+          interp="$(echo "($current+$set)/2" | bc)"
+          $cmd s "$interp"
+          sleep 0.1
+        done
+        $cmd s "$set%"
       '';
     })
 
