@@ -16,6 +16,7 @@
     # languages
     python3
     clang
+    typst
 
     # package managers
     uv

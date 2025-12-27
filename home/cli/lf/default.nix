@@ -48,9 +48,13 @@ in {
       f = "filter";
       x = "extract";
       Z = "fzf_jump";
+
+      # goto
       gL = "follow-link";
       gM = "goto-file";
       gD = "cd ~/Downloads";
+      gn = "cd ~/Project/_personal/nix-dots";
+      "g<space>" = "push :cd<space>";
 
       # copy stuff about file
       Yf = "yank-file";
