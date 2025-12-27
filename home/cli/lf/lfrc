@@ -1,0 +1,134 @@
+&[ "$LF_LEVEL" -eq 1 ] || lf -remote "send $id echoerr \"Warning: You're in a nested lf instance!\""
+
+# extract with ouch
+cmd extract ${{
+    set -f
+    ouch decompress $fx
+}}
+
+# rename with vidir (from moreutils)
+cmd bulk-rename ${{
+    if test -n "$fs"
+	then
+		vimv -- $(basename -a -- $fs)
+	else
+		vimv -- $(dirname "$f")
+	fi
+    lf -remote "send $id :load; unselect"
+}}
+
+# use eza for file stats
+cmd on-select &{{
+	lf -remote "send $id set statfmt \"$(eza --total-size --time-style=iso -ld --color=always "$f" | sed 's/\\/\\\\/g;s/"/\\"/g')\""
+}}
+
+# use fzf to jump to a file
+cmd fzf_jump ${{
+    res="$(fd | fzf --reverse --header="Jump to location" || true)"
+    if [ -n "$res" ]; then
+        if [ -d "$res" ]; then
+            cmd="cd"
+        else
+            cmd="select"
+        fi
+        res="$(printf '%s' "$res" | sed 's/\\/\\\\/g;s/"/\\"/g')"
+        lf -remote "send $id $cmd \"$res\""
+    fi
+}}
+
+# show git status in info column
+set info custom
+
+cmd on-load &{{
+    cd "$(dirname "$1")" || exit 1
+    [ "$(git rev-parse --is-inside-git-dir 2>/dev/null)" = false ] || exit 0
+
+    cmds=""
+
+    for file in "$@"; do
+        case "$file" in
+            */.git|*/.git/*) continue;;
+        esac
+
+        status=$(git status --porcelain --ignored -- "$file" | cut -c1-2 | head -n1)
+
+        if [ -n "$status" ]; then
+            cmds="${cmds}addcustominfo ${file} \"$status\"; "
+        else
+            cmds="${cmds}addcustominfo ${file} ''; "
+        fi
+    done
+
+    lf -remote "send $id :$cmds"
+}}
+
+# dynamically set number of columns
+cmd on-init :{{
+    cmd on-redraw %{{
+        if [ "$lf_width" -le 80 ]; then
+            lf -remote "send $id set ratios 1:2"
+        elif [ "$lf_width" -le 160 ]; then
+            lf -remote "send $id set ratios 1:2:3"
+        else
+            lf -remote "send $id set ratios 1:2:3:5"
+        fi
+    }}
+
+    on-redraw
+}}
+
+# follow symbolic link
+cmd follow-link %{{
+  lf -remote "send $id select \"$(readlink -- "$f" | sed 's/\\/\\\\/g;s/"/\\"/g')\""
+}}
+
+# go to first file
+cmd goto-file &{{
+    if [ -n "$(find -mindepth 1 -maxdepth 1 -type d -print -quit)" ]; then
+        lf -remote "send $id :set dironly; bottom; set nodironly; down"
+    else
+        lf -remote "send $id top"
+    fi
+}}
+
+# use rsync to copy/move and report progress
+cmd paste &{{
+    set -- $(cat ~/.local/share/lf/files)
+    mode="$1"
+    shift
+    case "$mode" in
+        copy)
+            rsync -av --ignore-existing --progress -- "$@" . |
+            stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+            while IFS= read -r line; do
+                line="$(printf '%s' "$line" | sed 's/\\/\\\\/g;s/"/\\"/g')"
+                lf -remote "send $id echo \"$line\""
+            done
+            ;;
+        move)
+            mv -n -- "$@" .
+            lf -remote "send clear"
+            ;;
+    esac
+}}
+
+cmd yank-file $printf '%s' "$f" | wl-copy
+cmd yank-paths $printf '%s' "$fx" | wl-copy
+cmd yank-dirname &printf '%s' "$PWD" | wl-copy
+cmd yank-basename &basename -a -- $fx | head -c-1 | wl-copy
+cmd yank-basename-without-extension &basename -a -- $fx | sed -E 's/\.[^.]+$//' | head -c-1 | wl-copy
+
+# override default directory listing
+cmd pager ${{
+    if [ -f "$f" ]; then
+        $PAGER "$f"
+    elif [ -d "$f" ]; then
+        eza -T --color always "$f" | $PAGER
+    fi
+}}
+
+setlocal ~/Downloads sortby time
+setlocal ~/Downloads reverse
+
+setlocal /mnt/data/Downloads sortby time
+setlocal /mnt/data/Downloads reverse

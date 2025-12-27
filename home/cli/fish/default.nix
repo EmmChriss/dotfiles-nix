@@ -72,9 +72,6 @@ in {
 
       # mark subshells with FISH_TOP=1
       test -z "$FISH_TOP" && ${lib.getExe greetings} && set -x FISH_TOP 1
-
-      # ctrl-f to open file manager
-      bind \cf 'y; commandline -f repaint'
     '';
   };
 }

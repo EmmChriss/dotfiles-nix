@@ -92,25 +92,16 @@
         set="$(echo "9*$set+1" | bc -l)"      # apply 9x+1
         set="$(echo "l($set)/l(10)" | bc -l)" # apply log_10
         set="$(echo "$set*100" | bc)"         # apply x100
-        set="''${set%.*}"                   # round to integer
+        set="''${set%.*}"                     # round to integer
 
         # write new value to file
         echo "$new" > "$XDG_RUNTIME_DIR/bl" && echo "$new"
 
-        # interpolate with x steps, dividing the distance each time
-        # shellcheck disable=SC2034
-        for i in seq 10; do
-          current="$($cmd g)"
-          interp="$(echo "($current+$set)/2" | bc)"
-          $cmd s "$interp"
-          sleep 0.1
-        done
-        $cmd s "$set%"
+        # set
+        $cmd s "$set%" >/dev/null
       '';
     })
 
-    # Preview files in terminal
-    (writeShellScriptBin "preview" (builtins.readFile ./scripts/preview))
     # Rapid-charge mode for Lenovo laptops
     (writeShellScriptBin "ideapad-rc" (builtins.readFile ./scripts/ideapad-rc))
   ];

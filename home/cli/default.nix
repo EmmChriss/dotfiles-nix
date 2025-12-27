@@ -7,7 +7,7 @@
     ./bat
     ./fish
     ./helix
-    ./yazi
+    ./lf
     ./zellij
     ./rustic
     ./mega

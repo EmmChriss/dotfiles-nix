@@ -7,12 +7,12 @@ if [ -n "$id" ] && echo "$PWD" | grep -q 'sshfs'; then
 fi
 
 FILE="$1"
-HEIGHT="$2"
+# HEIGHT="$2"
 
 MIME="$(file -biL "$FILE")"
-MT="$(echo "$MIME" | cut -d ';' -f 1)"
+# MT="$(echo "$MIME" | cut -d ';' -f 1)"
 ME="$(echo "$MIME" | cut -d '=' -f 2)"
-EXT="${FILE#/*/*.}"
+# EXT="${FILE#/*/*.}"
 
 # Style on
 printf "\e[7m"
@@ -21,24 +21,17 @@ if test "$(file -bi "$FILE" | cut -d ';' -f 1)" = 'inode/symlink'; then
 fi
 
 # Write header: <path> <mimetype>... and some other info? with color
-printf "%s\n" "$MIME"
-
-# Style off
-printf "\e[0m"
-
-# Handle extension
-test -n "$EXT" && \
-case "$EXT" in
-esac
+printf "%s\n\e[0m" "$MIME"
 
 # Handle text-files specifically
 if echo "$ME" | grep -q -e 'ascii' -e 'utf'; then
-	highlight --stdout -O ansi --height "$HEIGHT" --base16 -s nord --force "$FILE" && exit
-	cat "$FILE" && exit
+  bat --paging=never --color=always --style=changes "$FILE" && exit
+  cat "$FILE" && exit
 fi
 
 # Handle archive files specifically
-als "$FILE" 2>/dev/null && exit
+ouch list --tree --yes --accessible --gitignore "$FILE" 2>/dev/null && exit
 
 # Fallback
 echo "File Type" && file --dereference --brief -- "$FILE" | sed 's/, /\n/g'
+
