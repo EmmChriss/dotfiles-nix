@@ -19,12 +19,12 @@ cmd bulk-rename ${{
 
 # use eza for file stats
 cmd on-select &{{
-	lf -remote "send $id set statfmt \"$(eza --total-size --time-style=iso -ld --color=always "$f" | sed 's/\\/\\\\/g;s/"/\\"/g')\""
+	lf -remote "send $id set statfmt \"$(eza --time-style=iso -ld --color=always "$f" | sed 's/\\/\\\\/g;s/"/\\"/g')\""
 }}
 
 # use fzf to jump to a file
 cmd fzf_jump ${{
-    res="$(fd | fzf --reverse --header="Jump to location" || true)"
+    res="$(fd -L | fzf --reverse --header="Jump to location" || true)"
     if [ -n "$res" ]; then
         if [ -d "$res" ]; then
             cmd="cd"
@@ -70,7 +70,7 @@ cmd on-init :{{
         elif [ "$lf_width" -le 160 ]; then
             lf -remote "send $id set ratios 1:2:3"
         else
-            lf -remote "send $id set ratios 1:2:3:5"
+            lf -remote "send $id set ratios 1:2:5"
         fi
     }}
 

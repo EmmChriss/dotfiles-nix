@@ -72,6 +72,9 @@ in {
 
       # mark subshells with FISH_TOP=1
       test -z "$FISH_TOP" && ${lib.getExe greetings} && set -x FISH_TOP 1
+
+      # fuzzy search files
+      bind \ct 'cd (fd -L -td | fzf)'
     '';
   };
 }

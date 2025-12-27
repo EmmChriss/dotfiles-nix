@@ -15,5 +15,10 @@
     tofi = super.tofi.overrideAttrs (old: {
       patches = (old.patches or []) ++ [./tofi-drun-print-desktop.patch];
     });
+
+    # ouch: enable unfree RAR support
+    ouch = super.ouch.override (old: {
+      enableUnfree = true;
+    });
   };
 }

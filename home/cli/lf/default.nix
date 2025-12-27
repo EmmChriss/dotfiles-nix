@@ -5,7 +5,7 @@
 }: let
   preview = pkgs.writeShellApplication {
     name = "preview.sh";
-    runtimeInputs = with pkgs; [bat ouch];
+    runtimeInputs = with pkgs; [coreutils file bat ouch exiftool jq];
     text = builtins.readFile ./preview.sh;
   };
 in {
@@ -38,11 +38,12 @@ in {
       icons = true;
       incfilter = true;
       incsearch = true;
-      hidden = true;
       cursorpreviewfmt = "\\033[7;2m";
     };
     keybindings = {
       "<enter>" = "shell";
+      "." = "set hidden!";
+
       R = "bulk-rename";
       D = "delete";
       f = "filter";
@@ -52,8 +53,6 @@ in {
       # goto
       gL = "follow-link";
       gM = "goto-file";
-      gD = "cd ~/Downloads";
-      gn = "cd ~/Project/_personal/nix-dots";
       "g<space>" = "push :cd<space>";
 
       # copy stuff about file

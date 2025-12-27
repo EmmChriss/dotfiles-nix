@@ -60,6 +60,29 @@
               rclone rcat backups-home:secrets.tar.gz.age <"$encrypted"
             } || notify-send "Secrets backup failed"
 
+            # upload general stuff
+            {
+              rclone copy /mnt/data/Media storage:media \
+                --fast-list --refresh-times --order-by size,descending \
+                --metadata --check-first --update --links --max-age 7d
+
+              rclone copy /mnt/data/Notes storage:notes \
+                --fast-list --refresh-times --order-by size,descending \
+                --metadata --check-first --update --links
+
+              rclone copy /mnt/data/Books storage:books \
+                --fast-list --refresh-times --order-by size,descending \
+                --metadata --check-first --update --links
+
+              rclone copy /mnt/data/Documents storage:documents \
+                --fast-list --refresh-times --order-by size,descending \
+                --metadata --check-first --update --links
+
+              rclone copy /mnt/data/Downloads storage:downloads \
+                --fast-list --refresh-times --order-by size,descending \
+                --metadata --check-first --update --links --max-age 7d --min-size 1K
+            } || notif-send "Failed to upload media and downloads"
+
             # do full backup
             {
               notify-send "Starting backup.."

@@ -19,8 +19,6 @@
         disable_time = false;
       };
 
-      cursor.no_hardware_cursors = true;
-
       # Monitors
       # See https://wiki.hyprland.org/Configuring/Monitors/
       monitor = [
