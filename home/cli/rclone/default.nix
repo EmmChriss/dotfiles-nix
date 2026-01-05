@@ -23,7 +23,7 @@ in {
     };
     Service = {
       Type = "notify";
-      ExecStart = "${pkgs.rclone}/bin/rclone --vfs-cache-mode full --vfs-cache-max-size 5G --no-modtime --ignore-checksum mount storage: /mnt/storage";
+      ExecStart = "${pkgs.rclone}/bin/rclone --vfs-cache-mode full --vfs-cache-max-size 5G --vfs-refresh --no-modtime --ignore-checksum mount storage: /mnt/storage";
       ExecStop = "/run/wrappers/bin/fusermount -u /mnt/storage";
     };
   };

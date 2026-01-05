@@ -17,6 +17,9 @@
     loupe
     papers
     vlc
+    mpv
+    calibre
+    jellyfin-media-player
 
     nautilus
     sushi # nautilus file preview
@@ -28,7 +31,7 @@
 
     # creation
     typora
-    godot_4
+    godot
     aseprite
     gimp
     inkscape

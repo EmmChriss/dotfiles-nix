@@ -77,10 +77,6 @@
               rclone copy /mnt/data/Documents storage:documents \
                 --fast-list --refresh-times --order-by size,descending \
                 --metadata --check-first --update --links
-
-              rclone copy /mnt/data/Downloads storage:downloads \
-                --fast-list --refresh-times --order-by size,descending \
-                --metadata --check-first --update --links --max-age 7d --min-size 1K
             } || notif-send "Failed to upload media and downloads"
 
             # do full backup
