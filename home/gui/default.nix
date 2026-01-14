@@ -20,6 +20,7 @@
     mpv
     calibre
     jellyfin-media-player
+    zoom
 
     nautilus
     sushi # nautilus file preview
