@@ -10,6 +10,8 @@ os:
 home:
     nh home switch . --fallback
 
+upgrade: format update os home clean
+
 os-rollback:
     nh os rollback
 

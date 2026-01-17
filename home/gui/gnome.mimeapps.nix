@@ -9,7 +9,7 @@
   Decibels = "org.gnome.Decibels.desktop";
   Loupe = "org.gnome.Loupe.desktop";
   Calendar = "org.gnome.Calendar.desktop";
-  Showtime = "vlc.desktop";
+  Showtime = "mpv.desktop";
   Software = "org.gnome.Software.desktop";
   Yelp = "org.gnome.Yelp.desktop";
   Calls = "org.gnome.Calls.desktop";

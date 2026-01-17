@@ -23,11 +23,39 @@
       Hello $USER!
       <c-f> to open file manager
       <c-t> to fuzzy search files
+      <a-c> to fuzzy change directory
+      <c-r> to fuzzy search history
       EOF
     '';
   };
 in {
   home.packages = [pkgs.grc];
+
+  programs.fzf = let
+    fd = "${pkgs.fd}/bin/fd";
+    tree = "${pkgs.tree}/bin/tree";
+  in {
+    enable = true;
+    enableBashIntegration = true;
+    enableFishIntegration = true;
+    defaultCommand = "${fd} -tf";
+    defaultOptions = [
+      "--height 40%"
+      "--border"
+    ];
+    # alt-c
+    changeDirWidgetCommand = "${fd} -H -td";
+    changeDirWidgetOptions = [
+      "--preview '${tree} -C {} | head -200'"
+    ];
+    # ctrl-t
+    fileWidgetCommand = "${fd} -H -tf";
+    fileWidgetOptions = [
+      "--preview 'head {}'"
+    ];
+    # ctrl-r
+    historyWidgetOptions = [];
+  };
 
   # enable fish shell
   programs.fish = {
@@ -72,9 +100,6 @@ in {
 
       # mark subshells with FISH_TOP=1
       test -z "$FISH_TOP" && ${lib.getExe greetings} && set -x FISH_TOP 1
-
-      # fuzzy search files
-      bind \ct 'cd (fd -L -td | fzf)'
     '';
   };
 }

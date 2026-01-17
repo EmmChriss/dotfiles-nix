@@ -15,6 +15,8 @@
       zenity
     ];
     text = ''
+            # make sure rclone config is encrypted before backing up
+            rclone config encryption set
             # make sure we even have internet connectivity
             ping -c3 linux.org >/dev/null 2>&1 || exit 1
             # ask user about starting backup
@@ -77,7 +79,7 @@
               rclone copy /mnt/data/Documents storage:documents \
                 --fast-list --refresh-times --order-by size,descending \
                 --metadata --check-first --update --links
-            } || notif-send "Failed to upload media and downloads"
+            } || notify-send "Failed to upload media and downloads"
 
             # do full backup
             {
@@ -87,7 +89,7 @@
 
             {
               notify-send "Cleaning backup.."
-              rustic forget --prune --max-repack 0 --check-index
+              rustic forget --prune --max-repack 0 --check-index --delete-unchanged
             } || notify-send "Cleaning backup failed"
 
             {
@@ -111,10 +113,10 @@ in {
 
     forget = {
       prune = true;
-      keep-last = 2;
-      keep-daily = 2;
-      keep-weekly = 2;
-      keep-monthly = 2;
+      keep-last = 5;
+      keep-daily = 5;
+      keep-weekly = 4;
+      keep-monthly = 6;
     };
 
     backup = {
@@ -127,13 +129,13 @@ in {
         ".backupignore"
       ];
       iglobs = [
+        "!home/*/.local/share/containers"
+        "!home/*/.local/share/fnm"
+        "!home/*/.local/share/uv"
+        "!home/*/.local/state"
         "!.bun"
         "!.cache"
         "!.cargo"
-        "!.local/share/containers"
-        "!.local/share/fnm"
-        "!.local/share/uv"
-        "!.local/state"
         "!.npm"
         "!.pnpm"
         "!.rustup"
@@ -150,7 +152,6 @@ in {
         {sources = ["/mnt/data/Notes"];}
         {sources = ["/mnt/data/Media"];}
         {sources = ["/mnt/data/Documents"];}
-        {sources = ["/mnt/data/Downloads"];}
       ];
     };
   };
@@ -174,6 +175,7 @@ in {
     };
     Install = {
       WantedBy = ["timers.target"];
+      Requires = ["mnt-storage.service"];
     };
   };
 }

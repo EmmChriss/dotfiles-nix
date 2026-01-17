@@ -45,42 +45,14 @@
       loupe
       papers
       nautilus
-      vlc
+      mpv
       librewolf
       qbittorrent
       inkscape
+      teams-for-linux
+      zoom
     ];
   };
-
-  # XDG default apps
-  # xdg.mimeApps = let
-  #   browser = "librewolf.desktop";
-  #   files = "com.system76.CosmicFiles.desktop";
-  #   docs = "org.gnome.Papers.desktop";
-  #   videos = "vlc.desktop";
-  # in {
-  #   enable = true;
-  #   associations.added = {
-  #     "x-scheme-handler/msteams" = ["teams-for-linux.desktop"];
-  #   };
-  #   associations.removed = {};
-  #   defaultApplications = {
-  #     # web
-  #     "x-scheme-handler/http" = [browser];
-  #     "x-scheme-handler/https" = [browser];
-  #     "x-scheme-handler/mailto" = [browser];
-  #     "x-scheme-handler/ftp" = [browser];
-  #     "x-scheme-handler/chrome" = [browser];
-  #     "application/xhtml+xml" = [browser];
-  #     "text/html" = [browser];
-
-  #     # file types
-  #     "application/pdf" = [
-  #       docs
-  #       browser
-  #     ];
-  #   };
-  # };
 
   dconf = {
     enable = true;

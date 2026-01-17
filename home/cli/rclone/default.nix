@@ -14,7 +14,7 @@ in {
     inherit RCLONE_PASSWORD_COMMAND;
   };
 
-  home.shellAliases.mnt-nas = "systemctl --user start mnt-storage mnt-encrypted";
+  home.shellAliases.mnt-nas = "systemctl --user start mnt-storage";
 
   systemd.user.services.mnt-storage = {
     Unit = {
@@ -23,20 +23,8 @@ in {
     };
     Service = {
       Type = "notify";
-      ExecStart = "${pkgs.rclone}/bin/rclone --vfs-cache-mode full --vfs-cache-max-size 5G --vfs-refresh --no-modtime --ignore-checksum mount storage: /mnt/storage";
+      ExecStart = "${pkgs.rclone}/bin/rclone --vfs-cache-mode full --vfs-cache-min-free-space 5G --vfs-refresh --no-modtime --ignore-checksum --rc --rc-addr 'localhost:5572' --rc-serve --rc-web-gui --rc-web-gui-no-open-browser mount storage: /mnt/storage";
       ExecStop = "/run/wrappers/bin/fusermount -u /mnt/storage";
-    };
-  };
-
-  systemd.user.services.mnt-encrypted = {
-    Unit = {
-      Description = "Programmatic mount configuration with rsync";
-      After = ["network-online.target"];
-    };
-    Service = {
-      Type = "notify";
-      ExecStart = "${pkgs.rclone}/bin/rclone --vfs-cache-mode full --vfs-cache-max-size 5G --no-modtime --ignore-checksum mount encrypted: /mnt/encrypted";
-      ExecStop = "/run/wrappers/bin/fusermount -u /mnt/encrypted";
     };
   };
 }

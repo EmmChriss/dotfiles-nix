@@ -24,7 +24,7 @@ cmd on-select &{{
 
 # use fzf to jump to a file
 cmd fzf_jump ${{
-    res="$(fd -L | fzf --reverse --header="Jump to location" || true)"
+    res="$(fd -H -td | fzf --height 100% --border --preview 'tree -C {} | head -200'  --reverse --header="Jump to location" || true)"
     if [ -n "$res" ]; then
         if [ -d "$res" ]; then
             cmd="cd"

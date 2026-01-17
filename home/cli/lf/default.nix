@@ -9,7 +9,7 @@
     text = builtins.readFile ./preview.sh;
   };
 in {
-  home.packages = with pkgs; [preview eza fzf vimv-rs fd];
+  home.packages = with pkgs; [preview eza fzf vimv-rs fd tree];
 
   programs.fish.interactiveShellInit = ''
     function lfcd --wraps="lf" --description="lf - Terminal file manager (changing directory on exit)"
