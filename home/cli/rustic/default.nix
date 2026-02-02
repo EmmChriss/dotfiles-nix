@@ -15,12 +15,13 @@
       zenity
     ];
     text = ''
-            # make sure rclone config is encrypted before backing up
-            rclone config encryption set
             # make sure we even have internet connectivity
             ping -c3 linux.org >/dev/null 2>&1 || exit 1
             # ask user about starting backup
             zenity --question --text "Start backup now?" || exit 1
+
+            # make sure rclone config is encrypted before backing up
+            rclone config encryption check || rclone config encryption set
 
             # make sure we are concerned with current user
             cd ~
@@ -152,6 +153,7 @@ in {
         {sources = ["/mnt/data/Notes"];}
         {sources = ["/mnt/data/Media"];}
         {sources = ["/mnt/data/Documents"];}
+        {sources = ["/mnt/win/Users"];}
       ];
     };
   };

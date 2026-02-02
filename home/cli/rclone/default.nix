@@ -18,7 +18,7 @@ in {
 
   systemd.user.services.mnt-storage = {
     Unit = {
-      Description = "Programmatic mount configuration with rsync";
+      Description = "Programmatic mount configuration with rclone";
       After = ["network-online.target"];
     };
     Service = {

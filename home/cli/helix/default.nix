@@ -77,6 +77,20 @@
         C-right = "move_next_word_start";
       };
     };
+    languages.language = [
+      {
+        name = "scss";
+        language-servers = [
+          {name = "some-sass-language-server";}
+        ];
+      }
+      {
+        name = "css";
+        language-servers = [
+          {name = "some-sass-language-server";}
+        ];
+      }
+    ];
     languages.language-server = {
       typescript-language-server = {
         command = "${lib.getExe pkgs.bun}";
@@ -85,6 +99,12 @@
           "${pkgs.typescript-language-server}/lib/node_modules/typescript-language-server/lib/cli.mjs"
           "--stdio"
         ];
+      };
+      some-sass-language-server = {
+        command = "some-sass-language-server --stdio";
+        args = ["--stdio"];
+        # see https://wkillerud.github.io/some-sass/language-server/settings.html for all available settings
+        config.somesass.workspace.loadPaths = [];
       };
     };
   };

@@ -17,5 +17,6 @@
     # wayland
     wl-clipboard
     wf-recorder
+    wlr-randr
   ];
 }

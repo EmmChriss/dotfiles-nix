@@ -87,6 +87,7 @@
     # Home-manager configurations
     homeConfigurations.morga = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      extraSpecialArgs.inputs = inputs;
       modules = [
         # Configure nixpkgs
         nixpkgsConfig
