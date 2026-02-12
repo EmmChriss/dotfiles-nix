@@ -25,6 +25,7 @@
         ",preferred,auto,1"
         "desc:Lenovo Group Limited LEN L220xwC VL-18504,preferred,auto-right,1"
         "desc:Philips Consumer Electronics Company Philips 226V4 UK01342044314,preferred,auto-left,1"
+        # "desc:Technical Concepts Ltd Beyond TV 0x00010000,1920x1080@59.938999Hz,1"
       ];
 
       # Workspaces

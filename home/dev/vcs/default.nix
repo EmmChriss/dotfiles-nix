@@ -31,7 +31,7 @@ in {
   };
 
   # jujutsu: enhanced git
-  home.packages = [pkgs.jjui];
+  home.packages = [pkgs.jjui pkgs.meld];
   programs.jujutsu = {
     enable = true;
     settings = {
@@ -78,6 +78,7 @@ in {
         pager = "${pkgs.delta}/bin/delta";
         diff-formatter = ":git";
         diff-editor = ":builtin";
+        merge-editor = "meld";
 
         # verify signatures only when `show`-ing change
         show-cryptographic-signatures = true;

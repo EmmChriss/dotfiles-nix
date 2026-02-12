@@ -232,6 +232,8 @@
   # Gaming mode
   specialisation.gaming.configuration = {
     hardware.nvidia = {
+      # due to audio bug happening in open drivers within wine
+      open = false;
       prime = {
         reverseSync.enable = lib.mkForce false;
         sync.enable = lib.mkForce true;
@@ -259,7 +261,7 @@
     programs.gamescope = {
       enable = true;
       capSysNice = true;
-      args = ["--rt"];
+      args = ["--rt" "--adaptive-sync"];
       env =
         # for Prime render offload on Nvidia laptops.
         # Also requires `hardware.nvidia.prime.offload.enable`.
@@ -288,7 +290,13 @@
               });
         });
       in
-        hackedPkgs.lutris;
+        hackedPkgs.lutris.override {
+          extraLibraries = pkgs:
+            with pkgs; [
+              libadwaita
+              gtk4
+            ];
+        };
     in [
       # monitor fps and stuff
       mangohud
