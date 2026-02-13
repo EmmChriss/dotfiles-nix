@@ -32,8 +32,5 @@
       runtimeInputs = [xh];
       text = ''${lib.getExe pkgs.xh} "$@"'';
     })
-
-    # git
-    gitui
   ];
 }

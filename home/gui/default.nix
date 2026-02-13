@@ -37,7 +37,38 @@
     gimp
     inkscape
     reaper
+
+    # fallback
+    ungoogled-chromium
   ];
+
+  xdg.configFile."chromium-flags.conf".text = ''
+    --disable-gpu-driver-bug-workarounds
+    --ignore-gpu-blocklist
+    --new-canvas-2d-api
+    --enable-accelerated-2d-canvas
+    --ozone-platform=wayland
+    --enable-features=WaylandWindowDecorations
+    --enable-gpu-rasterization
+    --enable-gpu-compositing
+    --enable-zero-copy
+    --enable-raw-draw
+    --enable-webrtc-pipewire-capturer
+    --enable-features=WebRTCPipeWireCapturer
+    --enable-features=VaapiVideoDecode
+    --enable-features=VaapiVideoDecodeLinuxGL
+    --use-gl=angle
+    --use-angle=gl
+
+    --enable-parallel-downloading
+    --process-per-site
+    --enable-native-notifications
+
+    # This is workaround for the bug:
+    # https://github.com/hyprwm/Hyprland/discussions/11961
+    # It must be removed once the bug is fixed and chrome doesn't crash when moved between monitors.
+    --disable-features=WaylandWpColorManagerV1
+  '';
 
   xdg.mimeApps = {
     enable = true;
