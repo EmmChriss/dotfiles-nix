@@ -46,6 +46,7 @@
                 satty
                 jujutsu
                 rbw
+                flyctl
                 ;
             }
         )
