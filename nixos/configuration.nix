@@ -203,6 +203,8 @@
 
   # Nvidia
   hardware.nvidia = {
+    open = true;
+
     # creates specialization called "battery-saver"
     primeBatterySaverSpecialisation = true;
 
@@ -313,7 +315,15 @@
   programs.adb.enable = true;
 
   services.dbus.implementation = "broker";
-  services.udisks2.enable = true;
+
+  services.udisks2 = {
+    enable = true;
+    settings."udisks.conf".defaults = {
+      "defaults" = "noatime";
+      "ntfs:ntfs3_defaults" = "uid=$UID,gid=$GID";
+      "ntfs:ntfs3_allow" = "uid=$UID,gid=$GID,umask,dmask,fmask,iocharset,discard,nodiscard,sparse,nosparse,hidden,nohidden,sys_immutable,showmeta,noshowmeta,prealloc,noprealloc,hide_dot_files,nohide_dot_files,windows_names,nocase,case";
+    };
+  };
 
   # DO NOT CHANGE
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
