@@ -29,12 +29,12 @@ repair:
 
 clean:
     sudo journalctl --rotate --vacuum-time=48h
-    nh clean all --optimise --ask --keep-since 2d
+    nh clean all --optimise --ask --keep-since 2d --keep 2
     just repair
 
 clean-all:
     sudo journalctl --rotate --vacuum-time=1h
-    nh clean all --optimise --ask
+    nh clean all --optimise --ask --keep 2
     just repair
 
 format:

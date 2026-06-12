@@ -26,7 +26,7 @@
     sushi # nautilus file preview
     nautilus-open-any-terminal
 
-    qbittorrent
+    qbittorrent-enhanced
     teams-for-linux
     popcorntime
 
@@ -87,7 +87,7 @@
       nautilus
       mpv
       librewolf
-      qbittorrent
+      qbittorrent-enhanced
       inkscape
       teams-for-linux
       zoom
