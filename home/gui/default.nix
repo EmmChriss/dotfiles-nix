@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     # ./gnome.mimeapps.nix
     ./pqiv
@@ -108,6 +112,9 @@
 
   gtk = {
     enable = true;
+
+    # setting a global theme in gt4 is buggy
+    gtk4.theme = config.gtk.theme;
 
     theme = {
       package = pkgs.flat-remix-gtk;

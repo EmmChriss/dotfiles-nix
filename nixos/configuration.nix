@@ -124,6 +124,9 @@
     # mouse, and I didn't look into how to disable just that
     # powerManagement.powertop.enable = true;
     pkgs.powertop
+
+    # adb and others
+    pkgs.android-tools
   ];
 
   # Audio
@@ -186,10 +189,7 @@
   '';
 
   # Display manager
-  services.displayManager.gdm = {
-    enable = true;
-    wayland = true;
-  };
+  services.displayManager.gdm.enable = true;
 
   # Window manager
   # NOTE: hyprland is installed here, but configured in home-manager
@@ -198,6 +198,9 @@
     withUWSM = true;
     xwayland.enable = true;
   };
+
+  # symlink to current hyprland's lua stubs
+  environment.etc."hl.meta.lua".source = "${pkgs.hyprland}/share/hypr/stubs/hl.meta.lua";
 
   hardware.graphics.enable = true;
 
@@ -310,9 +313,6 @@
 
   # enable nix-ld
   programs.nix-ld.enable = true;
-
-  # enable android tools and associated udev rules
-  programs.adb.enable = true;
 
   services.dbus.implementation = "broker";
 

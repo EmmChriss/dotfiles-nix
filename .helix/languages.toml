@@ -2,3 +2,6 @@
 name = "nix"
 formatter = { command = "nix", args = ["fmt", "--"] }
 auto-format = true
+
+[language-server.lua-language-server.config]
+Lua.workspace.library = ["/etc/hl.meta.lua"]

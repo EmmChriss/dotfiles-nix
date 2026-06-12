@@ -22,12 +22,10 @@
     enable = true;
     userDirs = {
       enable = true;
-      documents = "$HOME/Documents";
-      download = "$HOME/Downloads";
+      setSessionVariables = true;
       videos = "$HOME/Media/Videos";
       music = "$HOME/Media/Music";
       pictures = "$HOME/Media/Pictures";
-      desktop = "$HOME/Desktop";
     };
   };
 

@@ -14,16 +14,6 @@
     '';
   };
 
-  bar-lang = pkgs.writeShellApplication {
-    name = "bar-lang";
-    runtimeInputs = [pkgs.hyprland pkgs.socat];
-    text = ''
-      socat - UNIX-CONNECT:"$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" |\
-      grep -E '^activelayout>>' --line-buffered |\
-      cut -d, -f2
-    '';
-  };
-
   bar-wg = pkgs.writeShellApplication {
     name = "bar-wg";
     runtimeInputs = [pkgs.networkmanager];
@@ -36,13 +26,11 @@
     '';
   };
 in {
-  home.packages = [bar-lang];
-
   programs.waybar = {
     enable = true;
     systemd = {
       enable = true;
-      target = "graphical-session.target";
+      targets = ["graphical-session.target"];
     };
     settings.mainBar = {
       layer = "top";
@@ -62,9 +50,9 @@ in {
         "memory"
         "battery"
         "tray"
-        # "custom/language"
         "hyprland/language"
         "clock"
+        "custom/power_button"
       ];
 
       "hyprland/workspaces" = {
@@ -96,7 +84,7 @@ in {
 
       tray.spacing = 10;
 
-      clock.format = "{:%Y-%m-%d %H:%M}";
+      clock.format = "{:%Y-%m-%d W%W %a %H:%M}";
 
       cpu.format = "U:{usage}% L:{load} ";
 
@@ -164,9 +152,9 @@ in {
         format-ro = "RO";
       };
 
-      "custom/language" = {
-        exec = lib.getExe bar-lang;
-        format = "{:.3}";
+      "custom/power_button" = {
+        on-click = "${lib.getExe pkgs.wlogout}";
+        format = "⏼";
       };
     };
     style = ./style.css;
