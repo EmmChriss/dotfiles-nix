@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs,
   lib,
   ...
@@ -25,6 +26,11 @@
   sattyArgs = ''--early-exit --copy-command wl-copy --save-after-copy'';
   grimArgs = ''-c -l9 -t ppm'';
 in {
+  home.packages = [
+    # graphical window switcher
+    inputs.snappy-switcher.packages.${pkgs.system}.default
+  ];
+
   wayland.windowManager.hyprland.settings = {
     exitcmd._var = "uwsm stop";
     terminal._var = "xargs uwsm-app -- alacritty";

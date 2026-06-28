@@ -25,13 +25,15 @@ in {
       rounding = 3;
 
       blur = {
-        enabled = true;
+        # enabled = true;
+        enabled = false;
         size = 3;
         passes = 1;
       };
 
       shadow = {
-        enabled = true;
+        # enabled = true;
+        enabled = false;
         # color = "rgba(1a1a1aee)";
       };
     };
@@ -86,7 +88,7 @@ in {
 
     dwindle = {
       preserve_split = true;
-      smart_split = true;
+      permanent_direction_override = true;
     };
   };
 }

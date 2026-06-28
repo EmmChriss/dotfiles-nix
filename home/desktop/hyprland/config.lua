@@ -69,14 +69,16 @@ hl.window_rule({ match = { tag = "sg" }, rounding = 0 })
 
 -- Window rules
 -- See https://wiki.hypr.land/Configuring/Basics/Window-Rules/
+
 hl.window_rule({
-  match = { class = "(pinentry)(.*)" },
+  match = { initial_class = "(pinentry)(.*)" },
   stay_focused = true,
 })
 
 
 -- Animations
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Animations/
+
 hl.curve("overshoot", { type = "bezier", points = {{0.6, 0.25}, {0.3, 1}} })
 
 hl.animation({ leaf = "windows", enabled = true, speed = 5, bezier = "overshoot" })
@@ -90,6 +92,7 @@ hl.animation({ leaf = "zoomFactor", enabled = true, speed = 1, bezier = "oversho
 
 -- Gestures
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Gestures/
+
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
 hl.gesture({ fingers = 3, direction = "up", action = "fullscreen" })
 hl.gesture({ fingers = 2, direction = "pinch", action = "cursorZoom", zoom_level = 1, mode = "live" })
@@ -107,31 +110,56 @@ hl.bind("SUPER + Return",       hl.dsp.exec_cmd(terminal))
 hl.bind("SUPER + Escape",        hl.dsp.exec_cmd("hyprctl reload"))
 hl.bind("SUPER + CTRL + Escape", hl.dsp.exec_cmd(exitcmd))
 
--- window manipulation
+-- window state manipulation
 hl.bind("SUPER + Q",         hl.dsp.window.close())
 hl.bind("SUPER + SHIFT + Q", hl.dsp.window.kill())
 hl.bind("SUPER + S",         hl.dsp.window.float())
-hl.bind("SUPER + T",         hl.dsp.window.pseudo())
--- hl.bind("SUPER + J",      hl.dsp.window.togglesplit())
+hl.bind("SUPER + P",         hl.dsp.window.pseudo())
+hl.bind("SUPER + J",         hl.dsp.layout("togglesplit"))
 hl.bind("SUPER + F",         hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 hl.bind("SUPER + CTRL + F",  hl.dsp.window.fullscreen({ mode = "maximized" }))
 hl.bind("SUPER + P",         hl.dsp.window.pin())
 
--- focus and move windows with arrow keys
-for dir, key in pairs({ l = "left", r = "right", u = "up", d = "down" }) do
-  hl.bind("SUPER + " .. key,         hl.dsp.focus({ direction = dir }))
-  hl.bind("SUPER + SHIFT + " .. key, hl.dsp.window.move({ direction = dir }))
+-- directional window manipulation
+PRESELECT_NOTIFICATION = nil --[[@as HL.Notification?]]
+DIRNAME = { l = "LEFT", d = "DOWN", u = "UP", r = "RIGHT" }
+local function preselect(dir)
+  return function()
+    hl.dispatch(hl.dsp.layout("preselect " .. dir))
+    if PRESELECT_NOTIFICATION ~= nil then
+      PRESELECT_NOTIFICATION:dismiss()
+    end
+    if DIRNAME[dir] ~= nil then
+      PRESELECT_NOTIFICATION = hl.notification.create({ text = "Preselect: " .. DIRNAME[dir] .. "\n<hold to dismiss>", timeout = 9999999999 })
+    end
+  end
 end
+
+-- clear dangling preselect notifications on config refresh
+for _, notif in ipairs(hl.notification.get()) do
+  if notif:get_text():find("Preselect:") ~= nil then
+    notif:dismiss()
+  end
+end
+
+for key, dir in pairs({
+  left = "l", down = "d", up = "u", right = "r",
+  -- A = "l",    S = "d",    W = "u",  D = "r",
+  -- H = "l",    J = "d",    K = "u",  L = "r",
+}) do
+  -- focus windows in direction with directional keys
+  hl.bind("SUPER + " .. key,         hl.dsp.focus({ direction = dir }))
+  -- move windows in direction with directional keys
+  hl.bind("SUPER + SHIFT + " .. key, hl.dsp.window.move({ direction = dir }))
+  -- preselect a direction for next window with directional keys
+  hl.bind("SUPER + CTRL + " .. key, preselect(dir))
+end
+-- undo preselect
+hl.bind("SUPER + Control_L", preselect("_"), { long_press = true })
 
 -- focus and move windows between workspaces with numbers
 for i = 1, 10 do
-  local k
-  if i == 10 then
-    k = 0
-  else
-    k = i
-  end
-
+  local k = (i == 10) and 0 or i
   -- focus workspace
   hl.bind("SUPER + " .. tostring(k),       hl.dsp.focus({ workspace = tostring(i) }))
   hl.bind("SUPER + ALT + " .. tostring(k), hl.dsp.focus({ workspace = tostring(10 + i) }))
@@ -174,15 +202,38 @@ hl.bind("Print",         hl.dsp.exec_cmd(printscr))
 hl.bind("SUPER + Print", hl.dsp.exec_cmd(printscrSelect))
 
 -- zoom
-hl.bind("SUPER + CTRL + mouse_up", function()
-  local prev = hl.get_config("cursor.zoom_factor")
-  local next = math.max(prev - 0.5, 1)
-  hl.config({ cursor = { zoom_factor = next } })
-end, { mouse = true })
+local function zoom(offset)
+  local MAX_ZOOM = 3
+  local MIN_ZOOM = 1
+  local ZOOM_TOGGLE_FACTOR = 1.5
 
-hl.bind("SUPER + CTRL + mouse_down", function()
-  local prev = hl.get_config("cursor.zoom_factor")
-  local next = math.min(prev + 0.5, 10)
-  hl.config({ cursor = { zoom_factor = next } })
-end, { mouse = true })
+  local current = hl.get_config("cursor.zoom_factor")
+  if offset ~= nil then
+      current = current + offset
+  elseif current ~= MIN_ZOOM then
+      current = MIN_ZOOM
+  else
+      current = ZOOM_TOGGLE_FACTOR
+  end
+  current = math.max(MIN_ZOOM, math.min(MAX_ZOOM, current))
+  hl.config({ cursor = { zoom_factor = current } })
+end
 
+hl.bind("SUPER + Z", zoom)
+hl.bind("SUPER + KP_ADD", function()
+    zoom(0.5)
+end)
+hl.bind("SUPER + minus", function()
+    zoom(-0.5)
+end)
+
+--
+-- Extra utilities
+--
+
+-- SUPER+Tab and ALT+Tab window switcher
+hl.exec_cmd("snappy-switcher --daemon")
+-- Alt+Tab (standard MRU)
+hl.bind("ALT + Tab", hl.dsp.exec_cmd("snappy-switcher next --mod alt"))
+-- Super+Tab (workspace-filtered)
+-- hl.bind("SUPER + TAB", hl.dsp.exec_cmd("snappy-switcher next --workspace --mod super"))
