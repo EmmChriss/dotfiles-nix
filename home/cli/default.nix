@@ -33,6 +33,7 @@
     tealdeer
     fzf
     ouch
+    progress
 
     # media processing
     imagemagick
