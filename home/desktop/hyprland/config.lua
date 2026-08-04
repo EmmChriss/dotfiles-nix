@@ -54,17 +54,10 @@ end
 -- Smart gaps: no gaps when only window on workspace
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, gaps_in = 0 })
-
--- tag windows for smart gaps
-hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, tag = "+sg" })
-hl.window_rule({ match = { float = false, workspace = "f[1]" }, tag = "+sg" })
-
--- remove tag from exceptions
-hl.window_rule({ match = { class = "REAPER" }, tag = "-sg" })
-
--- apply SG style to remaining tagged windows
-hl.window_rule({ match = { tag = "sg" }, border_size = 0 })
-hl.window_rule({ match = { tag = "sg" }, rounding = 0 })
+hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
+hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 0 })
+hl.window_rule({ match = { float = false, workspace = "f[1]" }, border_size = 0 })
+hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 0 })
 
 
 -- Window rules
@@ -81,13 +74,13 @@ hl.window_rule({
 
 hl.curve("overshoot", { type = "bezier", points = {{0.6, 0.25}, {0.3, 1}} })
 
-hl.animation({ leaf = "windows", enabled = true, speed = 5, bezier = "overshoot" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 5, bezier = "overshoot", style = "popin 80%" })
-hl.animation({ leaf = "border", enabled = true, speed = 10, bezier = "overshoot" })
-hl.animation({ leaf = "borderangle", enabled = true, speed = 8, bezier = "overshoot" })
-hl.animation({ leaf = "fade", enabled = true, speed = 7, bezier = "overshoot" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "overshoot" })
-hl.animation({ leaf = "zoomFactor", enabled = true, speed = 1, bezier = "overshoot" })
+-- hl.animation({ leaf = "windows", enabled = true, speed = 5, bezier = "overshoot" })
+-- hl.animation({ leaf = "windowsOut", enabled = true, speed = 5, bezier = "overshoot", style = "popin 80%" })
+-- hl.animation({ leaf = "border", enabled = true, speed = 10, bezier = "overshoot" })
+-- hl.animation({ leaf = "borderangle", enabled = true, speed = 8, bezier = "overshoot" })
+-- hl.animation({ leaf = "fade", enabled = true, speed = 7, bezier = "overshoot" })
+-- hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "overshoot" })
+-- hl.animation({ leaf = "zoomFactor", enabled = true, speed = 1, bezier = "overshoot" })
 
 
 -- Gestures

@@ -23,7 +23,7 @@ in {
     };
     Service = {
       Type = "notify";
-      ExecStart = "${pkgs.rclone}/bin/rclone --vfs-cache-mode full --vfs-cache-min-free-space 5G --vfs-refresh --no-modtime --ignore-checksum --rc --rc-addr 'localhost:5572' --rc-serve --rc-web-gui --rc-web-gui-no-open-browser mount storage: /mnt/storage";
+      ExecStart = "${pkgs.rclone}/bin/rclone --vfs-cache-mode full --vfs-cache-min-free-space 20G --vfs-cache-max-age 5m --vfs-refresh --vfs-fast-fingerprint --no-modtime --ignore-checksum --rc --rc-addr 'localhost:5572' --rc-serve --rc-web-gui --rc-web-gui-no-open-browser mount storage: /mnt/storage";
       ExecStop = "/run/wrappers/bin/fusermount -u /mnt/storage";
     };
   };

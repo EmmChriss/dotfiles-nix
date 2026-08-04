@@ -53,6 +53,8 @@
                 jujutsu
                 rbw
                 flyctl
+                yt-dlp
+                jq
                 ;
             }
         )

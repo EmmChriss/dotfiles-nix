@@ -10,7 +10,9 @@
       # nixd
       nil
       # rust-analyzer # installed through rustup
-      # python312Packages.python-lsp-server
+      # ty # puthon
+      # ruff # python
+      python314Packages.python-lsp-server
       taplo # toml
       zls
       # docker-langserver
@@ -89,6 +91,13 @@
         language-servers = [
           {name = "some-sass-language-server";}
         ];
+      }
+      {
+        name = "json";
+        formatter = {
+          command = "${lib.getExe pkgs.jq}";
+          args = ["."];
+        };
       }
     ];
     languages.language-server = {

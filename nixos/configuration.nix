@@ -60,10 +60,11 @@
     loader = {
       timeout = 1;
       efi = {
-        canTouchEfiVariables = true;
+        canTouchEfiVariables = false;
         efiSysMountPoint = "/boot/efi";
       };
       grub = {
+        memtest86.enable = true;
         efiSupport = true;
         device = "nodev";
       };

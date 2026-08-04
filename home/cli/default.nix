@@ -44,5 +44,9 @@
     nix-tree
     comma
     steam-run-free
+
+    # stuff
+    yt-dlp
+    jq
   ];
 }
