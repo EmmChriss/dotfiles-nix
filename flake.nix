@@ -27,43 +27,38 @@
   outputs = {
     self,
     nixpkgs,
-    nixpkgs-unstable,
     home-manager,
     ...
   } @ inputs: let
     inherit (self) outputs;
     forAllSystems = fn: nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed fn;
     forAllPackages = fn: forAllSystems (system: fn nixpkgs.legacyPackages.${system});
-    nixpkgsConfig = {
-      # Always allow unfree
-      nixpkgs.config.allowUnfree = true;
+    nixpkgsConfig.nixpkgs.config.allowUnfree = true;
+    nixpkgsConfig.nixpkgs.overlays = [
+      # use the unstable version of some packages
+      (
+        self: super: {
+          inherit
+            (
+              import inputs.nixpkgs-unstable {
+                system = "x86_64-linux";
+                config.allowUnfree = true;
+              }
+            )
+            yt-dlp
+            graphify
+            claude-code
+            jujutsu
+            jjui
+            stirling-pdf-desktop
+            ;
+        }
+      )
 
-      # Enable overlays
-      nixpkgs.overlays = [
-        # use the unstable version of some packages
-        (
-          let
-            pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
-          in
-            self: super: {
-              inherit
-                (pkgs)
-                helix
-                satty
-                jujutsu
-                rbw
-                flyctl
-                yt-dlp
-                jq
-                ;
-            }
-        )
-
-        # import some of our own overlays
-        self.overlays.modifications
-        self.overlays.additions
-      ];
-    };
+      # import some of our own overlays
+      self.overlays.modifications
+      self.overlays.additions
+    ];
   in {
     # Devshell
     devShell = forAllPackages (

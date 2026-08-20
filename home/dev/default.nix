@@ -32,5 +32,7 @@
       runtimeInputs = [xh];
       text = ''${lib.getExe pkgs.xh} "$@"'';
     })
+
+    graphify
   ];
 }

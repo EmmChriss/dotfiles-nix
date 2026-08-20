@@ -7,7 +7,6 @@
 
   services.wl-clip-persist.enable = true;
   services.network-manager-applet.enable = true;
-  xsession.preferStatusNotifierItems = true;
 
   home.packages = with pkgs; [
     playerctl

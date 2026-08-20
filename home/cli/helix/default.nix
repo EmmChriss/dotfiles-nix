@@ -3,6 +3,12 @@
   lib,
   ...
 }: {
+  xdg.configFile."helix/runtime".text = ''
+    DO NOT RUN hx --grammar commands; it will break grammars
+    Instead, use the nixpkgs ./generate_grammars.py in the helix package
+    and override the helix package to use that as runtime dir.
+  '';
+
   programs.helix = {
     enable = true;
     extraPackages = with pkgs; [

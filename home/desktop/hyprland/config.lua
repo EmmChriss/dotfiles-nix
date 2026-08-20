@@ -32,15 +32,14 @@ hl.monitor({
 -- Workspaces
 -- See https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
 
-hl.workspace_rule({ workspace = "1", default = true })
-hl.workspace_rule({ workspace = "11", default = true })
-
 for i = 1, 10 do
   -- default workspace for builtin monitor
   hl.workspace_rule({
     workspace = tostring(i),
     monitor = "desc:AU Optronics 0xD1ED",
     default_name = tostring(i),
+    default = (i == 1),
+    persistent = true,
   })
 
   -- default workspace for external monitor
@@ -48,6 +47,8 @@ for i = 1, 10 do
     workspace = tostring(10 + i),
     monitor = "HDMI-A-1",
     default_name = tostring(10 + i),
+    default = (i == 1),
+    persistent = true,
   })
 end
 

@@ -18,6 +18,7 @@ in
         enable = true;
         settings = {
           revisions.revset = "..";
+          revsets.git-sign-on-push = "~signed() & mine()";
           ui = {
             auto_refresh_interval = 3;
             flash_message_display_seconds = 0;
@@ -283,10 +284,7 @@ in
             auto-track-bookmarks = "glob:*";
           };
 
-          git = {
-            sign-on-push = true;
-            private-commits = "description(glob:'wip:*')";
-          };
+          git.private-commits = "description(glob:'wip:*')";
         };
       };
     }

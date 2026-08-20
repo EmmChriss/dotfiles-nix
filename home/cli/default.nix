@@ -48,5 +48,7 @@
     # stuff
     yt-dlp
     jq
+    claude-code
+    claude-monitor
   ];
 }
