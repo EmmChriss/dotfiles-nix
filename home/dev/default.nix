@@ -4,6 +4,7 @@
     ./rust
     ./podman
     ./vcs
+    ./ssh
   ];
 
   home.packages = with pkgs; [

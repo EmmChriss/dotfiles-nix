@@ -1,20 +1,7 @@
-{config, ...}: let
-  cfg = config.home.vcs;
-in {
+{...}: {
   programs.git = {
     enable = true;
-
-    # git large file support
     lfs.enable = true;
-
-    # automatic git signing
-    signing = {
-      format = "ssh";
-      signByDefault = true;
-      key = cfg.signature;
-    };
-
-    settings.user = {inherit (cfg) name email;};
   };
 
   # git diff highlighter
@@ -27,6 +14,5 @@ in {
     };
   };
 
-  # gitui
   programs.gitui.enable = true;
 }
