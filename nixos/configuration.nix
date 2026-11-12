@@ -326,6 +326,12 @@
     };
   };
 
+  qt = {
+    enable = true;
+    style = "adwaita-dark";
+    platformTheme = "gnome";
+  };
+
   # DO NOT CHANGE
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "24.11";

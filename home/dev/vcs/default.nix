@@ -23,7 +23,6 @@
     prft-github = {
       name = "Molnár Krisztián";
       email = "krisztian.molnar@perficient.com";
-      sshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDrpi4QInnCyPFy4cK1q0+Emm316YYdi5OR8RlC/r5RH";
     };
     prft-azure = {
       name = "Molnár Krisztián";
